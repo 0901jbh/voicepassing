@@ -1,4 +1,9 @@
 venv/
+# 원본 데이터 및 augmented data
 data/
+
+# 정제된 데이터
+dataset/final_data.xlsx
+
 data_augmentation/__pycache__/
 data_augmentation/Mecab-ko-for-Google-Colab/
