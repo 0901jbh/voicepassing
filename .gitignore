@@ -7,3 +7,6 @@ dataset/final_data.xlsx
 
 data_augmentation/__pycache__/
 data_augmentation/Mecab-ko-for-Google-Colab/
+
+# pyc
+*.pyc
