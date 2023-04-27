@@ -116,7 +116,6 @@ class VoicePassingTrainer():
     
     def validate(self, index, valid_loader, verbose = True):
 
-        valid_loss = 0
         valid_correct = 0
         valid_n_probs = 0
         
@@ -136,7 +135,7 @@ class VoicePassingTrainer():
             y = y.squeeze().to(self.device)
 
             pred = self.model(X)        
-            loss = self.criterion(pred, y)
+            valid_loss = self.criterion(pred, y)
 
             pred_labels = pred.argmax(axis = 1)
             n_correct = len(torch.where(pred_labels == y)[0])
