@@ -1,7 +1,7 @@
 import torch
-from dataLoader import small_train_loader
+from dataLoader import train_loader
 from model import VoicePassingModel
-from transformers import DistilBertTokenizer
+from transformers import DistilBertTokenizer, AdamW
 from tqdm import tqdm
 
 trainer_config = {
@@ -19,21 +19,22 @@ class VoicePassingTrainer():
     def set_model(self, model):
         self.model = model.to(self.device)
 
-    def train(self, num_epochs, train_loader, criterion, lr = 0.003, hist = False):
+    def train(self, num_epochs, train_loader, criterion, lr = 3e-5, hist = False):
 
         self.criterion = criterion
-        self.optimizer = torch.optim.Adam(params = self.model.parameters(), lr = lr)
+        self.optimizer = AdamW(params = self.model.parameters(), lr = lr, correct_bias=False)
         self.model.train()
 
-        for num_epoch in tqdm(range(num_epochs), desc="EPOCH", leave = True):
-            result = self.train_one_epoch(num_epoch, train_loader, hist = hist)
+        for epoch_idx in range(num_epochs):
+            result = self.train_one_epoch(epoch_idx, train_loader, hist = hist)
             
 
     def train_one_epoch(self, index, train_loader, verbose = True, hist = False):
 
         train_loss = 0
 
-        for X, y in tqdm(train_loader, desc="batch", leave=False):
+        for X, y in tqdm(train_loader, desc="batch", leave= True):
+
 
             X = self.tokenizer(
                 text = X,
@@ -47,6 +48,7 @@ class VoicePassingTrainer():
             y = y.squeeze().to(self.device)
 
             pred = self.model(X)
+        
             loss = self.criterion(pred, y)
             train_loss += loss.item()
 
@@ -56,6 +58,7 @@ class VoicePassingTrainer():
         if verbose:
             print(f"EPOCH {index+1} Loss : {train_loss : .4f}")
             print(pred)
+            print(y)
         
         if hist:
             return train_loss
