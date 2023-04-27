@@ -34,7 +34,7 @@ class VoicePassingTrainer():
 
         return history
 
-    def train(self, num_epochs, train_loader, criterion, lr = 3e-5, valid_loader = None, reset_history = False):
+    def train(self, num_epochs, train_loader, criterion, lr = 3e-5, valid_loader = None, reset_history = False, verbose = True):
 
         if reset_history:
             self.train_loss_history = []
@@ -47,16 +47,29 @@ class VoicePassingTrainer():
         self.model.train()
 
         for epoch_idx in range(num_epochs):
-            train_loss, train_acc = self.train_one_epoch(epoch_idx, train_loader)
+            train_loss, train_acc = self.train_one_epoch(epoch_idx, train_loader, verbose = verbose)
 
             self.train_loss_history.append(train_loss)
             self.train_acc_history.append(train_acc)
 
             if valid_loader:
-                valid_loss, valid_acc = self.validate(epoch_idx, valid_loader)
+                valid_loss, valid_acc = self.validate(epoch_idx, valid_loader, verbose = verbose)
+
+                # 모델 저장
+                if not epoch_idx: # 저장된 게 없다면
+                    torch.save(self.model.state_dict(), r"./result/best.pt")
+                    print("the initial model saved")
+
+                else:
+                    if valid_loss < self.valid_loss_history[-1]:
+                        torch.save(self.model.state_dict(), fr"./result/best.pt")
+                        print("the best model saved")
 
                 self.valid_loss_history.append(valid_loss)
                 self.valid_acc_history.append(valid_acc)
+
+        torch.save(self.model.state_dict(), fr"./result/last.pt")
+        print("the last model saved")
 
     def train_one_epoch(self, index, train_loader, verbose = True):
 
@@ -91,13 +104,13 @@ class VoicePassingTrainer():
             train_correct += n_correct
             train_n_probs += len(y)
 
+        train_acc = (train_correct / train_n_probs) * 100
+
         if verbose:
-            print(f"EPOCH {index+1} Loss : {train_loss : .4f}")
+            print(f"EPOCH {index+1} TRAIN / Loss : {train_loss : .4f}, Acc : {train_acc : .4f}")
             print(pred[-4:])
             print(y[-4:])
 
-        train_acc = (train_correct / train_n_probs) * 100
-        
         return train_loss, train_acc
 
     def test_a_sentence(self, text):
@@ -146,7 +159,7 @@ class VoicePassingTrainer():
         valid_acc = (valid_correct / valid_n_probs) * 100
 
         if verbose:
-            print(f"EPOCH {index+1} Loss : {valid_loss : .4f}, Acc : {valid_acc : .4f}")
+            print(f"EPOCH {index+1} VALID / Loss : {valid_loss : .4f}, Acc : {valid_acc : .4f}")
             print(pred[-4:])
             print(y[-4:])
         
