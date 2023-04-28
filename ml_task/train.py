@@ -32,7 +32,6 @@ trainer.train(50, train_loader = VoicePassingDataloader(
                                     batch_size=32,
                                     shuffle=True,
                                     non_augmented=True,
-                                    small = True
                                     ),
             criterion = criterion,
             valid_loader = VoicePassingDataloader(
@@ -40,7 +39,6 @@ trainer.train(50, train_loader = VoicePassingDataloader(
                                     shuffle=False,
                                     non_augmented=True,
                                     test = True,
-                                    small = True
                                     )
             )
 
