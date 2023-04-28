@@ -148,7 +148,7 @@ class VoicePassingTrainer():
             y = y.squeeze().to(self.device)
 
             pred = self.model(X)        
-            valid_loss = self.criterion(pred, y)
+            valid_loss = self.criterion(pred, y).item()
 
             pred_labels = pred.argmax(axis = 1)
             n_correct = len(torch.where(pred_labels == y)[0])
