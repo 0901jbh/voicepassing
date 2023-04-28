@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:voicepassing/screens/search_screen_result.dart';
+import 'package:voicepassing/widgets/nav_bar.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
@@ -25,7 +26,7 @@ class SearchScreen extends StatelessWidget {
             child: Column(
               children: [
                 Image.asset(
-                  'images/SearchImg.png',
+                  'images/SearchMain.png',
                   fit: BoxFit.fitWidth,
                 ),
                 Column(
@@ -81,6 +82,7 @@ class SearchScreen extends StatelessWidget {
           );
         },
       ),
+      bottomNavigationBar: const Navbar(),
     );
   }
 }

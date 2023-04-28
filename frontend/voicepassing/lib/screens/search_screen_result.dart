@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:voicepassing/services/search_service.dart';
+import 'package:voicepassing/widgets/nav_bar.dart';
 
 class SearchScreenResult extends StatefulWidget {
   const SearchScreenResult({super.key});
@@ -29,6 +30,7 @@ class _SearchScreenResultState extends State<SearchScreenResult> {
           );
         },
       ),
+      bottomNavigationBar: const Navbar(),
     );
   }
 }

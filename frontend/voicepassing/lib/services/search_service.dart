@@ -11,7 +11,8 @@ class SearchWidget extends StatefulWidget {
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
-  Textinput? searchWord;
+  GlobalKey<TextinputState> textInputStateKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -43,7 +44,11 @@ class _SearchWidgetState extends State<SearchWidget> {
                   SizedBox(
                     width: 180,
                     height: 50,
-                    child: Card(color: Colors.blue, child: searchWord),
+                    child: Card(
+                        color: Colors.blue,
+                        child: Textinput(
+                          key: textInputStateKey,
+                        )),
                   ),
                   const SizedBox(
                     width: 20,
@@ -62,10 +67,14 @@ class _SearchWidgetState extends State<SearchWidget> {
               onTap: () async {
                 ClipboardData? data =
                     await Clipboard.getData(Clipboard.kTextPlain);
-                setState(() {
-                  print(searchWord);
-                });
-                print(data?.text);
+                String str = data?.text ?? '';
+
+                if (str.isNotEmpty) {
+                  textInputStateKey.currentState?.setText(str);
+                }
+                // print(data);
+                // print(data?.text);
+                // print('눌값?');
               },
               child: const Icon(
                 Icons.paste_sharp,
@@ -78,7 +87,9 @@ class _SearchWidgetState extends State<SearchWidget> {
 }
 
 class Textinput extends StatefulWidget {
-  const Textinput({super.key});
+  const Textinput({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<Textinput> createState() => TextinputState();
@@ -86,6 +97,34 @@ class Textinput extends StatefulWidget {
 
 class TextinputState extends State<Textinput> {
   final myController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    myController.addListener(_printLatestValue);
+  }
+
+  @override
+  void dispose() {
+    // 텍스트에디팅컨트롤러를 제거하고, 등록된 리스너도 제거된다.
+    myController.dispose();
+    super.dispose();
+  }
+
+  // myController의 텍스트를 콘솔에 출력하는 메소드
+  void _printLatestValue() {
+    print("Second text field: ${myController.text}");
+  }
+
+  void setText(String txt) {
+    setState(() {
+      String mytext = myController.text;
+      myController.text = txt;
+      print(myController.text);
+      print(myController.text);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +151,6 @@ class TextinputState extends State<Textinput> {
                 ? IconButton(
                     padding: EdgeInsets.zero,
                     onPressed: () {
-                      print('클릭이벤트');
                       setState(() {
                         myController.clear();
                         textValue = '';
