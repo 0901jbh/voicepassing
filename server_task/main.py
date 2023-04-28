@@ -1,8 +1,20 @@
 import uvicorn
 import argparse
 from fastapi import FastAPI
+from contextlib import asynccontextmanager
+from classifier.model import model
+from routers import inference
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app : FastAPI):
+    print("server opened")
+    model.set_weight()
+
+    yield
+    print("server closed")
+    
+app = FastAPI(lifespan = lifespan)
+app.include_router(inference.router)
 
 if __name__ == "__main__":
 
