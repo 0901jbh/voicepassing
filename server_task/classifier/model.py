@@ -1,35 +1,41 @@
+from transformers import DistilBertModel, DistilBertConfig
+import torch
+import torch.nn as nn
+import os
 
-# temporary model for test
-class Model():
-    def __init__(self):
-        self.has_weight = False
+class VoicePassingModel(nn.Module):
 
-    def set_weight(self):
-        self.has_weight = True
+    def __init__(self, bert_out = 768, dropout = 0.3, num_classes = 4):
 
-    def forward(self, text):
-
-        if self.has_weight:
-            temp_result = {
-                "result" : [0.1, 0.4, 0.3, 0.2],
-                "attention" : {
-                    "네" : [0.25],
-                    "저는" : [0.2],
-                    "금융" : [0.87],
-                    "범죄" : [0.9],
-                    "수사" : [0.88],
-                    "1팀" : [0.84],
-                    "의" : [0.1],
-                    "김철민" : [0.247],
-                    "수사관" : [0.99],
-                    "이고" : [0.12],
-                    "요" : [0.01],
-                }
-            }
-
-            return temp_result
-
-        else:
-            return {"result" : [], "attention" : []}
+        super(VoicePassingModel, self).__init__()
+        self.bertModel = DistilBertModel.from_pretrained("distilbert-base-uncased")
         
-model = Model()
+        # freeze non-classifier layers
+        for param in self.bertModel.parameters():
+            param.requires_grad = False
+            
+        self.pre_classifier = nn.Linear(bert_out, bert_out)
+        self.dropout = nn.Dropout(dropout)
+        self.classifier = nn.Linear(bert_out, num_classes)
+        self.relu = nn.ReLU()
+
+    def forward(self, X):
+
+        output_1 = self.bertModel(**X, output_attentions = True)
+
+        # # Classification
+        hidden_state = output_1['last_hidden_state']
+        attentions = output_1['attentions']
+
+        pooler = hidden_state[:, 0]
+        pooler = self.pre_classifier(pooler)
+        pooler = self.relu(pooler)
+        pooler = self.dropout(pooler)
+        output = self.classifier(pooler)
+
+        # # Attention
+
+        return output, attentions
+
+model = VoicePassingModel()
+
