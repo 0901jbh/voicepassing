@@ -30,5 +30,8 @@ async def classify_text(string_model : StringModel):
 
     return { "result " : result.detach().squeeze().numpy().tolist()}
 
+@router.post("/test")
+async def junghee_test(string_model : StringModel):
+    return { "result " : [0.1, 0.2, 0.3, 0.4]}
 
     
