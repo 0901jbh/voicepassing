@@ -13,3 +13,6 @@ ml_task/result/
 
 # pyc
 *.pyc
+
+# model weight
+*.pt
