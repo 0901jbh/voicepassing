@@ -1,0 +1,30 @@
+version: '3.3'
+services:
+  spring:
+    image: gradle:jdk11
+    container_name: spring
+    environment:
+      - DB_URL=${MYSQL_URL}
+      - DB_USER=${MYSQL_USER}
+      - DB_PASSWORD=${MYSQL_PASSWORD}
+      - SPRING_RECORD_TEMP_DIR=/data
+    ports:
+      - 8200:8080
+    volumes:
+      - ./backend/voicepassing/build/libs/voicepassing-0.0.1-SNAPSHOT.jar:/app.jar
+      - VOICE_PASSING:/data
+    command: java -jar /app.jar
+
+  untrunc:
+    build: ./backend/untrunc
+    container_name: untrunc
+    command: python3 app.py
+    volumes:
+      - ./backend/untrunc/app.py:/app.py
+      - VOICE_PASSING:/data
+    ports:
+      - 8100:8000
+volumes:
+  VOICE_PASSING:
+    external: true
+
