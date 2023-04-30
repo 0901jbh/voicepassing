@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:styled_text/styled_text.dart';
+import 'package:voicepassing/screens/result_screen.dart';
 import 'package:voicepassing/screens/search_screen.dart';
 import 'package:voicepassing/widgets/img_button.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
-
+  final count = 283;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,45 +39,82 @@ class MainScreen extends StatelessWidget {
       ),
       body: Builder(
         builder: (BuildContext context) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SearchScreen(),
-                ),
-              );
-            },
+          return Center(
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    ImgButton(
-                      title: '검사 결과',
-                      ImgName: 'ResultImg',
-                    ),
-                    ImgButton(
-                      title: '검사 결과',
-                      ImgName: 'ResultImg',
-                    ),
-                  ],
+                SizedBox(
+                  width: 315,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          StyledText(
+                            text: '오늘 <b>보이스패싱</b>은',
+                            tags: {
+                              'b': StyledTextTag(
+                                  style: const TextStyle(color: Colors.blue))
+                            },
+                          ),
+                          StyledText(
+                            text: '<b>$count건</b>을',
+                            tags: {
+                              'b': StyledTextTag(
+                                  style: const TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 30))
+                            },
+                          ),
+                          const Text('잡았어요')
+                        ],
+                      ),
+                      Image.asset(
+                        'images/MainImg.png',
+                        height: 110,
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                SizedBox(
+                  width: 315,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      ImgButton(
+                        title: '검사 결과',
+                        imgName: 'ResultImg',
+                        screenWidget: ResultScreen(),
+                      ),
+                      ImgButton(
+                          title: '통계 내용',
+                          imgName: 'StaticsImg',
+                          screenWidget: SearchScreen()),
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    ImgButton(
-                      title: '검사 결과',
-                      ImgName: 'ResultImg',
-                    ),
-                    ImgButton(
-                      title: '검사 결과',
-                      ImgName: 'ResultImg',
-                    ),
-                  ],
+                SizedBox(
+                  width: 315,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      ImgButton(
+                          title: '검색',
+                          imgName: 'SearchImg',
+                          screenWidget: SearchScreen()),
+                      ImgButton(
+                          title: '녹음 파일 검사',
+                          imgName: 'AnalyticsImg',
+                          screenWidget: SearchScreen()),
+                    ],
+                  ),
                 ),
               ],
             ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:voicepassing/screens/main_screen.dart';
 import 'package:voicepassing/screens/search_screen_result.dart';
+import 'package:voicepassing/widgets/head_bar.dart';
 import 'package:voicepassing/widgets/nav_bar.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -9,15 +11,10 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 0.0,
-        backgroundColor: Colors.white.withOpacity(1),
-        foregroundColor: Colors.black,
-        title: const Text(
-          "검색",
-          style: TextStyle(),
-        ),
+      appBar: HeadBar(
+        navPage: const MainScreen(),
+        title: const Text('검색'),
+        appBar: AppBar(),
       ),
       body: Builder(
         builder: (BuildContext context) {
@@ -82,7 +79,7 @@ class SearchScreen extends StatelessWidget {
           );
         },
       ),
-      bottomNavigationBar: const Navbar(),
+      bottomNavigationBar: const Navbar(selectedIndex: 2),
     );
   }
 }

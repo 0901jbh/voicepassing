@@ -30,7 +30,7 @@ class _SearchScreenResultState extends State<SearchScreenResult> {
           );
         },
       ),
-      bottomNavigationBar: const Navbar(),
+      bottomNavigationBar: const Navbar(selectedIndex: 2),
     );
   }
 }

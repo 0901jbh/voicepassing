@@ -131,43 +131,41 @@ class TextinputState extends State<Textinput> {
     String textValue = myController.text;
     bool showSuffixIcon = textValue.isNotEmpty;
 
-    return Container(
-      child: TextField(
-        controller: myController,
-        onChanged: (value) {
-          setState(() {
-            textValue = value;
-          });
-        },
-        autofocus: true,
-        decoration: InputDecoration(
-          suffixIconConstraints: const BoxConstraints(
-            maxHeight: 20,
-            maxWidth: 20,
-          ),
-          suffixIcon: Padding(
-            padding: const EdgeInsets.only(left: 0),
-            child: showSuffixIcon
-                ? IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () {
-                      setState(() {
-                        myController.clear();
-                        textValue = '';
-                      });
-                    },
-                    icon: const Icon(
-                      Icons.cancel,
-                      color: Colors.white,
-                    ),
-                  )
-                : null,
-          ),
+    return TextField(
+      controller: myController,
+      onChanged: (value) {
+        setState(() {
+          textValue = value;
+        });
+      },
+      autofocus: true,
+      decoration: InputDecoration(
+        suffixIconConstraints: const BoxConstraints(
+          maxHeight: 20,
+          maxWidth: 20,
         ),
-        style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.w600,
+        suffixIcon: Padding(
+          padding: const EdgeInsets.only(left: 0),
+          child: showSuffixIcon
+              ? IconButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: () {
+                    setState(() {
+                      myController.clear();
+                      textValue = '';
+                    });
+                  },
+                  icon: const Icon(
+                    Icons.cancel,
+                    color: Colors.white,
+                  ),
+                )
+              : null,
         ),
+      ),
+      style: const TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.w600,
       ),
     );
   }

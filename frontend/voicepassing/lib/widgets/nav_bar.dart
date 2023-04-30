@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:voicepassing/screens/main_screen.dart';
+import 'package:voicepassing/screens/result_screen.dart';
+import 'package:voicepassing/screens/search_screen.dart';
 
 class Navbar extends StatefulWidget {
-  const Navbar({super.key});
+  final int selectedIndex;
+
+  const Navbar({super.key, required this.selectedIndex});
 
   @override
   State<Navbar> createState() => _NavbarState();
 }
 
 class _NavbarState extends State<Navbar> {
-  final int _selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
@@ -37,18 +40,36 @@ class _NavbarState extends State<Navbar> {
           label: '파일 검사',
         )
       ],
-      currentIndex: _selectedIndex,
+      currentIndex: widget.selectedIndex,
       selectedItemColor: Colors.blue,
       unselectedItemColor: const Color(0xffB1B8C0),
       onTap: (int index) {
         switch (index) {
           case 0:
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MainScreen(),
+              ),
+            );
             break;
           case 1:
             break;
           case 2:
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SearchScreen(),
+              ),
+            );
             break;
           case 3:
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ResultScreen(),
+              ),
+            );
             break;
           case 4:
             break;

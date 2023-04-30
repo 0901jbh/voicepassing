@@ -10,9 +10,21 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
+    return MaterialApp(
+      builder: (context, child) {
+        return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.1),
+            child: child!);
+      },
+      home: const Scaffold(
         body: MainScreen(),
+      ),
+      theme: ThemeData(
+        textTheme: const TextTheme(
+
+            // bodyText1: TextStyle(fontSize: 20),
+            // bodyText2: TextStyle(fontSize: 20),
+            ),
       ),
     );
   }
