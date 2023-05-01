@@ -15,7 +15,7 @@ def recoverM4A():
     if session_id:
         try:
             subprocess.run(["untrunc", f"/data/ok.m4a", f"/data/{session_id}/record.m4a"], check=True)
-            subprocess.run(["mv", f"/data/{session_id}/record.m4a_fixed.m4a", f"/data/{session_id}/recover.m4a"], check=True)
+            subprocess.run(["mv", f"/data/{session_id}/record.m4a_fixed.m4a", f"/data/{session_id}/recover.mp3"], check=True)
             return {"msg": "성공"}
         except subprocess.CalledProcessError:
             return {"msg": "실패"}
