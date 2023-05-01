@@ -31,7 +31,8 @@ dependencies {
 	// jpa
 	implementation  'org.springframework.boot:spring-boot-starter-data-jpa'
 
-
+	// socket
+	implementation 'org.springframework.boot:spring-boot-starter-websocket:2.6.2'
 
 	// lombok
 	compileOnly 'org.projectlombok:lombok'
@@ -52,12 +53,16 @@ dependencies {
 	// javax.xml.bind
 	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
 
+	// https://mvnrepository.com/artifact/org/jaudiotagger
+	implementation 'org:jaudiotagger:2.0.3'
 
 
 	// swagger
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.9'
 
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+
+
 }
 
 tasks.named('test') {
