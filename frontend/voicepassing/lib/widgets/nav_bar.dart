@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:voicepassing/screens/analytics_screen.dart';
 import 'package:voicepassing/screens/main_screen.dart';
 import 'package:voicepassing/screens/result_screen.dart';
 import 'package:voicepassing/screens/search_screen.dart';
+import 'package:voicepassing/screens/statics_screen.dart';
 
 class Navbar extends StatefulWidget {
   final int selectedIndex;
@@ -54,6 +56,12 @@ class _NavbarState extends State<Navbar> {
             );
             break;
           case 1:
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const StaticsScreen(),
+              ),
+            );
             break;
           case 2:
             Navigator.push(
@@ -72,6 +80,12 @@ class _NavbarState extends State<Navbar> {
             );
             break;
           case 4:
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AnalyticsScreen(),
+              ),
+            );
             break;
         }
       },
