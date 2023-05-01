@@ -31,6 +31,6 @@ COPY --from=build /untrunc-src/untrunc /bin/untrunc
 COPY ./requirement.txt requirement.txt
 RUN pip3 install -r requirement.txt
 
-# non-root user
-RUN useradd untrunc
-USER untrunc
+# 생략
+# RUN useradd voicepassing
+# USER voicepassing
