@@ -8,7 +8,7 @@ class VoicePassingModel(nn.Module):
     def __init__(self, bert_out = 768, dropout = 0.3, num_classes = 4):
 
         super(VoicePassingModel, self).__init__()
-        self.bertModel = DistilBertModel.from_pretrained("distilbert-base-uncased")
+        self.bertModel = DistilBertModel.from_pretrained("distilbert-base-multilingual-cased")
         
         # freeze non-classifier layers
         for param in self.bertModel.parameters():

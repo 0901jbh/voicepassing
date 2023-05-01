@@ -22,22 +22,21 @@ async def classify_text(string_model : StringModel):
     tokens = tokenizer(
         text = text,
         add_special_tokens = True,
+        truncation = True,
+        max_length = 512,
         return_tensors = "pt"
     )
 
-    # for name, parameter in classifier.named_parameters():
-    #         if not name.startswith("bert"):
-    #             print(parameter, "나중 ")
-    #             break
-
     print(tokens)
-    # result, attention = classifier(tokens)
-    # last_attention = torch.mean(attention[-1], dim = 1).squeeze()
+    result, attention = classifier(tokens)
+    last_attention = attention[-1].squeeze()
 
-    detokenized = tokenizer.decode(tokens['input_ids'].squeeze())
+    detokenized = [tokenizer.decode(token) for token in tokens['input_ids'].squeeze()]
     print(detokenized)
-    # pd.DataFrame(last_attention).to_excel("temp.xlsx")
-    # return { "result " : result.detach().squeeze().numpy().tolist()}
+
+    # pd.DataFrame(temp, columns= detokenized).to_excel(f"hi.xlsx")
+    
+    return { "result " : result.detach().squeeze().numpy().tolist()}
 
 @router.post("/test")
 async def junghee_test(string_model : StringModel):
