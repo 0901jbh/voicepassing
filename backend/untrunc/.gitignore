@@ -1,0 +1,9 @@
+*.d
+*.o
+.build_*
+untrunc
+untrunc-*
+ffmpeg-*
+libav-*
+build
+*.pro.user
