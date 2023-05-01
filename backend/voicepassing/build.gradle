@@ -61,6 +61,8 @@ dependencies {
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.9'
 
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+
+
 }
 
 tasks.named('test') {
