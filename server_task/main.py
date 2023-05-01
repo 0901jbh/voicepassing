@@ -9,7 +9,19 @@ import torch
 @asynccontextmanager
 async def lifespan(app : FastAPI):
     print("server opened")
+
+    # for name, parameter in model.named_parameters():
+    #     if not name.startswith("bert"):
+    #         print(parameter, "처음 ")
+    #         break
+
     model.load_state_dict(torch.load(r"./classifier/weight/base_model/last.pt", map_location = torch.device("cpu")))
+    model.eval()
+
+    # for name, parameter in model.named_parameters():
+    #     if not name.startswith("bert"):
+    #         print(parameter, "다운 ")
+    #         break
 
     yield
     print("server closed")
