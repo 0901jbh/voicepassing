@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:styled_text/styled_text.dart';
+import 'package:voicepassing/screens/analytics_screen.dart';
 import 'package:voicepassing/screens/result_screen.dart';
 import 'package:voicepassing/screens/search_screen.dart';
+import 'package:voicepassing/screens/statics_screen.dart';
 import 'package:voicepassing/widgets/img_button.dart';
 
 class MainScreen extends StatelessWidget {
@@ -93,7 +95,7 @@ class MainScreen extends StatelessWidget {
                       ImgButton(
                           title: '통계 내용',
                           imgName: 'StaticsImg',
-                          screenWidget: SearchScreen()),
+                          screenWidget: StaticsScreen()),
                     ],
                   ),
                 ),
@@ -112,7 +114,7 @@ class MainScreen extends StatelessWidget {
                       ImgButton(
                           title: '녹음 파일 검사',
                           imgName: 'AnalyticsImg',
-                          screenWidget: SearchScreen()),
+                          screenWidget: AnalyticsScreen()),
                     ],
                   ),
                 ),
