@@ -28,7 +28,7 @@ FROM openjdk:11
 ARG JAR_FILE=backend/voicepassing/build/libs/voicepassing-0.0.1-SNAPSHOT.jar
 
 RUN pwd
-RUN ls
+RUN ls/var/
 
 # COPY ${JAR_FILE} app.jar
 
