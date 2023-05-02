@@ -29,5 +29,3 @@ services:
 volumes:
   VOICE_PASSING:
     external: true
-
-z
