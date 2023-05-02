@@ -20,6 +20,13 @@ public class ResultDTO{
         private String text;
 
     }
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResultNum {
+        private long resultNum;
+    }
 
     @Getter
     @AllArgsConstructor

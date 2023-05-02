@@ -26,10 +26,10 @@ public class ResultController {
 
     private static final Logger logger = LoggerFactory.getLogger(ResultController.class);
     private final ResultService resultService;
-//
-//    //검사 결과 목록 조회
-    @GetMapping()
-    public ResponseEntity<?> getResults() {
+
+    //검사 결과 목록 조회
+    @GetMapping("/{androidId}")
+    public ResponseEntity<?> getResultbyId(@PathVariable String androidId) {
         HttpStatus status = null;
         Map<String, Object> resultMap = new HashMap<>();
         List<ResultDTO.Result> results = resultService.getResultList();
@@ -38,6 +38,18 @@ public class ResultController {
       resultMap.put("results",results);
       status = HttpStatus.OK;
        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+
+    }
+    @GetMapping()
+    public ResponseEntity<?> getResults() {
+        HttpStatus status;
+        Map<String, Long> resultMap = new HashMap<>();
+        ResultDTO.ResultNum resultNum = resultService.getResultNum();
+        resultMap.put("resultNum",resultNum.getResultNum());
+        status = HttpStatus.OK;
+        return new ResponseEntity<Map<String, Long>>(resultMap,status);
+
+
 
     }
 

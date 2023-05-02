@@ -18,8 +18,8 @@ public class ResultServiceImpl implements ResultService {
     private final ResultRepository resultRepository;
 
     @Override
-    public List<ResultDTO.Result> getResultList() {
-        List<Result> resultsEntity = resultRepository.findAll();
+    public List<ResultDTO.Result> getResultList(String androidId) {
+        List<Result> resultsEntity = resultRepository.findAllByAndroId(androidId);
 
 
         List<ResultDTO.Result> resultList = new ArrayList<>();
@@ -30,6 +30,14 @@ public class ResultServiceImpl implements ResultService {
         return resultList;
 
     }
+
+    @Override
+    public ResultDTO.ResultNum getResultNum() {
+        long resultNum = resultRepository.count();
+        return ResultDTO.ResultNum.builder().resultNum(resultNum).build();
+    }
+
+
     private ResultDTO.Result buildResult(Result result){
         ResultDTO.Result resultDto = ResultDTO.Result.builder()
                 .resultId(result.getResultId())
@@ -40,4 +48,6 @@ public class ResultServiceImpl implements ResultService {
                 .build();
         return resultDto;
     }
+
+
 }
