@@ -5,7 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class ResultDto{
+import java.util.*;
+
+public class ResultDTO{
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
@@ -17,5 +19,21 @@ public class ResultDto{
         private int category;
         private String text;
 
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class Temp {
+        private ArrayList<Double> result;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class Send {
+        private String text;
     }
 }
