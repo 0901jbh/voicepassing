@@ -23,7 +23,7 @@ FROM ubuntu:bionic
 ARG FF_VER=shared
 
 RUN apt-get update && [ "$FF_VER" = 'shared' ] && \
-	apt-get -y install --no-install-recommends libavformat57 libavcodec57 libavutil55 python3-setuptools python3-pip && \
+	apt-get -y install --no-install-recommends libavformat57 libavcodec57 libavutil55 python3-setuptools python3-pip ffmpeg && \
 	rm -rf /var/lib/apt/lists/* || true
 COPY --from=build /untrunc-src/untrunc /bin/untrunc
 
