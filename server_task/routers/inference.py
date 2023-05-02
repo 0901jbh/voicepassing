@@ -29,12 +29,12 @@ async def classify_text(string_model : StringModel):
 
     print(tokens)
     result, attention = classifier(tokens)
-    last_attention = attention[-1].squeeze()
+    last_attention = torch.mean(attention[-1], dim = 1).squeeze()
 
     detokenized = [tokenizer.decode(token) for token in tokens['input_ids'].squeeze()]
     print(detokenized)
 
-    # pd.DataFrame(temp, columns= detokenized).to_excel(f"hi.xlsx")
+    pd.DataFrame(last_attention, columns= detokenized).to_excel(f"hi.xlsx")
     
     return { "result " : result.detach().squeeze().numpy().tolist()}
 
