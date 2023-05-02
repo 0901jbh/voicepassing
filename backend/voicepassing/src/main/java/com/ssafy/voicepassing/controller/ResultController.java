@@ -1,7 +1,7 @@
 package com.ssafy.voicepassing.controller;
 
 
-import com.ssafy.voicepassing.model.dto.ResultDto;
+import com.ssafy.voicepassing.model.dto.ResultDTO;
 import com.ssafy.voicepassing.model.service.ResultService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class ResultController {
     public ResponseEntity<?> getResults() {
         HttpStatus status = null;
         Map<String, Object> resultMap = new HashMap<>();
-        List<ResultDto.Result> results = resultService.getResultList();
+        List<ResultDTO.Result> results = resultService.getResultList();
         if(results == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
       resultMap.put("results",results);
