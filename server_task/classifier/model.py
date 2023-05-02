@@ -1,7 +1,13 @@
-from transformers import DistilBertModel, DistilBertConfig
+from transformers import DistilBertModel
 import torch
 import torch.nn as nn
 import os
+import pickle
+import numpy as np
+from sklearn.pipeline import make_pipeline
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from lime.lime_text import LimeTextExplainer
 
 class VoicePassingModel(nn.Module):
 
@@ -37,5 +43,29 @@ class VoicePassingModel(nn.Module):
 
         return output, attentions
 
+class bayesianClassifierPipeLine():
+
+    def __init__(self):
+
+        with open("./classifier/tf_vectorizer.pickle", "rb") as f:
+            self.vectorizer = pickle.load(f)
+
+        with open("./classifier/bayesian_classifier.pickle", "rb") as f:
+            self.bayesian_classifier = pickle.load(f)
+
+        self.pipe_line = make_pipeline(self.vectorizer, self.bayesian_classifier)
+        self.explainer = LimeTextExplainer(class_names=["혐의 없음", "기관 사칭형", "대출 빙자형", "기타"])
+
+    def forward(self, string):
+
+        result = self.pipe_line.predict_proba([string])
+        exp = self.explainer.explain_instance(string, self.pipe_line.predict_proba)
+        label = np.argmax(result)
+
+        return label, result.squeeze().tolist(), exp.as_list(label = label)
+
+
+
 model = VoicePassingModel()
+pipeline = bayesianClassifierPipeLine()
 
