@@ -39,6 +39,8 @@ dependencies:
   circle_progress_bar: ^0.1.1
   styled_text: ^7.0.0
   flutter_overlay_window: ^0.4.1
+  phone_state: ^1.0.2
+  permission_handler: ^10.2.0
 
 dev_dependencies:
   flutter_test:

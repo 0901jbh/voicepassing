@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:voicepassing/screens/main_screen.dart';
 
+import '../widgets/alarm_widget/real_time_result_widget.dart';
+
+// 오버레이 위젯 설정
+@pragma("vm:entry-point")
+void overlayMain() {
+  runApp(
+    const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: RealTimeResultWidget(),
+    ),
+  );
+}
+
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const App());
 }
 
