@@ -59,12 +59,10 @@ class bayesianClassifierPipeLine():
     def forward(self, string):
 
         result = self.pipe_line.predict_proba([string])
-        exp = self.explainer.explain_instance(string, self.pipe_line.predict_proba)
+        exp = self.explainer.explain_instance(string, self.pipe_line.predict_proba, num_features = 10, top_labels = 4)
         label = np.argmax(result)
 
         return label, result.squeeze().tolist(), exp.as_list(label = label)
-
-
 
 model = VoicePassingModel()
 pipeline = bayesianClassifierPipeLine()
