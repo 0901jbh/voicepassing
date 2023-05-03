@@ -63,7 +63,7 @@ public class AnalysisController {
         Map<String, Object> resultMap = new HashMap<>();
 
        resultMap = analysisService.recommend(request);
-
+        //Object obj = resultMap.get("result");
        return new ResponseEntity<Map<String,Object>>(resultMap,status);
     }
 
@@ -74,6 +74,40 @@ public class AnalysisController {
         ResponseEntity<?> re = clovaAI();
 
         return re;
+    }
+
+    @PostMapping("/db")
+    public ResponseEntity<?> DB(){
+
+        String text = analysisService.SpeechToText();
+        boolean isFinish = false;
+        String sessionId = "SSAFY1357";
+        AIResponseDTO.Request request = AIResponseDTO.Request.builder()
+                .text(text)
+                .isFinish(false)
+                .sessionId(sessionId)
+                .build();
+
+        HttpStatus status = HttpStatus.OK;
+        Map<String, Object> resultMap = new HashMap<>();
+
+        resultMap = analysisService.recommend(request);
+        Object obj = resultMap.get("result");
+        AIResponseDTO.Response rep = (AIResponseDTO.Response) resultMap.get("result");
+        String phoneNumber = "010-1234-5678";
+        String androidId = "android1";
+        ResultDTO.Result res = ResultDTO.Result.builder()
+                .androidId(androidId)
+                .phoneNumber(phoneNumber)
+                .category(rep.getTotalCategory())
+                .risk((int)rep.getTotalCategoryScore())
+                .build();
+
+
+//                .
+//
+//                .build();
+        return new ResponseEntity<Map<String,Object>>(resultMap,status);
     }
 
 

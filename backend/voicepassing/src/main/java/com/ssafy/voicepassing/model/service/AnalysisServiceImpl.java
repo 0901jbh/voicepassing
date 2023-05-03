@@ -30,6 +30,7 @@ public class AnalysisServiceImpl implements AnalysisService{
     //@Value("${fastapi.url}")
     private String fastApiUrl;
 
+    //clova upload file to text
     @Override
     public String FileSpeechToText(MultipartFile file) throws IOException {
         String clientId = "69z4ol7120";             // Application Client ID";
