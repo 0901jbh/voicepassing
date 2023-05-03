@@ -19,10 +19,8 @@ public class ResultServiceImpl implements ResultService {
     private final ResultRepository resultRepository;
 
     @Override
-    public List<ResultDTO.Result> getResultList() {
-        List<Result> resultsEntity = resultRepository.findAll();
-
-
+    public List<ResultDTO.Result> getResultList(String androidId) {
+        List<Result> resultsEntity = resultRepository.findAllByAndroidId(androidId);
         List<ResultDTO.Result> resultList = new ArrayList<>();
         for (Result result: resultsEntity) {
             ResultDTO.Result resultDto = buildResult(result);
@@ -48,21 +46,11 @@ public class ResultServiceImpl implements ResultService {
         }
 
     }
+    public ResultDTO.ResultNum getResultNum() {
+        long resultNum = resultRepository.count();
+        return ResultDTO.ResultNum.builder().resultNum(resultNum).build();
+    }
 
-//    @Override
-//    public boolean addFavoriteBoardGame() {
-//
-//
-//        if(userRepository.existsByUserId(userId) && boardGameRepository.existsById(gameId)){
-//            Favorite fav = Favorite.builder()
-//                    .gameId(gameId)
-//                    .userId(userId)
-//                    .build();
-//            favoriteRepository.save(fav);
-//            return true;
-//        }
-//        return false;
-//    }
 
     private ResultDTO.Result buildResult(Result result){
         ResultDTO.Result resultDto = ResultDTO.Result.builder()

@@ -105,13 +105,13 @@ public class AnalysisServiceImpl implements AnalysisService{
 
     //Clova : file -> text
     @Override
-    public String SpeechToText() {
+    public String SpeechToText(String sessionId,String fileName) {
         String clientId = "69z4ol7120";             // Application Client ID";
         String clientSecret = "BgrF1fA39jXxMM2v9OLdzIQMl4JNbjMBg17uptzP";     // Application Client Secret";
 
 
         try {
-            String imgFile = RECORD_PATH+"/1.mp3";
+            String imgFile = RECORD_PATH+"/"+sessionId+"/part/"+fileName;
             File voiceFile = new File(imgFile);
 
             String language = "Kor";        // 언어 코드 ( Kor, Jpn, Eng, Chn )

@@ -43,14 +43,14 @@ public class AnalysisController {
 
     @PostMapping("/colva")
     public ResponseEntity<?> clova(){
-        String text = analysisService.SpeechToText();
+        String text = "test";//analysisService.SpeechToText();
         return ResponseEntity.ok("File uploaded");
     }
 
     @PostMapping("/colvaAI")
     public ResponseEntity<?> clovaAI(){
 
-        String text = analysisService.SpeechToText();
+        String text = "test";//analysisService.SpeechToText();
         boolean isFinish = false;
         String sessionId = "SSAFY1357";
         AIResponseDTO.Request request = AIResponseDTO.Request.builder()

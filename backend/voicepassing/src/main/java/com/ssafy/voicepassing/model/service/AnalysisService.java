@@ -21,7 +21,7 @@ public interface AnalysisService {
 
 
     //clova TTS
-    public String SpeechToText();
+    public String SpeechToText(String sessionId, String fileName);
     //text to AI
     public Map<String,Object> recommend(AIResponseDTO.Request rb);
 
