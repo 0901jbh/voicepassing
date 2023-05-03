@@ -42,7 +42,9 @@ public class ResultServiceImpl implements ResultService {
                 .androidId(result.getAndroidId())
                 .category(result.getCategory())
                 .risk(result.getRisk())
+                .phoneNumber(result.getPhoneNumber())
                 .build();
+
         return resultDto;
     }
 
