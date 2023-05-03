@@ -6,7 +6,6 @@ import random
 import numpy as np
 import os
 import pickle
-import pandas as pd
 
 # seed setting
 RANDOM_SEED = 42
@@ -29,14 +28,14 @@ trainer = VoicePassingTrainer(model = VoicePassingModel())
 criterion = torch.nn.CrossEntropyLoss()
 
 # train
-trainer.train(200, train_loader = VoicePassingDataloader(
-                                    batch_size=64,
+trainer.train(50, train_loader = VoicePassingDataloader(
+                                    batch_size=32,
                                     shuffle=True,
                                     non_augmented=True,
                                     ),
             criterion = criterion,
             valid_loader = VoicePassingDataloader(
-                                    batch_size=64,
+                                    batch_size=32,
                                     shuffle=False,
                                     non_augmented=True,
                                     test = True,
@@ -46,10 +45,8 @@ trainer.train(200, train_loader = VoicePassingDataloader(
 # save result
 history = trainer.get_history()
 
-pd.DataFrame(data=np.array(history["train_accuracy"]).T).to_csv("ta.csv")
-pd.DataFrame(data=np.array(history["train_loss"]).T).to_csv("tl.csv")
-pd.DataFrame(data=np.array(history["valid_accuracy"]).T).to_csv("va.csv")
-pd.DataFrame(data=np.array(history["valid_loss"]).T).to_csv("vl.csv")
-
+with open("history", "wb") as f:
+    pk = pickle.dumps(history)
+    f.write(pk)
 
 print("== The Process is DONE! ==")
