@@ -4,6 +4,7 @@ package com.ssafy.voicepassing.controller;
 import com.ssafy.voicepassing.model.dto.AIResponseDTO;
 import com.ssafy.voicepassing.model.dto.ResultDTO;
 import com.ssafy.voicepassing.model.service.AnalysisService;
+import com.ssafy.voicepassing.model.service.ClovaSpeechService;
 import com.ssafy.voicepassing.model.service.ResultService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -37,10 +38,33 @@ public class AnalysisController {
 
     private final AnalysisService analysisService;
 
+    final ClovaSpeechService clovaSpeechClient = new ClovaSpeechService();
+    ClovaSpeechService.NestRequestEntity requestEntity = new ClovaSpeechService.NestRequestEntity();
 
 
+    @PostMapping("cs")
+    public ResponseEntity<?> cs(){
+        String result = null;
+        String path = "C:\\Users\\SSAFY\\Desktop\\test\\1.mp3";
+        result = clovaSpeechClient.upload(new File(path), requestEntity);
+
+      //  result = clovaSpeechClient.upload(new File(path), requestEntity);
+
+       // String str = result;
+
+        int textIndex = result.lastIndexOf("\"text\":");
+        int commaIndex = result.indexOf(",", textIndex);
+        String txt = result.substring(textIndex + 8, commaIndex - 1);
+        //System.out.println("msg : " +  txt);
 
 
+        // result = clovaSpeechClient.url("file URL", requestEntity);
+        // result = clovaSpeechClient.objectStorage("Object Storage key", requestEntity);
+        //System.out.println(result);
+        if(result != null)
+            return ResponseEntity.ok(txt);
+        return ResponseEntity.ok(result); //에러 처리 할 곳
+    }
     @PostMapping("/colva")
     public ResponseEntity<?> clova(){
         String text = "test";//analysisService.SpeechToText();
