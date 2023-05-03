@@ -1,9 +1,0 @@
-C:/Users/SSAFY/Desktop/S08P31A607/frontend/voicepassing/build/windows/runner/Debug/data/icudtl.dat
-C:/Users/SSAFY/Desktop/S08P31A607/frontend/voicepassing/build/windows/runner/Debug/flutter_windows.dll
-C:/Users/SSAFY/Desktop/S08P31A607/frontend/voicepassing/build/windows/runner/Debug/data/flutter_assets/AssetManifest.json
-C:/Users/SSAFY/Desktop/S08P31A607/frontend/voicepassing/build/windows/runner/Debug/data/flutter_assets/FontManifest.json
-C:/Users/SSAFY/Desktop/S08P31A607/frontend/voicepassing/build/windows/runner/Debug/data/flutter_assets/fonts/MaterialIcons-Regular.otf
-C:/Users/SSAFY/Desktop/S08P31A607/frontend/voicepassing/build/windows/runner/Debug/data/flutter_assets/kernel_blob.bin
-C:/Users/SSAFY/Desktop/S08P31A607/frontend/voicepassing/build/windows/runner/Debug/data/flutter_assets/NOTICES.Z
-C:/Users/SSAFY/Desktop/S08P31A607/frontend/voicepassing/build/windows/runner/Debug/data/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf
-C:/Users/SSAFY/Desktop/S08P31A607/frontend/voicepassing/build/windows/runner/Debug/data/flutter_assets/shaders/ink_sparkle.frag

@@ -1,4 +1,0 @@
-#Mon May 01 16:52:33 KST 2023
-base.0=C\:\\Users\\SSAFY\\Desktop\\S08P31A607\\frontend\\voicepassing\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
-path.0=classes.dex
-renamed.0=classes.dex
