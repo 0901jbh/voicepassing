@@ -1,6 +1,7 @@
 package com.ssafy.voicepassing.controller;
 
 
+import com.ssafy.voicepassing.model.dto.AIResponseDTO;
 import com.ssafy.voicepassing.model.dto.ResultDTO;
 import com.ssafy.voicepassing.model.service.AnalysisService;
 import com.ssafy.voicepassing.model.service.ResultService;
@@ -42,16 +43,90 @@ public class AnalysisController {
 
     @PostMapping("/colva")
     public ResponseEntity<?> clova(){
-        String text = analysisService.SpeechToText();
+        String text = "test";//analysisService.SpeechToText();
         return ResponseEntity.ok("File uploaded");
     }
 
-    @PostMapping("/AI")
-    public ResponseEntity<?> getAI(@RequestBody ResultDTO.Send rb){
+    @PostMapping("/colvaAI")
+    public ResponseEntity<?> clovaAI(){
+
+        String text = "test";//analysisService.SpeechToText();
+        boolean isFinish = false;
+        String sessionId = "SSAFY1357";
+        AIResponseDTO.Request request = AIResponseDTO.Request.builder()
+                .text(text)
+                .isFinish(false)
+                .sessionId(sessionId)
+                .build();
+
         HttpStatus status = HttpStatus.OK;
         Map<String, Object> resultMap = new HashMap<>();
-        System.out.println("1 :" + rb.getText());
-        resultMap = analysisService.recommend2(rb);
+
+       resultMap = analysisService.recommend(request);
+        //Object obj = resultMap.get("result");
+       return new ResponseEntity<Map<String,Object>>(resultMap,status);
+    }
+
+    @PostMapping("/colvaAIfront")
+    public ResponseEntity<?> clovaAIfront(){
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+        ResponseEntity<?> re = clovaAI();
+
+        return re;
+    }
+
+    @PostMapping("/db")
+    public ResponseEntity<?> DB(){
+
+        String text = analysisService.SpeechToText("a","b");
+        boolean isFinish = false;
+        String sessionId = "SSAFY1357";
+        AIResponseDTO.Request request = AIResponseDTO.Request.builder()
+                .text(text)
+                .isFinish(false)
+                .sessionId(sessionId)
+                .build();
+
+        HttpStatus status = HttpStatus.OK;
+        Map<String, Object> resultMap = new HashMap<>();
+
+        resultMap = analysisService.recommend(request);
+        Object obj = resultMap.get("result");
+        AIResponseDTO.Response rep = (AIResponseDTO.Response) resultMap.get("result");
+        String phoneNumber = "010-1234-5678";
+        String androidId = "android1";
+        ResultDTO.Result res = ResultDTO.Result.builder()
+                .androidId(androidId)
+                .phoneNumber(phoneNumber)
+                .category(rep.getTotalCategory())
+                .risk((int)rep.getTotalCategoryScore())
+                .build();
+
+        Boolean b = resultService.addResult(res);
+        System.out.println(b);
+
+
+        return new ResponseEntity<Map<String,Object>>(resultMap,status);
+    }
+
+
+
+    @PostMapping("/AI")
+    public ResponseEntity<?> getAI(@RequestBody AIResponseDTO.Request rb){
+        HttpStatus status = HttpStatus.OK;
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap = analysisService.recommend(rb);
+
+        return new ResponseEntity<Map<String,Object>>(resultMap,status);
+    }
+
+    @PostMapping("/result")
+    public ResponseEntity<?> getResult(@RequestBody AIResponseDTO.Request rb){
+        HttpStatus status = HttpStatus.OK;
+        Map<String, Object> resultMap = new HashMap<>();
+
+        resultMap = analysisService.getResult(rb);
 
         return new ResponseEntity<Map<String,Object>>(resultMap,status);
     }
@@ -74,10 +149,26 @@ public class AnalysisController {
 
     @PostMapping("/file")
     public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
-       String str = analysisService.uploadFile(file);
+        //String text = analysisService.SpeechToText();
+        String text = analysisService.FileSpeechToText(file);
+        System.out.println("after file speech");
+        boolean isFinish = false;
+        String sessionId = "SSAFY1357";
+        AIResponseDTO.Request request = AIResponseDTO.Request.builder()
+                .text(text)
+                .isFinish(false)
+                .sessionId(sessionId)
+                .build();
+
+        HttpStatus status = HttpStatus.OK;
+        Map<String, Object> resultMap = new HashMap<>();
+
+        resultMap = analysisService.recommend(request);
+
+        System.out.println(resultMap.get("result"));
+        return new ResponseEntity<Map<String,Object>>(resultMap,status);
 
 
-        return ResponseEntity.ok("File uploaded");
     }
 
 

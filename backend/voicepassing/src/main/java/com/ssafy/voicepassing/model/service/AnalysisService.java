@@ -12,13 +12,22 @@ import java.util.Map;
 public interface AnalysisService {
 
 
+
+    //upload_file clova TTS
+    public String FileSpeechToText(MultipartFile file) throws IOException;
+
+    //multipartfile -> file
+    public File mTF(MultipartFile mfile) throws IOException;
+
+
     //clova TTS
-    public String SpeechToText();
+    public String SpeechToText(String sessionId, String fileName);
     //text to AI
     public Map<String,Object> recommend(AIResponseDTO.Request rb);
 
-    //now temp
-    public Map<String,Object> recommend2(ResultDTO.Send rb);
+    //result to front
+    public Map<String,Object> getResult(AIResponseDTO.Request rb);
+
 
 
     //검사 파일 올리기
