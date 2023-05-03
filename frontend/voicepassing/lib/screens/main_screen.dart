@@ -1,7 +1,14 @@
+import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
+import 'package:voicepassing/services/recent_file.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:styled_text/styled_text.dart';
 import 'package:voicepassing/screens/analytics_screen.dart';
@@ -22,6 +29,10 @@ class _MainScreenState extends State<MainScreen> {
   // 통화 상태 감지 및 오버레이 위젯 띄우기 위한 임시 변수
   PhoneStateStatus phoneStatus = PhoneStateStatus.NOTHING;
   bool granted = false;
+  final String _recordDirectoryPath = "/storage/emulated/0/Recordings/Call";
+  late Directory recordDirectory;
+  late File? targetFile;
+  late WebSocketChannel _ws;
 
   // 권한 요청
   Future<bool> requestPermission() async {
@@ -41,12 +52,32 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    initializer();
+  }
+
+  void initializer() async {
+    await initializeDateFormatting();
+    await Permission.phone.request();
+    await Permission.storage.request();
+    await Permission.manageExternalStorage.request();
+    bool reqPermission = await requestPermission();
+    if (reqPermission) {
+      setStream();
+    }
+    recordDirectory = Directory(_recordDirectoryPath);
+    var files = await recordDirectory.list().toList();
+    debugPrint('FILES: $files');
   }
 
   // 통화 상태 감지
   void setStream() {
     PhoneState.phoneStateStream.listen((event) async {
-      // 전화 걸려올 때 크기 0인 위젯 생성
+      setState(() {
+        if (event != null) {
+          phoneStatus = event;
+        }
+      });
+      // 전화 걸려올 때 크기 0인 위젯 생성(추후 수정할 것)
       if (event == PhoneStateStatus.CALL_INCOMING) {
         if (await FlutterOverlayWindow.isActive()) return;
         await FlutterOverlayWindow.showOverlay(
@@ -55,12 +86,42 @@ class _MainScreenState extends State<MainScreen> {
           alignment: OverlayAlignment.center,
           visibility: NotificationVisibility.visibilityPublic,
           positionGravity: PositionGravity.auto,
-          height: 100,
-          width: 100,
+          height: 400,
+          width: 400,
         );
-        debugPrint("위젯 생성");
+      } else if (event == PhoneStateStatus.CALL_STARTED) {
+        // 통화 시작되면 웹소켓 연결 및 통화녹음 데이터 서버로 전송
+        _ws = WebSocketChannel.connect(
+          Uri.parse('ws://k8a607.p.ssafy.io:8080/record'),
+        );
+        debugPrint('111111111111');
+        transferVoice();
       }
     });
+  }
+
+  void transferVoice() async {
+    var temp = await recentFile(recordDirectory);
+    targetFile = temp is FileSystemEntity ? temp as File : null;
+    var offset = 0;
+    if (targetFile is File) {
+      Timer.periodic(const Duration(seconds: 6), (timer) async {
+        debugPrint('🙏🙏🙏🙏🙏🙏🙏');
+        Uint8List entireBytes = targetFile!.readAsBytesSync();
+        var nextOffset = entireBytes.length;
+        var splittedBytes = entireBytes.sublist(offset, nextOffset);
+        offset = nextOffset;
+        _ws.sink.add(splittedBytes);
+
+        if (phoneStatus == PhoneStateStatus.CALL_ENDED) {
+          timer.cancel();
+        }
+      });
+    } else {
+      // 에러(파일 없음)
+      debugPrint('파일 없음');
+      _ws.sink.close();
+    }
   }
 
   @override

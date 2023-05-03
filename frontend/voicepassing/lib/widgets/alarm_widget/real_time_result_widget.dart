@@ -22,12 +22,11 @@ class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
   @override
   void initState() {
     super.initState();
-    debugPrint("HELLO");
     setStream();
   }
 
   void setStream() {
-    debugPrint('asdfdsfsdf');
+    debugPrint('알림 위젯 setStream');
     PhoneState.phoneStateStream.listen((event) {
       if (event == PhoneStateStatus.CALL_STARTED) {
         debugPrint('전화 이벤트 : $event');
