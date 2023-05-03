@@ -25,10 +25,7 @@
 # RUN ./gradlew bootJar
 
 FROM openjdk:11
-ARG JAR_FILE=backend/voicepassing/build/libs/voicepassing-0.0.1-SNAPSHOT.jar
-
-RUN pwd
-RUN ls ./var/
+ARG JAR_FILE=./build/libs/voicepassing-0.0.1-SNAPSHOT.jar
 
 # COPY ${JAR_FILE} app.jar
 
