@@ -1,4 +1,4 @@
-from flask import Flask,request, jsonify
+from flask import Flask,request, jsonify, make_response
 from pydub import AudioSegment
 import subprocess
 import os
@@ -38,9 +38,9 @@ def recoverM4A():
 
             return {"msg": True, "new_file": new_file }
         except subprocess.CalledProcessError:
-            return {"msg": "실패"}
+            return make_response({"msg": "fail"}, 500)
     else:
-        return {"msg": "세션없음"}
+        return make_response({"msg": "No session"}, 400)
 
 if __name__ == '__main__':
     print("start_flask")
