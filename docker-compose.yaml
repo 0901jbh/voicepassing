@@ -1,21 +1,21 @@
 version: '3.3'
 services:
-  spring:
-    # 
-    build: ./backend/voicepassing
-    container_name: spring
-    environment:
-      - DB_URL=${MYSQL_URL}
-      - DB_USER=${MYSQL_USER}
-      - DB_PASSWORD=${MYSQL_PASSWORD}
-      - DOMAIN_UNTRUNC=${DOMAIN_UNTRUNC}
-      - SPRING_RECORD_TEMP_DIR=/data
-    ports:
-      - 8080:8080
-    volumes:
-      # - ./backend/voicepassing/build/libs/voicepassing-0.0.1-SNAPSHOT.jar:/app.jar
-      - VOICE_PASSING:/data
-    command: java -jar build/libs/voicepassing-0.0.1-SNAPSHOT.jar
+  # spring:
+  #   # 
+  #   build: ./backend/voicepassing
+  #   container_name: spring
+  #   environment:
+  #     - DB_URL=${MYSQL_URL}
+  #     - DB_USER=${MYSQL_USER}
+  #     - DB_PASSWORD=${MYSQL_PASSWORD}
+  #     - DOMAIN_UNTRUNC=${DOMAIN_UNTRUNC}
+  #     - SPRING_RECORD_TEMP_DIR=${SPRING_RECORD_TEMP_DIR}
+  #   ports:
+  #     - 8080:8080
+  #   volumes:
+  #     # - ./backend/voicepassing/build/libs/voicepassing-0.0.1-SNAPSHOT.jar:/app.jar
+  #     - VOICE_PASSING:/data
+  #   command: java -jar build/libs/voicepassing-0.0.1-SNAPSHOT.jar
 
   untrunc:
     build: ./backend/untrunc
@@ -24,6 +24,10 @@ services:
     volumes:
       - ./backend/untrunc/app.py:/app.py
       - VOICE_PASSING:/data
+    environment:
+      - FLASK_DATA_PATH=/data/WebSocket
+      - FLASK_FILE_PERIOD=15000
+      - FLASK_FILE_DUPLICATE=0
     ports:
       - 8300:8000
 volumes:
