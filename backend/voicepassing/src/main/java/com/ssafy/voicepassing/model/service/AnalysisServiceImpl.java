@@ -30,6 +30,7 @@ public class AnalysisServiceImpl implements AnalysisService{
     //@Value("${fastapi.url}")
     private String fastApiUrl;
 
+    //clova upload file to text
     @Override
     public String FileSpeechToText(MultipartFile file) throws IOException {
         String clientId = "69z4ol7120";             // Application Client ID";
@@ -110,7 +111,7 @@ public class AnalysisServiceImpl implements AnalysisService{
 
 
         try {
-            String imgFile = RECORD_PATH+"/1.m4a";
+            String imgFile = RECORD_PATH+"/1.mp3";
             File voiceFile = new File(imgFile);
 
             String language = "Kor";        // 언어 코드 ( Kor, Jpn, Eng, Chn )

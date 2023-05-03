@@ -20,13 +20,12 @@ public class Result extends BaseTimeEntity {
     private String androidId;
 
     @Column(nullable = false)
-    private int risk;
-
+    private String phoneNumber;
     @Column()
     private int category;
 
-    @Column(nullable = false, length = 6000)
-    private String text;
+    @Column(nullable = false)
+    private int risk;
 
 
 }
