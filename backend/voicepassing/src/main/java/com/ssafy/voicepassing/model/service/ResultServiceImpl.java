@@ -7,6 +7,7 @@ import com.ssafy.voicepassing.model.repository.ResultRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,13 +31,49 @@ public class ResultServiceImpl implements ResultService {
         return resultList;
 
     }
+
+    @Override
+    public boolean addResult(ResultDTO.Result resultDTO) {
+        try{
+            Result result = Result.builder()
+                    .androidId(resultDTO.getAndroidId())
+                    .category(resultDTO.getCategory())
+                    .phoneNumber(resultDTO.getPhoneNumber())
+                    .risk(resultDTO.getRisk())
+                    .build();
+            resultRepository.save(result);
+            return true;
+        } catch (PersistenceException e) {
+            return false;
+        }
+
+    }
+
+//    @Override
+//    public boolean addFavoriteBoardGame() {
+//
+//
+//        if(userRepository.existsByUserId(userId) && boardGameRepository.existsById(gameId)){
+//            Favorite fav = Favorite.builder()
+//                    .gameId(gameId)
+//                    .userId(userId)
+//                    .build();
+//            favoriteRepository.save(fav);
+//            return true;
+//        }
+//        return false;
+//    }
+
     private ResultDTO.Result buildResult(Result result){
         ResultDTO.Result resultDto = ResultDTO.Result.builder()
                 .resultId(result.getResultId())
                 .androidId(result.getAndroidId())
                 .category(result.getCategory())
                 .risk(result.getRisk())
+                .phoneNumber(result.getPhoneNumber())
                 .build();
+
         return resultDto;
     }
+
 }
