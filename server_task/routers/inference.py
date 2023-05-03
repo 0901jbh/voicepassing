@@ -17,6 +17,8 @@ tokenizer = DistilBertTokenizer.from_pretrained("distilbert-base-multilingual-ca
 device = "cuda" if is_available else "cpu"
 softmax = torch.nn.Softmax(dim = 0)
 session_store = dict()
+T = 100
+THRESHOLD = 0.7
 
 @router.post("", response_model = PhoneCallModel, status_code = 200)
 async def classify_sentence(input_model : ReferenceInputModel, response : Response):
@@ -25,10 +27,9 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
     is_finish = input_model.isFinish
     session_id = input_model.sessionId
 
-    # 1. Text Classification
-    
-    # 1.1. Tokenization
+    # 1. BERT Classification
 
+    ## 1.1. Tokenization
     tokens = tokenizer(
         text = text,
         add_special_tokens = True,
@@ -37,24 +38,34 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
         return_tensors = "pt"
     )
 
-    # classification using bayesian classifier
-    label, label_probs, word_probs = pipeline.forward(text)
+    output, attention = classifier(tokens)
+    label_probs = torch.nn.functional.softmax(output.squeeze() / T)
 
-    # 분기 1 : 혐의 없음 (분석을 했는데, 보이스피싱이 아닌 경우)
+    # 2. Bayesian Classification
+    b_label, b_label_probs, word_probs = pipeline.forward(text)
+
+    # 3. get result
+    label_probs = (label_probs + torch.FloatTensor(b_label_probs)) / 2
+    label = torch.argmax(label_probs, dim = 0).item()
+
+    ## 3.1. label 설정하기
+    if label_probs[label] < THRESHOLD : # 일정 기준을 넘지 못하면, 다 혐의 없음
+        label = 0
+
+    # 4. 분기 1 : 혐의 없음 (분석을 했는데, 보이스피싱이 아닌 경우)
     if label == 0:
         empty_phone_call_model = PhoneCallModel()
         response.status_code = 204
         return empty_phone_call_model
-
-    # 가장 확률이 높은 단어 추출
+    
+    # 5. 특정 키워드 추출하기
+    
+    word_probs = word_probs.as_list(label = label)
     words, probs = zip(*word_probs)
-    print('probs bf smx', probs),
     probs = softmax(torch.FloatTensor(probs))
-    print('probs bf after', probs),
     best_prob_idx = torch.argmax(probs)
     best_word = words[best_prob_idx]
     best_prob = probs[best_prob_idx].item()
-    print('label probs', label_probs)
 
     sentence_model = SentenceModel(
         sentCategory = label,
@@ -88,24 +99,6 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
         del session_store[session_id]
 
     return phone_call_model
-
-    """ 여기 밑으로 살려야 한다. """
-
-    # # tokenize
-
-
-    # print(tokens)
-    # result, attention = classifier(tokens)
-    # last_attention = torch.mean(attention[-1], dim = 1).squeeze()
-
-    # detokenized = [tokenizer.decode(token) for token in tokens['input_ids'].squeeze()]
-    # print(detokenized)
-
-    # pd.DataFrame(last_attention, columns= detokenized).to_excel(f"hi.xlsx")
-    
-    # return { "result" : result.detach().squeeze().numpy().tolist()}
-
-    """ 여기 위로 살려야 한다. """
 
 @router.post("/test")
 async def junghee_test(input_model : ReferenceInputModel):
