@@ -31,7 +31,7 @@ def recoverM4A():
                     target = audio_file[i:i+window_size+1000]
                     if len(target)==(window_size+1000):
                         target.export(f"{partition_folder}/{cnt}.mp3", format="mp3")
-                        new_file.append(cnt)
+                        new_file.append(f"{cnt}.mp3")
                 cnt += 1
 
             return {"msg": True, "new_file": new_file }
