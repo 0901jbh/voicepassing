@@ -14,12 +14,12 @@ public class ResultDTO{
     @Builder
     public static class Result {
 
-
         private int resultId;
         private String androidId;
         private String phoneNumber;
         private float risk;
         private int category;
+
 
 
 
