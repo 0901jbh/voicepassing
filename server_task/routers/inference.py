@@ -41,9 +41,12 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
         return_tensors = "pt"
     )
 
-    output, _ = classifier(tokens)
+    output, attention = classifier(tokens)
     label_probs = torch.nn.functional.softmax(output.squeeze() / T)
 
+    # attention = torch.mean(attention[-1], dim = 1).squeeze()
+    # pd.DataFrame(attention, columns = ["<CLS>"] + tokenizer.tokenize(text) + ["<SEP>"]).to_excel("attention.xlsx")
+    
     # 2. Bayesian Classification
     _, b_label_probs, word_probs = pipeline.forward(text)
 
@@ -61,7 +64,7 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
         label = 0
 
     # 4. 분기 1 : 혐의 없음 (분석을 했는데, 보이스피싱이 아닌 경우)
-    if label == 0:
+    if label == 0 and not is_finish:
         empty_phone_call_model = PhoneCallModel()
         response.status_code = 204
         return empty_phone_call_model
@@ -70,6 +73,7 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
 
     word_probs = word_probs.as_list(label = label)
     words, probs = zip(*word_probs)
+
     probs = softmax(torch.FloatTensor(probs))
     best_prob_idx = torch.argmax(probs)
     best_word = words[best_prob_idx]
@@ -86,20 +90,22 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
     has_session = session_store.get(session_id)
     if not has_session:
         session_store[session_id] = []
-
-    session_store[session_id].append(sentence_model)
+    
+    if label != 0:
+        session_store[session_id].append(sentence_model)
 
     # 분기 2 : 혐의 있음, 통화 지속됨 (분석을 했는데, 보이스피싱에 해당하는 경우 + 통화가 안 끝났을 경우)
     if not is_finish:
         empty_phone_call_model = PhoneCallModel(results = [sentence_model])
         return empty_phone_call_model
 
-    
     # 결과값 반환
 
     weighted_probs, call_label = classify_phonecall(prob_store.get(session_id))
 
-    print(weighted_probs, call_label)
+    if call_label == 0:
+        response.status_code = 204
+        return response
 
     phone_call_model = {
         "totalCategory" : call_label,
@@ -107,9 +113,8 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
         "results" : session_store[session_id].copy() if is_finish else [sentence_model] # temporary value
     }
 
-    if is_finish:
-        del session_store[session_id]
-        del prob_store[session_id]
+    del session_store[session_id]
+    del prob_store[session_id]
 
     return phone_call_model
 
