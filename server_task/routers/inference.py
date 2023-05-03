@@ -16,9 +16,12 @@ router = APIRouter(
 tokenizer = DistilBertTokenizer.from_pretrained("distilbert-base-multilingual-cased")
 device = "cuda" if is_available else "cpu"
 softmax = torch.nn.Softmax(dim = 0)
+
 session_store = dict()
-T = 100
-THRESHOLD = 0.7
+prob_store = dict()
+
+T = 36
+THRESHOLD = 0.5
 
 @router.post("", response_model = PhoneCallModel, status_code = 200)
 async def classify_sentence(input_model : ReferenceInputModel, response : Response):
@@ -38,15 +41,20 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
         return_tensors = "pt"
     )
 
-    output, attention = classifier(tokens)
+    output, _ = classifier(tokens)
     label_probs = torch.nn.functional.softmax(output.squeeze() / T)
 
     # 2. Bayesian Classification
-    b_label, b_label_probs, word_probs = pipeline.forward(text)
+    _, b_label_probs, word_probs = pipeline.forward(text)
 
-    # 3. get result
+    # 3. get result and save
     label_probs = (label_probs + torch.FloatTensor(b_label_probs)) / 2
     label = torch.argmax(label_probs, dim = 0).item()
+
+    if not prob_store.get(session_id):
+        prob_store[session_id] = []
+
+    prob_store[session_id].append(label_probs.detach().cpu().numpy().tolist())
 
     ## 3.1. label 설정하기
     if label_probs[label] < THRESHOLD : # 일정 기준을 넘지 못하면, 다 혐의 없음
@@ -59,7 +67,7 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
         return empty_phone_call_model
     
     # 5. 특정 키워드 추출하기
-    
+
     word_probs = word_probs.as_list(label = label)
     words, probs = zip(*word_probs)
     probs = softmax(torch.FloatTensor(probs))
@@ -86,17 +94,22 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
         empty_phone_call_model = PhoneCallModel(results = [sentence_model])
         return empty_phone_call_model
 
-    classify_phonecall(session_store.get(session_id))
+    
     # 결과값 반환
 
+    weighted_probs, call_label = classify_phonecall(prob_store.get(session_id))
+
+    print(weighted_probs, call_label)
+
     phone_call_model = {
-        "totalCategory" : 1 if is_finish else -1, # temporary value
-        "totalCategoryScore" : 0.9 if is_finish else -1, # temporay value
+        "totalCategory" : call_label,
+        "totalCategoryScore" : weighted_probs[call_label].item(),
         "results" : session_store[session_id].copy() if is_finish else [sentence_model] # temporary value
     }
 
     if is_finish:
         del session_store[session_id]
+        del prob_store[session_id]
 
     return phone_call_model
 
