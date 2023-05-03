@@ -25,6 +25,18 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
     is_finish = input_model.isFinish
     session_id = input_model.sessionId
 
+    # 1. Text Classification
+    
+    # 1.1. Tokenization
+
+    tokens = tokenizer(
+        text = text,
+        add_special_tokens = True,
+        truncation = True,
+        max_length = 512,
+        return_tensors = "pt"
+    )
+
     # classification using bayesian classifier
     label, label_probs, word_probs = pipeline.forward(text)
 
@@ -80,13 +92,7 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
     """ 여기 밑으로 살려야 한다. """
 
     # # tokenize
-    # tokens = tokenizer(
-    #     text = text,
-    #     add_special_tokens = True,
-    #     truncation = True,
-    #     max_length = 512,
-    #     return_tensors = "pt"
-    # )
+
 
     # print(tokens)
     # result, attention = classifier(tokens)

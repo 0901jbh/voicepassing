@@ -10,7 +10,7 @@ import torch
 async def lifespan(app : FastAPI):
     print("server opened")
 
-    model.load_state_dict(torch.load(r"./classifier/weight/multilingual/best.pt", map_location = torch.device("cpu")))
+    model.load_state_dict(torch.load(r"./classifier/weight/best_performance/best.pt", map_location = torch.device("cpu")))
     model.eval()
 
     print("=== pretrained weight of the model is succesfully loaded :) ===")
