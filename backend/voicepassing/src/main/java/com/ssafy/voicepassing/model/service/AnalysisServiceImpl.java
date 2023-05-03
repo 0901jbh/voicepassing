@@ -18,9 +18,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -33,11 +31,80 @@ public class AnalysisServiceImpl implements AnalysisService{
     private String fastApiUrl;
 
     @Override
+    public String FileSpeechToText(MultipartFile file) throws IOException {
+        String clientId = "69z4ol7120";             // Application Client ID";
+        String clientSecret = "BgrF1fA39jXxMM2v9OLdzIQMl4JNbjMBg17uptzP";     // Application Client Secret";
+        System.out.println("파일 찾기 전");
+        File voiceFile = mTF(file);
+        System.out.println("파일 찾기 후");
+        System.out.println("여기서 나가지나?");
+        try {
+            //String imgFile = RECORD_PATH+"/1.m4a";
+            //File voiceFile = new File(imgFile);
+
+            //File voiceFile = file;
+
+            String language = "Kor";        // 언어 코드 ( Kor, Jpn, Eng, Chn )
+            String apiURL = "https://naveropenapi.apigw.ntruss.com/recog/v1/stt?lang=" + language;
+            URL url = new URL(apiURL);
+
+            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+            conn.setUseCaches(false);
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setRequestProperty("Content-Type", "application/octet-stream");
+            conn.setRequestProperty("X-NCP-APIGW-API-KEY-ID", clientId);
+            conn.setRequestProperty("X-NCP-APIGW-API-KEY", clientSecret);
+            System.out.println("살아있나?");
+            OutputStream outputStream = conn.getOutputStream();
+            System.out.println("진짜여기");
+            FileInputStream inputStream = new FileInputStream(voiceFile);
+            System.out.println("여기다");
+            byte[] buffer = new byte[4096];
+            int bytesRead = -1;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+            outputStream.flush();
+            inputStream.close();
+            BufferedReader br = null;
+            int responseCode = conn.getResponseCode();
+            if(responseCode == 200) { // 정상 호출
+                br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            } else {  // 오류 발생
+                System.out.println("error!!!!!!! responseCode= " + responseCode);
+                br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            }
+            String inputLine;
+            System.out.println("문제");
+            if(br != null) {
+                StringBuffer response = new StringBuffer();
+                while ((inputLine = br.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                br.close();
+                String result = response.toString();
+                result = result.substring(9,result.length()-2);
+                return result;
+            } else {
+                System.out.println("error !!!");
+
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return "error";
+    }
+
+    public File mTF(MultipartFile mfile) throws IOException {
+        File file = new File(mfile.getOriginalFilename());
+        mfile.transferTo(file);
+        return file;
+    }
+
+    //Clova : file -> text
+    @Override
     public String SpeechToText() {
-        //String clientId = "YOUR_CLIENT_ID";             // Application Client ID";
-        //String clientSecret = "YOUR_CLIENT_SECRET";     // Application Client Secret";
-
-
         String clientId = "69z4ol7120";             // Application Client ID";
         String clientSecret = "BgrF1fA39jXxMM2v9OLdzIQMl4JNbjMBg17uptzP";     // Application Client Secret";
 
@@ -83,8 +150,9 @@ public class AnalysisServiceImpl implements AnalysisService{
                     response.append(inputLine);
                 }
                 br.close();
-                System.out.println(response.toString());
-                return response.toString();
+                String result = response.toString();
+                result = result.substring(9,result.length()-2);
+                return result;
             } else {
                 System.out.println("error !!!");
 
@@ -95,13 +163,14 @@ public class AnalysisServiceImpl implements AnalysisService{
         return "error";
     }
 
+    //text -> result 받기
     @Override
     public Map<String, Object> recommend(AIResponseDTO.Request rb) {
         Map<String, Object> resultMap = new HashMap<>();
         RestTemplate restTemplate = new RestTemplate();
 
 //    // 요청 Body 생성
-        Map<String, String> requestBody = new HashMap<>();
+        Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("text", rb.getText());
         requestBody.put("isFinish", Boolean.toString(rb.isFinish()));
         requestBody.put("sessionId", rb.getSessionId());
@@ -111,56 +180,60 @@ public class AnalysisServiceImpl implements AnalysisService{
         headers.setContentType(MediaType.APPLICATION_JSON);
 
 //    // HTTP 요청 생성
-        HttpEntity<Map<String, String>> httpEntity = new HttpEntity<>(requestBody, headers);
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestBody, headers);
 
 //    // FastAPI URL 설정
         String url = "http://localhost:8000/inference";
 
 //    // HTTP 요청 보내기
-        ResponseEntity<AIResponseDTO.Result> responseEntity = restTemplate.postForEntity(url,httpEntity,AIResponseDTO.Result.class);
+        ResponseEntity<AIResponseDTO.Response> responseEntity = restTemplate.postForEntity(url,httpEntity,AIResponseDTO.Response.class);
 
 //
 //// HTTP 응답 받기
-        AIResponseDTO.Result responseBody = responseEntity.getBody();
+        AIResponseDTO.Response responseBody = responseEntity.getBody();
         resultMap.put("result",responseBody);
 
         return resultMap;
     }
 
+    //front return test
     @Override
-    public Map<String, Object> recommend2(ResultDTO.Send rb) {
+    public Map<String, Object> getResult(AIResponseDTO.Request rb) {
         Map<String, Object> resultMap = new HashMap<>();
 
-        String text = rb.getText();
-        RestTemplate restTemplate = new RestTemplate();
+        AIResponseDTO.Result r = AIResponseDTO.Result.builder()
+                .sentCategory(1)
+                .sentCategoryScore((float)2.3)
+                .sentKeyword("경찰")
+                .keywordScore((float)1.1)
+                .sentence("경찰청 수사반입니다")
+                .build();
 
-//    // 요청 Body 생성
-        Map<String, String> requestBody = new HashMap<>();
-        requestBody.put("text", text);
-//        requestBody.put("isFinish", "false");
-//        requestBody.put("sessionId", "abc");
-//
-//    // HTTP Header 생성
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-//
-//    // HTTP 요청 생성
-        HttpEntity<Map<String, String>> httpEntity = new HttpEntity<>(requestBody, headers);
-//
-//    // FastAPI URL 설정
-        String url = "http://localhost:8000/inference";
-//
-//    // HTTP 요청 보내기
-        ResponseEntity<ResultDTO.Temp> responseEntity = restTemplate.postForEntity(url,httpEntity,ResultDTO.Temp.class);
+        AIResponseDTO.Result r2 = AIResponseDTO.Result.builder()
+                .sentCategory(1)
+                .sentCategoryScore((float)3.4)
+                .sentKeyword("수사반")
+                .keywordScore((float)1.11)
+                .sentence("경찰청 수사반입니다")
+                .build();
 
-//
-//// HTTP 응답 받기
-        ResultDTO.Temp responseBody = responseEntity.getBody();
-        resultMap.put("result",responseBody);
+        List<AIResponseDTO.Result> results = new ArrayList<>();
+        results.add(r);
+        results.add(r2);
+
+        AIResponseDTO.Response result = AIResponseDTO.Response.builder()
+                .totalCategory(1)
+                .totalCategoryScore(90)
+                .results(results)
+                .build();
+
+        System.out.println(result.getTotalCategory());
+        System.out.println(result.getTotalCategoryScore());
+
+        resultMap.put("result",result);
 
         return resultMap;
     }
-
 
 
 

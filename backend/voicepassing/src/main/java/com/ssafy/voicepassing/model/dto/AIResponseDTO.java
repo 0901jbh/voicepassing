@@ -26,7 +26,7 @@ public class AIResponseDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class AIResponse {
+    public static class Response {
         private int totalCategory;
         private float totalCategoryScore;
         private List<Result> results;

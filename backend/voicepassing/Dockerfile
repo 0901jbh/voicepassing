@@ -1,5 +1,25 @@
-FROM openjdk:11
-ARG JAR_FILE=backend/build/libs/*.jar
-COPY ${JAR_FILE} app.jar
-ENV USE_PROFILE local
-ENTRYPOINT ["java","-jar","-Dspring.profiles.active=${USE_PROFILE}","/app.jar"]
+FROM gradle:jdk11
+
+ARG DB_URL
+ARG DB_USER
+ARG DB_PASSWORD
+ARG DOMAIN_UNTRUNC
+ARG SPRING_RECORD_TEMP_DIR
+
+ENV DB_URL=${MYSQL_URL}
+ENV DB_USER=${MYSQL_USER}
+ENV DB_PASSWORD=${MYSQL_PASSWORD}
+ENV DOMAIN_UNTRUNC=${DOMAIN_UNTRUNC}
+ENV SPRING_RECORD_TEMP_DIR=/data
+
+ENV APP_HOME=/apps
+
+WORKDIR ${APP_HOME}
+
+COPY . ${APP_HOME}
+
+RUN cd ${APP_HOME}
+
+RUN chmod +x gradlew
+
+RUN ./gradlew bootJar
