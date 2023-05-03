@@ -4,11 +4,16 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from classifier.model import model
 from routers import inference
+import torch
 
 @asynccontextmanager
 async def lifespan(app : FastAPI):
     print("server opened")
-    model.set_weight()
+
+    model.load_state_dict(torch.load(r"./classifier/weight/best_performance/best.pt", map_location = torch.device("cpu")))
+    model.eval()
+
+    print("=== pretrained weight of the model is succesfully loaded :) ===")
 
     yield
     print("server closed")
@@ -42,5 +47,5 @@ if __name__ == "__main__":
     opt = parser.parse_args()
     print(opt)
 
-    uvicorn.run(app, host=opt.host, port = opt.port, reload = opt.reload)
+    uvicorn.run("__main__:app", host=opt.host, port = opt.port, reload = opt.reload)
 

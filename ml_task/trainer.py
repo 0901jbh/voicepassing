@@ -14,7 +14,7 @@ class VoicePassingTrainer():
 
         self.device = "cuda" if torch.cuda.is_available() else 'cpu'
         self.model = model.to(self.device)
-        self.tokenizer = DistilBertTokenizer.from_pretrained("distilbert-base-uncased")
+        self.tokenizer = DistilBertTokenizer.from_pretrained("distilbert-base-multilingual-cased")
         self.train_loss_history = []
         self.train_acc_history = []
         self.valid_loss_history = []
