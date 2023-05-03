@@ -25,7 +25,7 @@ public class Result extends BaseTimeEntity {
     private int category;
 
     @Column(nullable = false)
-    private int risk;
+    private float risk;
 
 
 }

@@ -17,7 +17,7 @@ public class ResultDTO{
         private int resultId;
         private String androidId;
         private String phoneNumber;
-        private int risk;
+        private float risk;
         private int category;
 
 
