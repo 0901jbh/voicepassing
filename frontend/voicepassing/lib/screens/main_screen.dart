@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
-import 'package:voicepassing/services/recent_file_path.dart';
+import 'package:voicepassing/services/recent_file.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -65,6 +65,8 @@ class _MainScreenState extends State<MainScreen> {
       setStream();
     }
     recordDirectory = Directory(_recordDirectoryPath);
+    var files = await recordDirectory.list().toList();
+    debugPrint('FILES: $files');
   }
 
   // 통화 상태 감지
@@ -84,25 +86,28 @@ class _MainScreenState extends State<MainScreen> {
           alignment: OverlayAlignment.center,
           visibility: NotificationVisibility.visibilityPublic,
           positionGravity: PositionGravity.auto,
-          height: 200,
-          width: 200,
+          height: 400,
+          width: 400,
         );
       } else if (event == PhoneStateStatus.CALL_STARTED) {
         // 통화 시작되면 웹소켓 연결 및 통화녹음 데이터 서버로 전송
         _ws = WebSocketChannel.connect(
-          Uri.parse('ws://k8a607.p.ssafy.io:8200/record'),
+          Uri.parse('ws://k8a607.p.ssafy.io:8080/record'),
         );
+        debugPrint('111111111111');
         transferVoice();
       }
     });
   }
 
   void transferVoice() async {
+    var temp = await recentFile(recordDirectory);
+    targetFile = temp is FileSystemEntity ? temp as File : null;
     var offset = 0;
-    var filePath = await recentFilePath(recordDirectory) ?? '';
-    if (File(filePath).existsSync()) {
-      Timer.periodic(const Duration(seconds: 10), (timer) async {
-        Uint8List entireBytes = File(filePath).readAsBytesSync();
+    if (targetFile is File) {
+      Timer.periodic(const Duration(seconds: 6), (timer) async {
+        debugPrint('🙏🙏🙏🙏🙏🙏🙏');
+        Uint8List entireBytes = targetFile!.readAsBytesSync();
         var nextOffset = entireBytes.length;
         var splittedBytes = entireBytes.sublist(offset, nextOffset);
         offset = nextOffset;
@@ -115,6 +120,7 @@ class _MainScreenState extends State<MainScreen> {
     } else {
       // 에러(파일 없음)
       debugPrint('파일 없음');
+      _ws.sink.close();
     }
   }
 
