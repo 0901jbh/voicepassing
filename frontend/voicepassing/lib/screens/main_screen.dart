@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:phone_state/phone_state.dart';
+
 import 'package:styled_text/styled_text.dart';
 import 'package:voicepassing/screens/analytics_screen.dart';
 import 'package:voicepassing/screens/result_screen.dart';
@@ -6,21 +10,129 @@ import 'package:voicepassing/screens/search_screen.dart';
 import 'package:voicepassing/screens/statics_screen.dart';
 import 'package:voicepassing/widgets/img_button.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
   final count = 283;
+  // 통화 상태 감지 및 오버레이 위젯 띄우기 위한 임시 변수
+  PhoneStateStatus phoneStatus = PhoneStateStatus.NOTHING;
+  bool granted = false;
+
+  // 권한 요청
+  Future<bool> requestPermission() async {
+    var status = await Permission.phone.request();
+
+    switch (status) {
+      case PermissionStatus.denied:
+      case PermissionStatus.restricted:
+      case PermissionStatus.limited:
+      case PermissionStatus.permanentlyDenied:
+        return false;
+      case PermissionStatus.granted:
+        return true;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  // 통화 상태 감지
+  void setStream() {
+    PhoneState.phoneStateStream.listen((event) async {
+      // 전화 걸려올 때 크기 0인 위젯 생성
+      if (event == PhoneStateStatus.CALL_INCOMING) {
+        if (await FlutterOverlayWindow.isActive()) return;
+        await FlutterOverlayWindow.showOverlay(
+          enableDrag: true,
+          flag: OverlayFlag.defaultFlag,
+          alignment: OverlayAlignment.center,
+          visibility: NotificationVisibility.visibilityPublic,
+          positionGravity: PositionGravity.auto,
+          height: 100,
+          width: 100,
+        );
+        debugPrint("위젯 생성");
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(1),
       appBar: AppBar(
         actions: [
+          TextButton(
+            onPressed: () async {
+              if (await FlutterOverlayWindow.isActive()) return;
+              await FlutterOverlayWindow.showOverlay(
+                enableDrag: true,
+                flag: OverlayFlag.defaultFlag,
+                alignment: OverlayAlignment.center,
+                visibility: NotificationVisibility.visibilityPublic,
+                positionGravity: PositionGravity.auto,
+                height: 100,
+                width: 100,
+              );
+            },
+            child: const Text('SHOW'),
+          ),
           IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.settings,
-                size: 24,
-              ))
+            onPressed: () async {
+              if (await FlutterOverlayWindow.isActive()) {
+                FlutterOverlayWindow.closeOverlay();
+              }
+            },
+            icon: const Icon(
+              Icons.cancel,
+              size: 24,
+              color: Colors.amber,
+            ),
+          ),
+          // 전화 권한
+          IconButton(
+            onPressed: !granted
+                ? () async {
+                    bool temp = await requestPermission();
+                    setState(() {
+                      granted = temp;
+                      if (granted) {
+                        setStream();
+                      }
+                    });
+                  }
+                : null,
+            icon: const Icon(
+              Icons.perm_phone_msg,
+              size: 24,
+              color: Colors.amber,
+            ),
+          ),
+          // 오버레이(다른 앱 위에 그리기) 권한
+          IconButton(
+            onPressed: () async {
+              await FlutterOverlayWindow.requestPermission();
+            },
+            icon: const Icon(
+              Icons.picture_in_picture,
+              size: 24,
+              color: Colors.amber,
+            ),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.settings,
+              size: 24,
+            ),
+          ),
         ],
         leadingWidth: 120,
         leading: Builder(builder: (BuildContext context) {
@@ -82,11 +194,11 @@ class MainScreen extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 315,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       ImgButton(
                         title: '검사 결과',
                         imgName: 'ResultImg',
@@ -102,11 +214,11 @@ class MainScreen extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 315,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       ImgButton(
                           title: '검색',
                           imgName: 'SearchImg',
