@@ -36,7 +36,7 @@ def recoverM4A():
                         new_file.append(f"{cnt}.mp3")
                 cnt += 1
 
-            return {"msg": True, "new_file": new_file }
+            return {"msg": "success", "new_file": new_file }
         except subprocess.CalledProcessError:
             return make_response({"msg": "fail"}, 500)
     else:
