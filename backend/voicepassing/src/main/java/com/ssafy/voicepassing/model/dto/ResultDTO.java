@@ -21,6 +21,15 @@ public class ResultDTO{
         private int category;
 
 
+
+
+    }
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResultNum {
+        private long resultNum;
     }
 
     @Getter

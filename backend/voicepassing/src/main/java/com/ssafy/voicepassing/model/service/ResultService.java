@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface ResultService {
     //검사 결과 목록 조회
-    public List<ResultDTO.Result> getResultList();
+    public List<ResultDTO.Result> getResultList(String androidId);
+    public ResultDTO.ResultNum getResultNum();
 
 }
+
