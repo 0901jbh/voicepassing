@@ -13,11 +13,13 @@ public class ResultDTO{
     @NoArgsConstructor
     @Builder
     public static class Result {
+
         private int resultId;
         private String androidId;
-        private int risk;
+        private String phoneNumber;
+        private float risk;
         private int category;
-        private String text;
+
 
     }
     @Getter
