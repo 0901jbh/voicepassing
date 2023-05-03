@@ -79,7 +79,7 @@ public class AnalysisController {
     @PostMapping("/db")
     public ResponseEntity<?> DB(){
 
-        String text = analysisService.SpeechToText();
+        String text = analysisService.SpeechToText("a","b");
         boolean isFinish = false;
         String sessionId = "SSAFY1357";
         AIResponseDTO.Request request = AIResponseDTO.Request.builder()
