@@ -1,0 +1,10 @@
+C:/Users/SSAFY/Desktop/S08P31A607/frontend/voicepassing/build/windows/CMakeFiles/INSTALL.dir
+C:/Users/SSAFY/Desktop/S08P31A607/frontend/voicepassing/build/windows/CMakeFiles/ALL_BUILD.dir
+C:/Users/SSAFY/Desktop/S08P31A607/frontend/voicepassing/build/windows/CMakeFiles/ZERO_CHECK.dir
+C:/Users/SSAFY/Desktop/S08P31A607/frontend/voicepassing/build/windows/flutter/CMakeFiles/flutter_wrapper_plugin.dir
+C:/Users/SSAFY/Desktop/S08P31A607/frontend/voicepassing/build/windows/flutter/CMakeFiles/flutter_wrapper_app.dir
+C:/Users/SSAFY/Desktop/S08P31A607/frontend/voicepassing/build/windows/flutter/CMakeFiles/flutter_assemble.dir
+C:/Users/SSAFY/Desktop/S08P31A607/frontend/voicepassing/build/windows/flutter/CMakeFiles/INSTALL.dir
+C:/Users/SSAFY/Desktop/S08P31A607/frontend/voicepassing/build/windows/runner/CMakeFiles/voicepassing.dir
+C:/Users/SSAFY/Desktop/S08P31A607/frontend/voicepassing/build/windows/runner/CMakeFiles/INSTALL.dir
+C:/Users/SSAFY/Desktop/S08P31A607/frontend/voicepassing/build/windows/runner/CMakeFiles/ALL_BUILD.dir

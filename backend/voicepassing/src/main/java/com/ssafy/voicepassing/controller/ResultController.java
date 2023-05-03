@@ -31,8 +31,10 @@ public class ResultController {
     @GetMapping("/{androidId}")
     public ResponseEntity<?> getResultbyId(@PathVariable String androidId) {
         HttpStatus status = null;
+//        System.out.println(androidId);
         Map<String, Object> resultMap = new HashMap<>();
-        List<ResultDTO.Result> results = resultService.getResultList();
+        List<ResultDTO.Result> results = resultService.getResultList(androidId);
+
         if(results == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
       resultMap.put("results",results);

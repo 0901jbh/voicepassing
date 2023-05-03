@@ -19,9 +19,7 @@ public class ResultServiceImpl implements ResultService {
 
     @Override
     public List<ResultDTO.Result> getResultList(String androidId) {
-        List<Result> resultsEntity = resultRepository.findAllByAndroId(androidId);
-
-
+        List<Result> resultsEntity = resultRepository.findAllByAndroidId(androidId);
         List<ResultDTO.Result> resultList = new ArrayList<>();
         for (Result result: resultsEntity) {
             ResultDTO.Result resultDto = buildResult(result);
