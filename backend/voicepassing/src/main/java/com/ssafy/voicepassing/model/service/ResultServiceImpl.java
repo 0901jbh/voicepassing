@@ -7,6 +7,7 @@ import com.ssafy.voicepassing.model.repository.ResultRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,21 @@ public class ResultServiceImpl implements ResultService {
     }
 
     @Override
+    public boolean addResult(ResultDTO.Result resultDTO) {
+        try{
+            Result result = Result.builder()
+                    .androidId(resultDTO.getAndroidId())
+                    .category(resultDTO.getCategory())
+                    .phoneNumber(resultDTO.getPhoneNumber())
+                    .risk(resultDTO.getRisk())
+                    .build();
+            resultRepository.save(result);
+            return true;
+        } catch (PersistenceException e) {
+            return false;
+        }
+
+    }
     public ResultDTO.ResultNum getResultNum() {
         long resultNum = resultRepository.count();
         return ResultDTO.ResultNum.builder().resultNum(resultNum).build();
@@ -47,6 +63,5 @@ public class ResultServiceImpl implements ResultService {
 
         return resultDto;
     }
-
 
 }

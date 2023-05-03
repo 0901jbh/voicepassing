@@ -103,10 +103,10 @@ public class AnalysisController {
                 .risk((int)rep.getTotalCategoryScore())
                 .build();
 
+        Boolean b = resultService.addResult(res);
+        System.out.println(b);
 
-//                .
-//
-//                .build();
+
         return new ResponseEntity<Map<String,Object>>(resultMap,status);
     }
 
