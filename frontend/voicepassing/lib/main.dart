@@ -34,6 +34,7 @@ class App extends StatelessWidget {
         body: MainScreen(),
       ),
       theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
         textTheme: const TextTheme(
 
             // bodyText1: TextStyle(fontSize: 20),

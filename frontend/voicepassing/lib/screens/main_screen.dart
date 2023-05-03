@@ -4,8 +4,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
 
 import 'package:styled_text/styled_text.dart';
+import 'package:voicepassing/screens/analytics_screen.dart';
 import 'package:voicepassing/screens/result_screen.dart';
 import 'package:voicepassing/screens/search_screen.dart';
+import 'package:voicepassing/screens/statics_screen.dart';
 import 'package:voicepassing/widgets/img_button.dart';
 
 class MainScreen extends StatefulWidget {
@@ -205,7 +207,7 @@ class _MainScreenState extends State<MainScreen> {
                       ImgButton(
                           title: '통계 내용',
                           imgName: 'StaticsImg',
-                          screenWidget: SearchScreen()),
+                          screenWidget: StaticsScreen()),
                     ],
                   ),
                 ),
@@ -224,7 +226,7 @@ class _MainScreenState extends State<MainScreen> {
                       ImgButton(
                           title: '녹음 파일 검사',
                           imgName: 'AnalyticsImg',
-                          screenWidget: SearchScreen()),
+                          screenWidget: AnalyticsScreen()),
                     ],
                   ),
                 ),
