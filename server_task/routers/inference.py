@@ -37,8 +37,31 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
     # 문장 자르기
     text_splited = [t for t in kss.split_sentences(text) if len(t) > 10]
 
+    if not text_splited: # 문장 없으면
+        if is_finish: # 그래도 마지막이라면
+
+            weighted_probs, call_label = classify_phonecall(prob_store.get(session_id, None))
+
+            phone_call_model = {
+                "totalCategory" : call_label,
+                "totalCategoryScore" : weighted_probs[call_label].item(),
+                "results" : sentence_store.get(session_id, [])
+            }
+
+            if sentence_store.get(session_id):
+                del sentence_store[session_id]
+            if prob_store.get(session_id):
+                del prob_store[session_id]
+
+            return phone_call_model
+        
+        else: # 마지막 아니라면
+            response.status_code = 204
+            return response
+    
     # 1. BERT Classification
     ## 1.1. Tokenization
+
     tokens = tokenizer(
         text = text_splited,
         add_special_tokens = True,
