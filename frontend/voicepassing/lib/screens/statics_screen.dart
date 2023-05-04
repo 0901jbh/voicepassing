@@ -17,7 +17,7 @@ class _ResultScreenState extends State<StaticsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HeadBar(
-        navPage: const MainScreen(),
+        navPage: MainScreen(),
         title: const Text('통계 및 사례'),
         appBar: AppBar(),
       ),

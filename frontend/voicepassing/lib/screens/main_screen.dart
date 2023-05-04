@@ -11,15 +11,17 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:unique_device_id/unique_device_id.dart';
 
-import 'package:styled_text/styled_text.dart';
 import 'package:voicepassing/screens/analytics_screen.dart';
 import 'package:voicepassing/screens/result_screen.dart';
 import 'package:voicepassing/screens/search_screen.dart';
 import 'package:voicepassing/screens/statics_screen.dart';
+import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/widgets/img_button.dart';
+import 'package:voicepassing/widgets/main_widget/main_logo.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  MainScreen({super.key});
+  final Future caseNum = ApiService.getCaseNum();
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -128,7 +130,9 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(1),
       appBar: AppBar(
@@ -215,90 +219,59 @@ class _MainScreenState extends State<MainScreen> {
         foregroundColor: Colors.black,
         elevation: 0,
       ),
-      body: Builder(
-        builder: (BuildContext context) {
-          return Center(
-            child: Column(
-              children: [
-                SizedBox(
-                  width: 315,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          StyledText(
-                            text: '오늘 <b>보이스패싱</b>은',
-                            tags: {
-                              'b': StyledTextTag(
-                                  style: const TextStyle(color: Colors.blue))
-                            },
-                          ),
-                          StyledText(
-                            text: '<b>$count건</b>을',
-                            tags: {
-                              'b': StyledTextTag(
-                                  style: const TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.w800,
-                                      fontSize: 30))
-                            },
-                          ),
-                          const Text('잡았어요')
-                        ],
-                      ),
-                      Image.asset(
-                        'images/MainImg.png',
-                        height: 110,
-                      )
-                    ],
-                  ),
+      body: Builder(builder: (
+        BuildContext context,
+      ) {
+        return Center(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              MainLogo(widget: widget),
+              const SizedBox(
+                height: 30,
+              ),
+              SizedBox(
+                width: 315,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    ImgButton(
+                      title: '검사 결과',
+                      imgName: 'ResultImg',
+                      screenWidget: ResultScreen(),
+                    ),
+                    ImgButton(
+                        title: '통계 내용',
+                        imgName: 'StaticsImg',
+                        screenWidget: StaticsScreen()),
+                  ],
                 ),
-                const SizedBox(
-                  height: 20,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                width: 315,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    ImgButton(
+                        title: '검색',
+                        imgName: 'SearchImg',
+                        screenWidget: SearchScreen()),
+                    ImgButton(
+                        title: '녹음 파일 검사',
+                        imgName: 'AnalyticsImg',
+                        screenWidget: AnalyticsScreen()),
+                  ],
                 ),
-                const SizedBox(
-                  width: 315,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ImgButton(
-                        title: '검사 결과',
-                        imgName: 'ResultImg',
-                        screenWidget: ResultScreen(),
-                      ),
-                      ImgButton(
-                          title: '통계 내용',
-                          imgName: 'StaticsImg',
-                          screenWidget: StaticsScreen()),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const SizedBox(
-                  width: 315,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ImgButton(
-                          title: '검색',
-                          imgName: 'SearchImg',
-                          screenWidget: SearchScreen()),
-                      ImgButton(
-                          title: '녹음 파일 검사',
-                          imgName: 'AnalyticsImg',
-                          screenWidget: AnalyticsScreen()),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 }
