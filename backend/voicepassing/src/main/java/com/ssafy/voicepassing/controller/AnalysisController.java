@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,9 @@ public class AnalysisController {
 
     private final AnalysisService analysisService;
 
-    final ClovaSpeechService clovaSpeechClient = new ClovaSpeechService();
+    @Autowired
+    private ClovaSpeechService clovaSpeechClient;
+    
     ClovaSpeechService.NestRequestEntity requestEntity = new ClovaSpeechService.NestRequestEntity();
 
 
@@ -255,6 +258,26 @@ public class AnalysisController {
 
 
     }
+    @PostMapping("/reqfile")
+    public ResponseEntity<?> reqFile(String sessionId, String filepath, boolean isFinish){
+        String result = null;
 
-
+        result = clovaSpeechClient.upload(new File(filepath), requestEntity);
+        int textIndex = result.lastIndexOf("\"text\":");
+        int commaIndex = result.indexOf(",", textIndex);
+        String txt = result.substring(textIndex + 8, commaIndex - 1);
+        
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+        if(result != null){
+            AIResponseDTO.Request request = AIResponseDTO.Request.builder()
+                    .text(txt)
+                    .isFinish(isFinish)
+                    .sessionId(sessionId)
+                    .build();
+            resultMap = analysisService.analysis(request);
+            return new ResponseEntity<Map<String,Object>>(resultMap,status);
+        }
+        return ResponseEntity.ok(result); //에러 처리 할 곳
+    }
 }

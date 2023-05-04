@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -65,20 +67,29 @@ public class AudioWebSocketHandler extends AbstractWebSocketHandler {
 		outputStream.write(bytes);
 		outputStream.close();
 
-		logger.info("URL : {}", DOMAIN_UNTRUNC);
-		String URL = DOMAIN_UNTRUNC + "/recover";
+		String untruncUrl = DOMAIN_UNTRUNC + "/recover";
 		Map<String, String> params = new HashMap<>();
 		params.put("sessionId", session.getId());
 
-		Map<String, Object> result = restApiUtil.requestGet(URL, params);
-		logger.info("결과 : {}", result);
+		logger.info("GET 요청 : {}", untruncUrl);
+		Map<String, Object> untruncResult = restApiUtil.requestGet(untruncUrl, params);
+		logger.info("결과 : {}", untruncResult);
 
-		List<String> newFile = (List<String>) result.get("new_file");
+		List<String> newFile = (List<String>) untruncResult.get("new_file");
+		String newFilePath = RECORD_PATH + "/" + session.getId() + "/part/";
 		for (int i = 0; i < newFile.size(); i++) {
-			//String clovaResult = analysisService.SpeechToText(session.getId(), newFile.get(i));
-			String clovaResult = session.getId()+" "+ newFile.get(i);//테스트용
 			
-			logger.info("클로바 요청{} : {}",i,clovaResult);
+			String filePath = newFilePath + newFile.get(i);
+			String myUrl = "http://localhost:8080/api/analysis/reqfile";
+			MultiValueMap<String, Object> mybody = new LinkedMultiValueMap<>();
+			mybody.add("sessionId", session.getId());
+			mybody.add("filepath", filePath);
+			mybody.add("isFinish", false);
+			
+			logger.info("클로바 요청{} 시작: {}", filePath);
+			Map<String, Object> myResult = restApiUtil.requestPost(myUrl, mybody);
+			logger.info("클로바 요청{} 결과: {}",i,myResult);
+			
 		}
 	}
 
