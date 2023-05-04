@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,9 @@ public class AnalysisController {
 
     private final AnalysisService analysisService;
 
-    final ClovaSpeechService clovaSpeechClient = new ClovaSpeechService();
+    @Autowired
+    private ClovaSpeechService clovaSpeechClient;
+    
     ClovaSpeechService.NestRequestEntity requestEntity = new ClovaSpeechService.NestRequestEntity();
 
 
@@ -255,6 +258,27 @@ public class AnalysisController {
 
 
     }
-
-
+    @PostMapping("/reqfile")
+    public ResponseEntity<?> reqFile(String sessionId, String filepath, boolean isFinish){
+        String result = null;
+        //result = "{\"result\":\"COMPLETED\",\"message\":\"Succeeded\",\"token\":\"e60bc43831984c9394038a1ec58b8585\",\"version\":\"ncp_v2_v2.1.6-d90fef3-20230420_v1.5.9_v4.1.5_ko_ncp_20221227_\",\"params\":{\"service\":\"ncp\",\"domain\":\"general\",\"lang\":\"ko\",\"completion\":\"sync\",\"diarization\":{\"enable\":true,\"speakerCountMin\":-1,\"speakerCountMax\":-1},\"boostings\":[],\"forbiddens\":\"\",\"wordAlignment\":true,\"fullText\":true,\"noiseFiltering\":true,\"resultToObs\":false,\"priority\":0,\"userdata\":{\"_ncp_DomainCode\":\"voicePassing\",\"_ncp_DomainId\":5107,\"_ncp_TaskId\":12819511,\"_ncp_TraceId\":\"11478a90a75c421ca766d1fd31d17ad6\"}},\"progress\":100,\"keywords\":{},\"segments\":[{\"start\":10080,\"end\":15020,\"text\":\"수고하십니다. 여기 서울지검 첨단범죄수사팀의 김민재 수사관이라고 합니다.\",\"confidence\":0.92385113,\"diarization\":{\"label\":\"1\"},\"speaker\":{\"label\":\"1\",\"name\":\"A\",\"edited\":false},\"words\":[[10450,11040,\"수고하십니다.\"],[11650,11880,\"여기\"],[11880,12400,\"서울지검\"],[12450,13520,\"첨단범죄수사팀의\"],[13520,13920,\"김민재\"],[13920,14380,\"수사관이라고\"],[14380,14680,\"합니다.\"]],\"textEdited\":\"수고하십니다. 여기 서울지검 첨단범죄수사팀의 김민재 수사관이라고 합니다.\"}],\"text\":\"수고하십니다. 여기 서울지검 첨단범죄수사팀의 김민재 수사관이라고 합니다.\",\"confidence\":0.9238512,\"speakers\":[{\"label\":\"1\",\"name\":\"A\",\"edited\":false}]}";
+        result = clovaSpeechClient.upload(new File(filepath), requestEntity);
+        System.out.println(result);
+        int textIndex = result.lastIndexOf("\"text\":");
+        int commaIndex = result.indexOf(",", textIndex);
+        String txt = result.substring(textIndex + 8, commaIndex - 1);
+        
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+        if(result != null){
+            AIResponseDTO.Request request = AIResponseDTO.Request.builder()
+                    .text(txt)
+                    .isFinish(isFinish)
+                    .sessionId(sessionId)
+                    .build();
+            resultMap = analysisService.analysis(request);
+            return new ResponseEntity<Map<String,Object>>(resultMap,status);
+        }
+        return ResponseEntity.ok(result); //에러 처리 할 곳
+    }
 }
