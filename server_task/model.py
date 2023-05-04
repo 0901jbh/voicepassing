@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 from typing import List
 
 class ReferenceInputModel(BaseModel):
-    text : str = Field(example = "네 저는 금융범죄 수사 1팀의 김철민 수사관이고요")
+    text : str = Field(example = "사실 확인차 연락을 드렸습니다. 본인 혹시 김동철이라는 사람 알고 계세요. 아니요. 모르는데요. 이 사람 출신이고 올해 사십세 된 남성입니다. 네 전혀 모르는 사람이세요. 왜냐하면 저희 검찰에서 얼마 전에 네 김동철 주범으로 인한 금융 범죄 사기단을 검거했으니")
     isFinish : bool = Field(example = False)
     sessionId : str = Field(example = "SSAFY1357")
 
