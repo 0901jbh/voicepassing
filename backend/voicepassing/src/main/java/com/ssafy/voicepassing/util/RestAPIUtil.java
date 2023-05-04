@@ -57,7 +57,7 @@ public class RestAPIUtil {
 
 		if (response.getStatusCode() == HttpStatus.OK) {
 			Map<String, Object> result = response.getBody();
-			logger.info("성공유무 : {}" ,result.get("msg"));
+			logger.info("성공 : {}" ,result);
 			return result;
 		} else {
 			logger.info("Error: {}",response.getStatusCodeValue());
