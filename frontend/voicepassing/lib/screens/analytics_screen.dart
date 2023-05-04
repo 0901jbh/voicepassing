@@ -17,7 +17,7 @@ class _ResultScreenState extends State<AnalyticsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HeadBar(
-        navPage: const MainScreen(),
+        navPage: MainScreen(),
         title: const Text('녹음 파일 검사'),
         appBar: AppBar(),
       ),

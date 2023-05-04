@@ -51,7 +51,7 @@ class _NavbarState extends State<Navbar> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const MainScreen(),
+                builder: (context) => MainScreen(),
               ),
             );
             break;

@@ -12,7 +12,7 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: HeadBar(
-        navPage: const MainScreen(),
+        navPage: MainScreen(),
         title: const Text('검색'),
         appBar: AppBar(),
       ),

@@ -41,9 +41,13 @@ dependencies:
   flutter_overlay_window: ^0.4.1
   phone_state: ^1.0.2
   permission_handler: ^10.2.0
+
+  flutter_dotenv: ^5.0.2
+
   web_socket_channel: ^2.4.0
   intl: ^0.18.1
   unique_device_id: ^0.1.2
+
 
 dev_dependencies:
   flutter_test:
@@ -70,7 +74,7 @@ flutter:
   # 추가할 이미지를 작성하는곳
   assets:
     - images/
-
+    - assets/config/.env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

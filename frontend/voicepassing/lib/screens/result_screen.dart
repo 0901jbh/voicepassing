@@ -51,7 +51,7 @@ class _ResultScreenState extends State<ResultScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HeadBar(
-        navPage: const MainScreen(),
+        navPage: MainScreen(),
         title: const Text('검사 결과'),
         appBar: AppBar(),
       ),

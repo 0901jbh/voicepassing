@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:voicepassing/screens/main_screen.dart';
 
 import '../widgets/alarm_widget/real_time_result_widget.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // 오버레이 위젯 설정
 @pragma("vm:entry-point")
@@ -14,7 +15,8 @@ void overlayMain() {
   );
 }
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: 'assets/config/.env');
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const App());
 }
@@ -30,7 +32,7 @@ class App extends StatelessWidget {
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.1),
             child: child!);
       },
-      home: const Scaffold(
+      home: Scaffold(
         body: MainScreen(),
       ),
       theme: ThemeData(
