@@ -20,7 +20,6 @@ import 'package:voicepassing/screens/search_screen.dart';
 import 'package:voicepassing/screens/statics_screen.dart';
 import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/widgets/img_button.dart';
-import 'package:voicepassing/widgets/main_widget/main_logo.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen({super.key});
@@ -40,6 +39,7 @@ class _MainScreenState extends State<MainScreen> {
   late File? targetFile;
   late WebSocketChannel _ws;
   late String androidId;
+  bool isWidgetOn = false;
 
   // 권한 요청
   Future<bool> requestPermission() async {
@@ -118,6 +118,16 @@ class _MainScreenState extends State<MainScreen> {
           ReceiveMessageModel receivedResult =
               ReceiveMessageModel.fromJson(jsonDecode(msg));
           // 받은 메세지 저장 -> 위젯에서 접근
+          if (receivedResult.totalCategoryScore != -1) {
+            if (receivedResult.totalCategoryScore >= 60) {
+              // 저장
+            }
+            _ws.sink.close();
+          } else {
+            if (receivedResult.results[0]!.sentCategoryScore >= 60) {
+              // 저장
+            }
+          }
         });
       }
     });
@@ -171,30 +181,25 @@ class _MainScreenState extends State<MainScreen> {
         actions: [
           TextButton(
             onPressed: () async {
-              if (await FlutterOverlayWindow.isActive()) return;
-              await FlutterOverlayWindow.showOverlay(
-                enableDrag: true,
-                flag: OverlayFlag.defaultFlag,
-                alignment: OverlayAlignment.center,
-                visibility: NotificationVisibility.visibilityPublic,
-                positionGravity: PositionGravity.auto,
-                height: 100,
-                width: 100,
-              );
-            },
-            child: const Text('SHOW'),
-          ),
-          IconButton(
-            onPressed: () async {
               if (await FlutterOverlayWindow.isActive()) {
                 FlutterOverlayWindow.closeOverlay();
+                setState(() {
+                  isWidgetOn = false;
+                });
+              } else {
+                await FlutterOverlayWindow.showOverlay(
+                  enableDrag: true,
+                  flag: OverlayFlag.defaultFlag,
+                  alignment: OverlayAlignment.center,
+                  visibility: NotificationVisibility.visibilityPublic,
+                  positionGravity: PositionGravity.auto,
+                );
+                setState(() {
+                  isWidgetOn = true;
+                });
               }
             },
-            icon: const Icon(
-              Icons.cancel,
-              size: 24,
-              color: Colors.amber,
-            ),
+            child: Text(isWidgetOn ? 'OFF' : 'ON'),
           ),
           // 전화 권한
           IconButton(
@@ -254,21 +259,21 @@ class _MainScreenState extends State<MainScreen> {
       body: Builder(builder: (
         BuildContext context,
       ) {
-        return Center(
+        return const Center(
           child: Column(
             children: [
-              const SizedBox(
+              SizedBox(
                 height: 20,
               ),
-              MainLogo(widget: widget),
-              const SizedBox(
+              // MainLogo(widget: widget),
+              SizedBox(
                 height: 30,
               ),
               SizedBox(
                 width: 315,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     ImgButton(
                       title: '검사 결과',
                       imgName: 'ResultImg',
@@ -281,14 +286,14 @@ class _MainScreenState extends State<MainScreen> {
                   ],
                 ),
               ),
-              const SizedBox(
+              SizedBox(
                 height: 10,
               ),
               SizedBox(
                 width: 315,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     ImgButton(
                         title: '검색',
                         imgName: 'SearchImg',

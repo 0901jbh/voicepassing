@@ -1,18 +1,14 @@
-import 'dart:math';
-
-import 'package:phone_state/phone_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:voicepassing/style/color_style.dart';
 
-class RealTimeResultWidget extends StatefulWidget {
-  const RealTimeResultWidget({Key? key}) : super(key: key);
+class CallEndedResultWidget extends StatefulWidget {
+  const CallEndedResultWidget({Key? key}) : super(key: key);
 
   @override
-  State<RealTimeResultWidget> createState() => _RealTimeResultWidgetState();
+  State<CallEndedResultWidget> createState() => _CallEndedResultWidgetState();
 }
 
-class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
+class _CallEndedResultWidgetState extends State<CallEndedResultWidget> {
   Color color = const Color(0xFFFFFFFF);
   String status = 'default';
   late List<String> dangerousKeywords = [
@@ -25,20 +21,6 @@ class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
   @override
   void initState() {
     super.initState();
-    setStream();
-  }
-
-  void setStream() {
-    debugPrint('알림 위젯 setStream');
-    PhoneState.phoneStateStream.listen((event) {
-      if (event == PhoneStateStatus.CALL_STARTED) {
-        debugPrint('전화 이벤트 : $event');
-        setState(() {
-          status = 'danger';
-          FlutterOverlayWindow.resizeOverlay(320, 80);
-        });
-      }
-    });
   }
 
   @override
@@ -47,15 +29,10 @@ class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
       color: Colors.transparent,
       elevation: 0.0,
       child: GestureDetector(
-        onTap: () {
-          FlutterOverlayWindow.resizeOverlay(320, 80);
-          setState(() {
-            score = Random().nextInt(50) + 50;
-          });
-        },
+        onTap: () {},
         child: Container(
-          height: 80,
-          width: 320,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             color:
                 score > 80 ? ColorStyles.dangerText : ColorStyles.warningText,
