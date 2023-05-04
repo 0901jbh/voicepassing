@@ -9,6 +9,7 @@ import 'package:phone_state/phone_state.dart';
 import 'package:voicepassing/services/recent_file.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:unique_device_id/unique_device_id.dart';
 
 import 'package:styled_text/styled_text.dart';
 import 'package:voicepassing/screens/analytics_screen.dart';
@@ -33,6 +34,7 @@ class _MainScreenState extends State<MainScreen> {
   late Directory recordDirectory;
   late File? targetFile;
   late WebSocketChannel _ws;
+  late String androidId;
 
   // 권한 요청
   Future<bool> requestPermission() async {
@@ -60,13 +62,14 @@ class _MainScreenState extends State<MainScreen> {
     await Permission.phone.request();
     await Permission.storage.request();
     await Permission.manageExternalStorage.request();
+
     bool reqPermission = await requestPermission();
     if (reqPermission) {
       setStream();
     }
     recordDirectory = Directory(_recordDirectoryPath);
-    var files = await recordDirectory.list().toList();
-    debugPrint('FILES: $files');
+    androidId = await UniqueDeviceId.instance.getUniqueId() ?? '';
+    debugPrint('기기식별번호 : $androidId');
   }
 
   // 통화 상태 감지
@@ -94,7 +97,7 @@ class _MainScreenState extends State<MainScreen> {
         _ws = WebSocketChannel.connect(
           Uri.parse('ws://k8a607.p.ssafy.io:8080/record'),
         );
-        debugPrint('111111111111');
+        _ws.sink.add(androidId);
         transferVoice();
       }
     });

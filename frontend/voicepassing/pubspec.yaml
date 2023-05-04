@@ -43,6 +43,7 @@ dependencies:
   permission_handler: ^10.2.0
   web_socket_channel: ^2.4.0
   intl: ^0.18.1
+  unique_device_id: ^0.1.2
 
 dev_dependencies:
   flutter_test:
