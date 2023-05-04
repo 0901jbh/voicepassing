@@ -50,7 +50,7 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
 
     output, _ = classifier(tokens)
 
-    print(f"RAW : {output.squeeze()}")
+    # print(f"RAW : {output.squeeze()}")
     if output.shape[0] != 1:
         label_probs = torch.nn.functional.softmax(output.squeeze() / T, dim = 1)
     else:
@@ -61,15 +61,15 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
 
     # 3. get result and save
 
-    print(f"BERT : {label_probs}")
-    print(f"NB : {torch.FloatTensor(b_label_probs)}")
+    # print(f"BERT : {label_probs}")
+    # print(f"NB : {torch.FloatTensor(b_label_probs)}")
 
     label_probs = (label_probs + torch.FloatTensor(b_label_probs)) / 2
 
-    print(f"TOTAL : {label_probs}")
+    # print(f"TOTAL : {label_probs}")
     
     label = torch.argmax(label_probs, dim = 1)
-    print(f"LABEL : {label}")
+    # print(f"LABEL : {label}")
         
     temp_prob_store = label_probs.detach().cpu().numpy().tolist()
 
