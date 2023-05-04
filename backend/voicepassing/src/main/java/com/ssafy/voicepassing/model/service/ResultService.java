@@ -8,7 +8,7 @@ import java.util.List;
 public interface ResultService {
 
     //분석 결과 추가
-    public boolean addResult(ResultDTO.Result resultDTO);
+    public int addResult(ResultDTO.Result resultDTO);
 
     public List<ResultDTO.Result> getResultList(String androidId);
     public ResultDTO.ResultNum getResultNum();

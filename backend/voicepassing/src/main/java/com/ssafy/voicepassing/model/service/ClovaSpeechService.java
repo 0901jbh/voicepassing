@@ -18,11 +18,11 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 
 import com.google.gson.Gson;
-public class ClovaSpeechService {
+public class ClovaSpeechService  {
     // Clova Speech secret key
-    private static final String SECRET = "9d1468dcfb69470393bfb41fb35dbec2";
+    private static final String SECRET = " ae740d1fd53f4053b8954cb6dc5da94b";
     // Clova Speech invoke URL
-    private static final String INVOKE_URL = "https://clovaspeech-gw.ncloud.com/external/v1/5107/6221c2582a93af12eac6dda509fc549195dad403db49f3e8258e6b0c6d794431";
+    private static final String INVOKE_URL = "https://clovaspeech-gw.ncloud.com/external/v1/5110/e452acb2f5f86ecced990965224c27a2644c33beaba1c34e3dbb1322adf42afa";
 
     private CloseableHttpClient httpClient = HttpClients.createDefault();
     private Gson gson = new Gson();

@@ -185,7 +185,7 @@ public class AnalysisServiceImpl implements AnalysisService{
 
 //    // FastAPI URL 설정
         String url = "http://localhost:8000/inference";
-
+        //   String url = "{AI_SERVER_URI}/inference";
 //    // HTTP 요청 보내기
         ResponseEntity<AIResponseDTO.Response> responseEntity = restTemplate.postForEntity(url,httpEntity,AIResponseDTO.Response.class);
 
