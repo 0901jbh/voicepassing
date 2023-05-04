@@ -47,7 +47,7 @@ dependencies:
   web_socket_channel: ^2.4.0
   intl: ^0.18.1
   unique_device_id: ^0.1.2
-
+  fl_chart: ^0.62.0
 
 dev_dependencies:
   flutter_test:

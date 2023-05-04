@@ -30,6 +30,11 @@ class _ResultScreenDetailState extends State<ResultScreenDetail> {
       ),
       body: Builder(
         builder: (BuildContext context) {
+          const roundedRectangleBorder = RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(15),
+            ),
+          );
           return SingleChildScrollView(
             child: Center(
               child: Column(
@@ -52,6 +57,8 @@ class _ResultScreenDetailState extends State<ResultScreenDetail> {
                   ),
                   Card(
                     color: ColorStyles.backgroundBlue,
+                    shape: roundedRectangleBorder,
+                    elevation: 0,
                     child: Padding(
                       padding: const EdgeInsets.all(20),
                       child: SizedBox(
@@ -72,6 +79,8 @@ class _ResultScreenDetailState extends State<ResultScreenDetail> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Card(
+                    shape: roundedRectangleBorder,
+                    elevation: 0,
                     color: ColorStyles.backgroundLightBlue,
                     child: Padding(
                       padding: const EdgeInsets.all(20),

@@ -16,4 +16,30 @@ class ApiService {
 
     throw Error();
   }
+
+  static getPhoneNumber(phoneNumber) async {
+    final url = Uri.parse('$baseUrl/phishings/$phoneNumber');
+    final response = await http.get(url);
+    if (response.statusCode == 204) {
+      return null;
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    }
+    throw Error();
+  }
+
+  // static Future<List<ResultModel>> getPhoneResult(phoneNumber) async {
+  //   List<ResultModel> resultInstance = [];
+  //   final url = Uri.parse('$baseUrl/phishings/$phoneNumber');
+  //   final response = await http.get(url);
+  //   if (response.statusCode == 200) {
+  //     final results = jsonDecode(response.body);
+  //     for (var result in results) {
+
+  //     }
+  //   }
+  //   }
+  //   throw Error();
+
+  // }
 }

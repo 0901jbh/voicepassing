@@ -23,7 +23,14 @@ class ResultDetailList extends StatelessWidget {
       backgroundColor = ColorStyles.warning;
       state = '경고 ';
     }
+    const roundedRectangleBorder = RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(
+        Radius.circular(15),
+      ),
+    );
     return Card(
+      shape: roundedRectangleBorder,
+      elevation: 0,
       color: backgroundColor,
       child: Padding(
         padding: const EdgeInsets.all(20.0),

@@ -11,6 +11,11 @@ class ResultList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const roundedRectangleBorder = RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(
+        Radius.circular(15),
+      ),
+    );
     Color textColor;
     Color backgroundColor;
     String state;
@@ -35,6 +40,8 @@ class ResultList extends StatelessWidget {
         );
       },
       child: Card(
+        shape: roundedRectangleBorder,
+        elevation: 0,
         color: backgroundColor,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
