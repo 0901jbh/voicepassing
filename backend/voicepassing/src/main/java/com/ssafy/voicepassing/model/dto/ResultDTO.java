@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class ResultDTO{
@@ -19,7 +20,7 @@ public class ResultDTO{
         private String phoneNumber;
         private float risk;
         private int category;
-
+        private LocalDateTime createdTime;
 
 
 

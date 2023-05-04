@@ -51,6 +51,24 @@ public class ResultServiceImpl implements ResultService {
         return ResultDTO.ResultNum.builder().resultNum(resultNum).build();
     }
 
+    @Override
+    public List<ResultDTO.Result> searchByPhoneNumber(String phoneNumber) {
+        if(phoneNumber.trim().length() < 1) {
+            return null;}
+        List<Result> resultsEntity = resultRepository.findAllByPhoneNumber(phoneNumber);
+        List<ResultDTO.Result> resultList = new ArrayList<>(resultsEntity.size());
+        System.out.println(resultsEntity.toString());
+        resultsEntity.forEach(result ->{
+            resultList.add(ResultDTO.Result.builder()
+                    .phoneNumber(result.getPhoneNumber())
+                    .category(result.getCategory())
+                    .createdTime(result.getCreatedTime())
+                    .build());
+        });
+
+        return resultList;
+    }
+
 
     private ResultDTO.Result buildResult(Result result){
         ResultDTO.Result resultDto = ResultDTO.Result.builder()

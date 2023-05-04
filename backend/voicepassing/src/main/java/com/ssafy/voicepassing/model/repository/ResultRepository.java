@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface ResultRepository extends JpaRepository<Result,Integer> {
     List<Result> findAllByAndroidId(String androidId);
+    List<Result> findAllByPhoneNumber(String phoneNumber);
 
 }
