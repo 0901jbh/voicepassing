@@ -65,6 +65,67 @@ public class AnalysisController {
             return ResponseEntity.ok(txt);
         return ResponseEntity.ok(result); //에러 처리 할 곳
     }
+
+    @PostMapping("csAI")
+    public ResponseEntity<?> csAI(){
+        String result = null;
+        String path = "C:\\Users\\SSAFY\\Desktop\\test\\1.mp3";
+        result = clovaSpeechClient.upload(new File(path), requestEntity);
+        // String str = result;
+
+        int textIndex = result.lastIndexOf("\"text\":");
+        int commaIndex = result.indexOf(",", textIndex);
+        String txt = result.substring(textIndex + 8, commaIndex - 1);
+        // result = clovaSpeechClient.url("file URL", requestEntity);
+        // result = clovaSpeechClient.objectStorage("Object Storage key", requestEntity);
+        //System.out.println(result);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+        if(result != null){
+            boolean isFinish = false;
+            String sessionId = "SSAFY1357";
+            AIResponseDTO.Request request = AIResponseDTO.Request.builder()
+                    .text(txt)
+                    .isFinish(false)
+                    .sessionId(sessionId)
+                    .build();
+            resultMap = analysisService.analysis(request);
+            return new ResponseEntity<Map<String,Object>>(resultMap,status);
+        }
+        return ResponseEntity.ok(result); //에러 처리 할 곳
+    }
+
+    @PostMapping("csAIDB")
+    public ResponseEntity<?> csAIDB(){
+        String result = null;
+        String path = "C:\\Users\\SSAFY\\Desktop\\test\\1.mp3";
+        result = clovaSpeechClient.upload(new File(path), requestEntity);
+        // String str = result;
+
+        int textIndex = result.lastIndexOf("\"text\":");
+        int commaIndex = result.indexOf(",", textIndex);
+        String txt = result.substring(textIndex + 8, commaIndex - 1);
+        // result = clovaSpeechClient.url("file URL", requestEntity);
+        // result = clovaSpeechClient.objectStorage("Object Storage key", requestEntity);
+        //System.out.println(result);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+        if(result != null){
+            boolean isFinish = false;
+            String sessionId = "SSAFY1357";
+            AIResponseDTO.Request request = AIResponseDTO.Request.builder()
+                    .text(txt)
+                    .isFinish(false)
+                    .sessionId(sessionId)
+                    .build();
+            resultMap = analysisService.analysis(request);
+            return new ResponseEntity<Map<String,Object>>(resultMap,status);
+        }
+        return ResponseEntity.ok(result); //에러 처리 할 곳
+    }
+
+
+
     @PostMapping("/colva")
     public ResponseEntity<?> clova(){
         String text = "test";//analysisService.SpeechToText();
@@ -86,7 +147,7 @@ public class AnalysisController {
         HttpStatus status = HttpStatus.OK;
         Map<String, Object> resultMap = new HashMap<>();
 
-       resultMap = analysisService.recommend(request);
+       resultMap = analysisService.analysis(request);
         //Object obj = resultMap.get("result");
        return new ResponseEntity<Map<String,Object>>(resultMap,status);
     }
@@ -115,7 +176,7 @@ public class AnalysisController {
         HttpStatus status = HttpStatus.OK;
         Map<String, Object> resultMap = new HashMap<>();
 
-        resultMap = analysisService.recommend(request);
+        resultMap = analysisService.analysis(request);
         Object obj = resultMap.get("result");
         AIResponseDTO.Response rep = (AIResponseDTO.Response) resultMap.get("result");
         String phoneNumber = "010-1234-5678";
@@ -140,7 +201,7 @@ public class AnalysisController {
     public ResponseEntity<?> getAI(@RequestBody AIResponseDTO.Request rb){
         HttpStatus status = HttpStatus.OK;
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap = analysisService.recommend(rb);
+        resultMap = analysisService.analysis(rb);
 
         return new ResponseEntity<Map<String,Object>>(resultMap,status);
     }
@@ -187,7 +248,7 @@ public class AnalysisController {
         HttpStatus status = HttpStatus.OK;
         Map<String, Object> resultMap = new HashMap<>();
 
-        resultMap = analysisService.recommend(request);
+        resultMap = analysisService.analysis(request);
 
         System.out.println(resultMap.get("result"));
         return new ResponseEntity<Map<String,Object>>(resultMap,status);

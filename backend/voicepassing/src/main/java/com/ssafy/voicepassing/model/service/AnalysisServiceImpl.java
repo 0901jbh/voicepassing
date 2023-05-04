@@ -40,7 +40,7 @@ public class AnalysisServiceImpl implements AnalysisService{
         System.out.println("파일 찾기 후");
         System.out.println("여기서 나가지나?");
         try {
-            //String imgFile = RECORD_PATH+"/1.m4a";
+            //String imgFile = RECORD_PATH+"/.m4a";
             //File voiceFile = new File(imgFile);
 
             //File voiceFile = file;
@@ -166,7 +166,7 @@ public class AnalysisServiceImpl implements AnalysisService{
 
     //text -> result 받기
     @Override
-    public Map<String, Object> recommend(AIResponseDTO.Request rb) {
+    public Map<String, Object> analysis(AIResponseDTO.Request rb) {
         Map<String, Object> resultMap = new HashMap<>();
         RestTemplate restTemplate = new RestTemplate();
 
