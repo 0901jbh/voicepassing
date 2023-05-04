@@ -31,7 +31,7 @@ public class ResultServiceImpl implements ResultService {
     }
 
     @Override
-    public boolean addResult(ResultDTO.Result resultDTO) {
+    public int addResult(ResultDTO.Result resultDTO) {
         try{
             Result result = Result.builder()
                     .androidId(resultDTO.getAndroidId())
@@ -39,10 +39,10 @@ public class ResultServiceImpl implements ResultService {
                     .phoneNumber(resultDTO.getPhoneNumber())
                     .risk(resultDTO.getRisk())
                     .build();
-            resultRepository.save(result);
-            return true;
+            Result r = resultRepository.save(result);
+            return r.getResultId();
         } catch (PersistenceException e) {
-            return false;
+            return -1;
         }
 
     }
