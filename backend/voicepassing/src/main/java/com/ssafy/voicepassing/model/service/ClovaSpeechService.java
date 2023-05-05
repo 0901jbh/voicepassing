@@ -21,15 +21,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
-<<<<<<< HEAD
-public class ClovaSpeechService  {
-    // Clova Speech secret key
-    private static final String SECRET = " ae740d1fd53f4053b8954cb6dc5da94b";
-    // Clova Speech invoke URL
-    private static final String INVOKE_URL = "https://clovaspeech-gw.ncloud.com/external/v1/5110/e452acb2f5f86ecced990965224c27a2644c33beaba1c34e3dbb1322adf42afa";
-
-=======
-
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -42,7 +33,6 @@ public class ClovaSpeechService {
 	@Value("${SPEECH_INVOKE_URL}")//SPEECH_INVOKE_URL
     private String SPEECH_INVOKE_URL;
 	
->>>>>>> 79b87a420b03b408de3be128cf21e95aab0a5837
     private CloseableHttpClient httpClient = HttpClients.createDefault();
     private Gson gson = new Gson();
 
