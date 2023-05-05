@@ -42,19 +42,15 @@ public class AnalysisController {
 
     private final AnalysisService analysisService;
 
-<<<<<<< HEAD
     private final KeywordService keywordService;
 
     private final KeywordSentenceService keywordSentenceService;
 
     private final ResultDetailService resultDetailService;
 
-    final ClovaSpeechService clovaSpeechClient = new ClovaSpeechService();
-=======
     @Autowired
     private ClovaSpeechService clovaSpeechClient;
     
->>>>>>> 79b87a420b03b408de3be128cf21e95aab0a5837
     ClovaSpeechService.NestRequestEntity requestEntity = new ClovaSpeechService.NestRequestEntity();
 
 
