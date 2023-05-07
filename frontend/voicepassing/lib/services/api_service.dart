@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:voicepassing/models/result_model.dart';
@@ -44,11 +43,12 @@ class ApiService {
       return resultList;
     } else if (response.statusCode == 200) {
       final List<dynamic> resultInstances =
-          jsonDecode(response.body)['results'];
+          jsonDecode(utf8.decode(response.bodyBytes))['results'];
       for (var result in resultInstances) {
+        // debugPrint(result.toString());
         final instance = ResultModel.toJson(result);
         resultList.add(instance);
-        debugPrint(instance.date.toString());
+        // debugPrint(instance.toString());
       }
       return resultList;
     }

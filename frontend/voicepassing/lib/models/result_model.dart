@@ -11,8 +11,8 @@ class ResultModel {
       : score = json['risk'] ?? 75.0,
         type = json['category'] ?? 0,
         date = json['createdTime'] ?? DateTime(2023).toString(),
-        words = json['words'] ?? ['단어'],
-        sentences = json['sentences'] ?? ['단어를 포함한 문장'],
+        words = List<String>.from(json['keyword']) ?? ['단어'],
+        sentences = List<String>.from(json['sentence']) ?? ['단어를 포함한 문장'],
         androidId = json['androidId'] ?? '',
         phoneNumber = json['phoneNumber'] ?? '';
 }

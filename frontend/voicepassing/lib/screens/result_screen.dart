@@ -16,8 +16,8 @@ class ResultScreen extends StatefulWidget {
 
 // Todo: 임시로 넣어놓은 데이터, 삭제예정
 class _ResultScreenState extends State<ResultScreen> {
-  late Future<List<ResultModel>> resultList;
-  late String androidId;
+  late List<ResultModel> resultList;
+  bool isLoading = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -27,10 +27,13 @@ class _ResultScreenState extends State<ResultScreen> {
   }
 
   initializer() async {
-    androidId = await UniqueDeviceId.instance.getUniqueId() ?? '';
+    await UniqueDeviceId.instance.getUniqueId().then((value) async {
+      resultList = await ApiService.getRecentResult('android2');
+      setState(() {
+        isLoading = true;
+      });
+    });
 // Todo: 임시로 넣어놓은 기기명, androidId로 바꿀예정
-    resultList = ApiService.getRecentResult('android2');
-    setState(() {});
   }
 
   // final List<CaseModel> cases = [
@@ -74,44 +77,41 @@ class _ResultScreenState extends State<ResultScreen> {
         title: const Text('검사 결과'),
         appBar: AppBar(),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            const ResultTitle(),
-            const SizedBox(
-              height: 20,
-            ),
-            Expanded(
-              child: FutureBuilder(
-                  future: resultList,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Expanded(
+      body: Builder(
+        builder: (BuildContext context) {
+          return Center(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                const ResultTitle(),
+                const SizedBox(
+                  height: 20,
+                ),
+                isLoading
+                    ? Expanded(
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
-                              for (var result in snapshot.data as List)
+                              for (var result in resultList)
                                 ResultList(caseInfo: result)
                             ],
                           ),
                         ),
-                      );
-                    }
-                    return const Text('...');
-                  }),
-            )
-            // for (var caseinfo in resultList)
-            //   Padding(
-            //     padding: const EdgeInsets.only(bottom: 20),
-            //     child: ResultList(
-            //       caseInfo: caseinfo,
-            //     ),
-            //   ),
-          ],
-        ),
+                      )
+                    : const Text('...'),
+                // for (var caseinfo in resultList)
+                //   Padding(
+                //     padding: const EdgeInsets.only(bottom: 20),
+                //     child: ResultList(
+                //       caseInfo: caseinfo,
+                //     ),
+                //   ),
+              ],
+            ),
+          );
+        },
       ),
 
       bottomNavigationBar: const Navbar(selectedIndex: 3),
