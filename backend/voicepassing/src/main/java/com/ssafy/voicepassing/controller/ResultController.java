@@ -33,7 +33,7 @@ public class ResultController {
         HttpStatus status = null;
 //        System.out.println(androidId);
         Map<String, Object> resultMap = new HashMap<>();
-        List<ResultDTO.Result> results = resultService.getResultList(androidId);
+        List<ResultDTO.ResultWithWords> results = resultService.getResults(androidId);
 
         if(results == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -14,5 +14,7 @@ public interface ResultService {
     public ResultDTO.ResultNum getResultNum();
     public List<ResultDTO.Result> searchByPhoneNumber(String phoneNumber);
 
+    public List<ResultDTO.ResultWithWords> getResults(String androidId);
+
 }
 
