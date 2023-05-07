@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:styled_text/styled_text.dart';
-import 'package:voicepassing/models/case_model.dart';
+import 'package:voicepassing/models/result_model.dart';
 import 'package:voicepassing/style/color_style.dart';
 import 'package:voicepassing/widgets/head_bar.dart';
 import 'package:voicepassing/widgets/nav_bar.dart';
 import 'package:voicepassing/widgets/result/result_detail.dart';
 
 class ResultScreenDetail extends StatefulWidget {
-  final CaseModel caseInfo;
+  final ResultModel caseInfo;
   const ResultScreenDetail({super.key, required this.caseInfo});
 
   @override
@@ -17,15 +18,16 @@ class ResultScreenDetail extends StatefulWidget {
 class _ResultScreenDetailState extends State<ResultScreenDetail> {
   @override
   Widget build(BuildContext context) {
-    for (int i = 0; i < widget.caseInfo.sentences.length; i++) {
-      for (String word in widget.caseInfo.words) {
-        widget.caseInfo.sentences[i] =
-            widget.caseInfo.sentences[i].replaceAll(word, '<b>$word</b>');
+    for (int i = 0; i < widget.caseInfo.sentences!.length; i++) {
+      for (String word in widget.caseInfo.words!) {
+        widget.caseInfo.sentences![i] =
+            widget.caseInfo.sentences![i].replaceAll(word, '<b>$word</b>');
       }
     }
     return Scaffold(
       appBar: HeadBar(
-        title: Text(widget.caseInfo.date.toString()),
+        title: Text(DateFormat('yy.M.d')
+            .format(DateTime.parse(widget.caseInfo.date.toString()))),
         appBar: AppBar(),
       ),
       body: Builder(
@@ -89,7 +91,7 @@ class _ResultScreenDetailState extends State<ResultScreenDetail> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            for (var sentence in widget.caseInfo.sentences)
+                            for (var sentence in widget.caseInfo.sentences!)
                               Padding(
                                   padding: const EdgeInsets.only(bottom: 10),
                                   child: StyledText(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:voicepassing/models/result_model.dart';
 import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/widgets/search_widget/search_detail.dart';
 
@@ -14,7 +15,7 @@ class SearchWidget extends StatefulWidget {
 
 class _SearchWidgetState extends State<SearchWidget> {
   final myController = TextEditingController();
-
+  String phoneNumber = '';
   @override
   void initState() {
     // TODO: implement initState
@@ -32,7 +33,7 @@ class _SearchWidgetState extends State<SearchWidget> {
   // myController의 텍스트를 콘솔에 출력하는 메소드
   void _printLatestValue() {}
 
-  late var caseInfo;
+  late List<ResultModel>? caseInfo;
   void setText(String txt) {
     setState(() {
       String mytext = myController.text;
@@ -84,11 +85,9 @@ class _SearchWidgetState extends State<SearchWidget> {
                               onSubmitted: (value) async {
                                 caseInfo =
                                     await ApiService.getPhoneNumber(value);
-                                print(caseInfo);
                                 setState(() {
+                                  phoneNumber = value;
                                   hasData = true;
-                                  print('15');
-                                  print(hasData);
                                 });
                                 //Todo: 전화번호인지 확인하는 로직 나중에 추가할것
                               },
@@ -165,7 +164,14 @@ class _SearchWidgetState extends State<SearchWidget> {
         // hasData
         //     ? SingleChildScrollView(child: Text(caseInfo.toString()))
         //     : const Text('데이터없음')
-        const SearchDetail()
+        phoneNumber.isNotEmpty
+            ? Expanded(
+                child: SearchDetail(
+                  phoneNumber: phoneNumber,
+                  resultList: caseInfo,
+                ),
+              )
+            : const Text('결과없음')
       ],
     );
   }

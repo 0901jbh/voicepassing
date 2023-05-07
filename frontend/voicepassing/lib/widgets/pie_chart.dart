@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 
 import 'package:flutter/material.dart';
+import 'package:voicepassing/widgets/indicator.dart';
 
 class PieChartSample2 extends StatefulWidget {
   const PieChartSample2({super.key});
@@ -50,6 +51,44 @@ class PieChart2State extends State {
               ),
             ),
           ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const <Widget>[
+              Indicator(
+                color: Colors.blue,
+                text: 'First',
+                isSquare: true,
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              Indicator(
+                color: Colors.yellow,
+                text: 'Second',
+                isSquare: true,
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              Indicator(
+                color: Colors.purple,
+                text: 'Third',
+                isSquare: true,
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              Indicator(
+                color: Colors.green,
+                text: 'Fourth',
+                isSquare: true,
+              ),
+              SizedBox(
+                height: 18,
+              ),
+            ],
+          ),
           const SizedBox(
             width: 28,
           ),
@@ -63,7 +102,7 @@ class PieChart2State extends State {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 25.0 : 16.0;
       final radius = isTouched ? 60.0 : 50.0;
-      const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
+      const shadows = [Shadow(color: Colors.white, blurRadius: 2)];
       switch (i) {
         case 0:
           return PieChartSectionData(
@@ -73,8 +112,7 @@ class PieChart2State extends State {
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.blue,
+              color: Colors.white,
               shadows: shadows,
             ),
           );
@@ -86,8 +124,7 @@ class PieChart2State extends State {
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: Colors.white,
               shadows: shadows,
             ),
           );
@@ -99,8 +136,7 @@ class PieChart2State extends State {
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: Colors.white,
               shadows: shadows,
             ),
           );
@@ -112,8 +148,7 @@ class PieChart2State extends State {
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: Colors.white,
               shadows: shadows,
             ),
           );

@@ -1,11 +1,12 @@
 import 'package:circle_progress_bar/circle_progress_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:voicepassing/models/case_model.dart';
+import 'package:intl/intl.dart';
+import 'package:voicepassing/models/result_model.dart';
 import 'package:voicepassing/screens/result_screen_detail.dart';
 import 'package:voicepassing/style/color_style.dart';
 
 class ResultList extends StatelessWidget {
-  final CaseModel caseInfo;
+  final ResultModel caseInfo;
 
   const ResultList({super.key, required this.caseInfo});
 
@@ -19,7 +20,7 @@ class ResultList extends StatelessWidget {
     Color textColor;
     Color backgroundColor;
     String state;
-    if (caseInfo.score >= 80) {
+    if (caseInfo.score! >= 80) {
       textColor = ColorStyles.dangerText;
       backgroundColor = ColorStyles.danger;
       state = '위험 ';
@@ -56,10 +57,12 @@ class ResultList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      caseInfo.date.toString(),
-                      style: const TextStyle(fontWeight: FontWeight.w900),
-                    ),
+                    Text(DateFormat('yy.M.d')
+                        .format(DateTime.parse(caseInfo.date.toString()))),
+                    // Text(
+                    //   caseInfo.date.toString(),
+                    //   style: const TextStyle(fontWeight: FontWeight.w900),
+                    // ),
                     Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
                       Text(
                         state,
@@ -82,7 +85,7 @@ class ResultList extends StatelessWidget {
                     foregroundColor: textColor,
                     backgroundColor: Colors.transparent,
                     // value/1 표시
-                    value: caseInfo.score / 100,
+                    value: caseInfo.score! / 100,
                     child: Center(
                       child: AnimatedCount(
                         style: TextStyle(
@@ -90,7 +93,7 @@ class ResultList extends StatelessWidget {
                             fontWeight: FontWeight.w500,
                             fontSize: 20),
                         fractionDigits: 0,
-                        count: caseInfo.score,
+                        count: caseInfo.score!,
                         unit: '',
                         duration: const Duration(microseconds: 500),
                       ),
