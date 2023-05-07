@@ -24,7 +24,13 @@ public class ResultServiceImpl implements ResultService {
         List<ResultDTO.Result> resultList = new ArrayList<>();
         for (Result result: resultsEntity) {
             ResultDTO.Result resultDto = buildResult(result);
-            resultList.add(resultDto);
+            resultList.add(ResultDTO.Result.builder()
+                    .phoneNumber(result.getPhoneNumber())
+                    .category(result.getCategory())
+                    .createdTime(result.getCreatedTime())
+                    .risk(result.getRisk())
+                    .build()
+                    );
         }
         return resultList;
 
