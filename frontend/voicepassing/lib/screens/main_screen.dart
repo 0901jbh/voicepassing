@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -6,11 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
-import 'package:voicepassing/services/recent_file.dart';
+import 'package:provider/provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:unique_device_id/unique_device_id.dart';
 
+import 'package:voicepassing/models/receive_message_model.dart';
+import 'package:voicepassing/models/send_message_model.dart';
+import 'package:voicepassing/providers/real_time_result.dart';
+import 'package:voicepassing/services/recent_file.dart';
 import 'package:voicepassing/screens/analytics_screen.dart';
 import 'package:voicepassing/screens/result_screen.dart';
 import 'package:voicepassing/screens/search_screen.dart';
@@ -37,6 +42,7 @@ class _MainScreenState extends State<MainScreen> {
   late File? targetFile;
   late WebSocketChannel _ws;
   late String androidId;
+  bool isWidgetOn = false;
 
   // 권한 요청
   Future<bool> requestPermission() async {
@@ -95,12 +101,44 @@ class _MainScreenState extends State<MainScreen> {
           width: 400,
         );
       } else if (event == PhoneStateStatus.CALL_STARTED) {
-        // 통화 시작되면 웹소켓 연결 및 통화녹음 데이터 서버로 전송
+        // 통화 시작되면 웹소켓 연결
         _ws = WebSocketChannel.connect(
           Uri.parse('ws://k8a607.p.ssafy.io:8080/record'),
         );
-        _ws.sink.add(androidId);
+
+        // 웹소켓 연결되면 시작 메세지로 기기 식별 번호(SSAID) 전달
+        var startMessage = SendMessageModel(
+          state: 0,
+          androidId: androidId,
+        );
+        _ws.sink.add(jsonEncode(startMessage));
+
+        // 통화 녹음 데이터 전송
         transferVoice();
+
+        // 검사 결과 수신
+        _ws.stream.listen((msg) {
+          if (msg != null) {
+            ReceiveMessageModel receivedResult =
+                ReceiveMessageModel.fromJson(jsonDecode(msg));
+            // 최종 결과 수신
+            if (receivedResult.result != null &&
+                receivedResult.result!.results != null) {
+              if (receivedResult.isFinish) {
+                if (receivedResult.result!.totalCategoryScore >= 0.6) {
+                  // provider에 저장
+                  context.read<RealTimeResult>().update(receivedResult.result!);
+                }
+                _ws.sink.close();
+              } else {
+                if (receivedResult.result!.totalCategoryScore >= 0.6) {
+                  // provider에 저장
+                  context.read<RealTimeResult>().update(receivedResult.result!);
+                }
+              }
+            }
+          }
+        });
       }
     });
   }
@@ -118,8 +156,22 @@ class _MainScreenState extends State<MainScreen> {
         offset = nextOffset;
         _ws.sink.add(splittedBytes);
 
+        //통화 종료
         if (phoneStatus == PhoneStateStatus.CALL_ENDED) {
+          // 타이머 종료
           timer.cancel();
+          // 덜 전달된 마지막 오프셋까지 보내기
+          Uint8List entireBytes = targetFile!.readAsBytesSync();
+          var nextOffset = entireBytes.length;
+          var splittedBytes = entireBytes.sublist(offset, nextOffset);
+          offset = nextOffset;
+          _ws.sink.add(splittedBytes);
+          // stateCode 1 보내기
+          var endMessage = SendMessageModel(
+            state: 1,
+            androidId: androidId,
+          );
+          _ws.sink.add(jsonEncode(endMessage));
         }
       });
     } else {
@@ -139,30 +191,25 @@ class _MainScreenState extends State<MainScreen> {
         actions: [
           TextButton(
             onPressed: () async {
-              if (await FlutterOverlayWindow.isActive()) return;
-              await FlutterOverlayWindow.showOverlay(
-                enableDrag: true,
-                flag: OverlayFlag.defaultFlag,
-                alignment: OverlayAlignment.center,
-                visibility: NotificationVisibility.visibilityPublic,
-                positionGravity: PositionGravity.auto,
-                height: 100,
-                width: 100,
-              );
-            },
-            child: const Text('SHOW'),
-          ),
-          IconButton(
-            onPressed: () async {
               if (await FlutterOverlayWindow.isActive()) {
                 FlutterOverlayWindow.closeOverlay();
+                setState(() {
+                  isWidgetOn = false;
+                });
+              } else {
+                await FlutterOverlayWindow.showOverlay(
+                  enableDrag: true,
+                  flag: OverlayFlag.defaultFlag,
+                  alignment: OverlayAlignment.center,
+                  visibility: NotificationVisibility.visibilityPublic,
+                  positionGravity: PositionGravity.auto,
+                );
+                setState(() {
+                  isWidgetOn = true;
+                });
               }
             },
-            icon: const Icon(
-              Icons.cancel,
-              size: 24,
-              color: Colors.amber,
-            ),
+            child: Text(isWidgetOn ? 'OFF' : 'ON'),
           ),
           // 전화 권한
           IconButton(
@@ -219,10 +266,9 @@ class _MainScreenState extends State<MainScreen> {
         foregroundColor: Colors.black,
         elevation: 0,
       ),
-      body: Builder(builder: (
-        BuildContext context,
-      ) {
-        return Center(
+      body: ChangeNotifierProvider(
+        create: (BuildContext context) => RealTimeResult(),
+        child: Center(
           child: Column(
             children: [
               const SizedBox(
@@ -232,11 +278,11 @@ class _MainScreenState extends State<MainScreen> {
               const SizedBox(
                 height: 30,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 315,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     ImgButton(
                       title: '검사 결과',
                       imgName: 'ResultImg',
@@ -252,11 +298,11 @@ class _MainScreenState extends State<MainScreen> {
               const SizedBox(
                 height: 10,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 315,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     ImgButton(
                         title: '검색',
                         imgName: 'SearchImg',
@@ -270,8 +316,8 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ],
           ),
-        );
-      }),
+        ),
+      ),
     );
   }
 }

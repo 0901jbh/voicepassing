@@ -7,7 +7,8 @@ class ColorStyles {
   static const Color warningText = Color(0xffFFC041);
   static const Color danger = Color(0xffffeeee);
   static const Color grayText = Color(0xff64768C);
-  static const Color lightGrayText = Color(0xFFD6DADF);
+  static const Color subLightGray = Color(0xFFD6DADF);
   static const Color backgroundBlue = Color(0xffE9F3FD);
   static const Color backgroundLightBlue = Color(0xffF7F7FB);
+  static const Color textBlack = Color(0xFF1A1327);
 }
