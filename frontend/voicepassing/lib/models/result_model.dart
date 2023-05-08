@@ -1,12 +1,18 @@
 class ResultModel {
-  final double score;
-  final DateTime date;
+  final double? score;
+  final String? date;
   // category
-  final String type;
-  final List<String> words, sentences;
-  final String androidId;
-  final String phoneNumber;
+  final int? type;
+  final List<String>? words, sentences;
+  final String? androidId;
+  final String? phoneNumber;
 
-  ResultModel(this.score, this.date, this.type, this.words, this.sentences,
-      this.androidId, this.phoneNumber);
+  ResultModel.toJson(Map<String, dynamic> json)
+      : score = json['risk'] ?? 75.0,
+        type = json['category'] ?? 0,
+        date = json['createdTime'] ?? DateTime(2023).toString(),
+        words = List<String>.from(json['keyword']) ?? ['단어'],
+        sentences = List<String>.from(json['sentence']) ?? ['단어를 포함한 문장'],
+        androidId = json['androidId'] ?? '',
+        phoneNumber = json['phoneNumber'] ?? '';
 }

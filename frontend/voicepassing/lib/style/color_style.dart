@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ColorStyles {
+  static const Color blueText = Color(0xff4488EE);
   static const Color warning = Color(0xffFFF8E5);
   static const Color dangerText = Color(0xffFF525E);
   static const Color warningText = Color(0xffFFC041);
