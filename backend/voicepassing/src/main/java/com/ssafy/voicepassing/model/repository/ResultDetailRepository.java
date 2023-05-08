@@ -4,5 +4,9 @@ import com.ssafy.voicepassing.model.entity.ResultDetail;
 import com.ssafy.voicepassing.model.entity.ResultDetailID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface ResultDetailRepository extends JpaRepository<ResultDetail, ResultDetailID> {
+    List<ResultDetail> findAllByResultId(int resultId);
+
 }
