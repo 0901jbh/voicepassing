@@ -1,4 +1,4 @@
-from transformers import DistilBertModel
+from transformers import DistilBertModel, DistilBertTokenizer
 import torch
 import torch.nn as nn
 import os
@@ -7,8 +7,24 @@ import numpy as np
 from sklearn.pipeline import make_pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
-from lime.lime_text import LimeTextExplainer
+import pandas as pd
 
+class VoicePassingTokenizer():
+    def __init__(self):
+        self.tokenizer = DistilBertTokenizer.from_pretrained("distilbert-base-multilingual-cased")
+
+        with open('./classifier/new_tokens.pickle', "rb") as f :
+            new_tokens = pickle.load(f)
+
+        new_tokens -= set((" "))
+        self.tokenizer.add_tokens(list(new_tokens))
+
+    def tokenize(self, text):
+        tokens = self.tokenizer.tokenize(text)
+        tokens = [token.replace("#", "") for token in tokens]
+
+        return tokens
+    
 class VoicePassingModel(nn.Module):
 
     def __init__(self, bert_out = 768, dropout = 0.3, num_classes = 4):
@@ -47,22 +63,45 @@ class bayesianClassifierPipeLine():
 
     def __init__(self):
 
-        with open("./classifier/tf_vectorizer.pickle", "rb") as f:
+        self.tokenizer = VoicePassingTokenizer()
+
+        with open("./classifier/vectorizer.pickle", "rb") as f:
             self.vectorizer = pickle.load(f)
 
-        with open("./classifier/bayesian_classifier.pickle", "rb") as f:
+        with open("./classifier/nb.pickle", "rb") as f:
             self.bayesian_classifier = pickle.load(f)
 
         self.pipe_line = make_pipeline(self.vectorizer, self.bayesian_classifier)
-        self.explainer = LimeTextExplainer(class_names=["혐의 없음", "기관 사칭형", "대출 빙자형", "기타"])
 
     def forward(self, string):
 
-        result = self.pipe_line.predict_proba([string])
-        exp = self.explainer.explain_instance(string, self.pipe_line.predict_proba, num_features = 10, top_labels = 4)
-        label = np.argmax(result)
+        prob_result = self.pipe_line.predict_proba(string)
 
-        return label, result.squeeze().tolist(), exp
+        return prob_result
+    
+    def extract_word_and_probs(self, string, label):
+
+        text_tokens = self.tokenizer.tokenize(string)
+
+        all_cases = [text_tokens.copy() for _ in range(len(text_tokens))]
+        all_texts = []
+
+        for idx, row in enumerate(all_cases):
+            row[idx] = ""
+            all_texts.append("".join(row))
+
+        del all_cases
+
+        prob_result = self.pipe_line.predict_proba(all_texts + [string])
+        dif = prob_result - prob_result[-1]
+
+        # print("tokens : ", text_tokens)
+        # print("dif :", dif)
+
+        arg_idx = dif[:, label].argmin()
+
+        return text_tokens[arg_idx], dif[arg_idx, label]
+        
 
 model = VoicePassingModel()
 pipeline = bayesianClassifierPipeLine()

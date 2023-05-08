@@ -80,20 +80,21 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
         label_probs = torch.nn.functional.softmax(output / T, dim = 1)
 
     # 2. Bayesian Classification
-    b_label_probs, word_probs = pipeline.forward(text_splited)
+    
+    b_label_probs = pipeline.forward(text_splited)
+    b_label_probs = torch.FloatTensor(b_label_probs)
 
     # 3. get result and save
 
     # print(f"BERT : {label_probs}")
     # print(f"NB : {torch.FloatTensor(b_label_probs)}")
 
-    label_probs = (label_probs + torch.FloatTensor(b_label_probs)) / 2
+    label_probs = (label_probs + b_label_probs) / 2
 
     # print(f"TOTAL : {label_probs}")
     
     label = torch.argmax(label_probs, dim = 1)
-    # print(f"LABEL : {label}")
-        
+    # print(f"LABEL : {label}")        
     temp_prob_store = label_probs.detach().cpu().numpy().tolist()
 
     ## 3.1. label 설정하기
@@ -106,28 +107,21 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
 
     temp_store = []
 
-    for idx, word_prob in enumerate(word_probs):
+    for idx, one_sentence in enumerate(text_splited):
 
         temp_store.append(label_probs[idx])
         cur_label = label[idx].item()
 
-        if cur_label == 0: # 평가 결과 음수일 경우
+        if cur_label == 0:
             continue
 
-        # 평가 결과가 음수가 아닌 경우
-
-        words, probs = zip(*word_prob.as_list(label = cur_label))
-
-        probs = softmax(torch.FloatTensor(probs))
-        best_prob_idx = torch.argmax(probs)
-        best_word = words[best_prob_idx]
-        best_prob = probs[best_prob_idx].item()
+        word, prob = pipeline.extract_word_and_probs(one_sentence, cur_label)
 
         sentence_model = SentenceModel(
             sentCategory = cur_label,
             sentCategoryScore = label_probs[idx][cur_label].item(),
-            sentKeyword = best_word,
-            keywordScore = best_prob,
+            sentKeyword = word,
+            keywordScore = abs(prob),
             sentence = text_splited[idx]
         )
 
@@ -179,3 +173,5 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
 @router.post("/test")
 async def junghee_test(input_model : ReferenceInputModel):
     return { "result" : [0.1, 0.2, 0.3, 0.4]}
+
+    
