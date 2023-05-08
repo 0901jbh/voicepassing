@@ -3,6 +3,7 @@ import argparse
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from classifier.model import model
+import classifier.model
 from routers import inference
 import torch
 
@@ -22,7 +23,7 @@ app = FastAPI(lifespan = lifespan)
 app.include_router(inference.router)
 
 if __name__ == "__main__":
-
+    
     parser = argparse.ArgumentParser(
         description = "FastAPI Server for communication with AI Model"
     )
