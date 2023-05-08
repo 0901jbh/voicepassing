@@ -334,7 +334,7 @@ public class AnalysisController {
         int textIndex = result.lastIndexOf("\"text\":");
         int commaIndex = result.indexOf(",", textIndex);
         String txt = result.substring(textIndex + 8, commaIndex - 1);
-        
+        logger.info("클로바 텍스트 변환 결과 : {}", txt);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
         if(result != null){
