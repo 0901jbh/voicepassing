@@ -14,8 +14,8 @@ public class AppConfig {
 	    ServletServerContainerFactoryBean container = new ServletServerContainerFactoryBean();
 	    container.setMaxTextMessageBufferSize(98730540);
 	    container.setMaxBinaryMessageBufferSize(98730540);
-	    container.setMaxSessionIdleTimeout(TimeUnit.MINUTES.convert(5, TimeUnit.MILLISECONDS));
-	    container.setAsyncSendTimeout(TimeUnit.SECONDS.convert(200, TimeUnit.MILLISECONDS));
+	    container.setMaxSessionIdleTimeout(TimeUnit.MINUTES.toMillis(5));
+    	container.setAsyncSendTimeout(TimeUnit.SECONDS.toMillis(200));
 	    return container;
 	}
 }
