@@ -27,6 +27,10 @@ public class AnalysisServiceImpl implements AnalysisService{
     @Value("${SPRING_RECORD_TEMP_DIR}")//C:\Users\SSAFY\Desktop\test
     private String RECORD_PATH; //확인완료
 
+    
+    @Value("${AI_SERVER_URI}")
+    private String AI_SERVER_URI;
+    
     //@Value("${fastapi.url}")
     private String fastApiUrl;
 
@@ -184,7 +188,7 @@ public class AnalysisServiceImpl implements AnalysisService{
         HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestBody, headers);
 
 //    // FastAPI URL 설정
-        String url = "http://localhost:8000/inference";
+        String url = AI_SERVER_URI + "/inference";
 
 //    // HTTP 요청 보내기
         ResponseEntity<AIResponseDTO.Response> responseEntity = restTemplate.postForEntity(url,httpEntity,AIResponseDTO.Response.class);

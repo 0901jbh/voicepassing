@@ -1,16 +1,19 @@
 package com.ssafy.voicepassing.controller;
 
 
-import com.ssafy.voicepassing.model.dto.AIResponseDTO;
-import com.ssafy.voicepassing.model.dto.ResultDTO;
-import com.ssafy.voicepassing.model.service.AnalysisService;
-import com.ssafy.voicepassing.model.service.ClovaSpeechService;
-import com.ssafy.voicepassing.model.service.ResultService;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.ssafy.voicepassing.model.dto.*;
+import com.ssafy.voicepassing.model.entity.ResultDetail;
+import com.ssafy.voicepassing.model.service.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -38,7 +42,15 @@ public class AnalysisController {
 
     private final AnalysisService analysisService;
 
-    final ClovaSpeechService clovaSpeechClient = new ClovaSpeechService();
+    private final KeywordService keywordService;
+
+    private final KeywordSentenceService keywordSentenceService;
+
+    private final ResultDetailService resultDetailService;
+
+    @Autowired
+    private ClovaSpeechService clovaSpeechClient;
+    
     ClovaSpeechService.NestRequestEntity requestEntity = new ClovaSpeechService.NestRequestEntity();
 
 
@@ -62,7 +74,7 @@ public class AnalysisController {
         // result = clovaSpeechClient.objectStorage("Object Storage key", requestEntity);
         //System.out.println(result);
         if(result != null)
-            return ResponseEntity.ok(txt);
+            return ResponseEntity.ok(result);
         return ResponseEntity.ok(result); //에러 처리 할 곳
     }
 
@@ -72,7 +84,6 @@ public class AnalysisController {
         String path = "C:\\Users\\SSAFY\\Desktop\\test\\1.mp3";
         result = clovaSpeechClient.upload(new File(path), requestEntity);
         // String str = result;
-
         int textIndex = result.lastIndexOf("\"text\":");
         int commaIndex = result.indexOf(",", textIndex);
         String txt = result.substring(textIndex + 8, commaIndex - 1);
@@ -101,7 +112,7 @@ public class AnalysisController {
         String path = "C:\\Users\\SSAFY\\Desktop\\test\\1.mp3";
         result = clovaSpeechClient.upload(new File(path), requestEntity);
         // String str = result;
-
+        System.out.println(result);
         int textIndex = result.lastIndexOf("\"text\":");
         int commaIndex = result.indexOf(",", textIndex);
         String txt = result.substring(textIndex + 8, commaIndex - 1);
@@ -111,7 +122,7 @@ public class AnalysisController {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.OK;
         if(result != null){
-            boolean isFinish = false;
+            boolean isFinish = true;
             String sessionId = "SSAFY1357";
             AIResponseDTO.Request request = AIResponseDTO.Request.builder()
                     .text(txt)
@@ -119,6 +130,66 @@ public class AnalysisController {
                     .sessionId(sessionId)
                     .build();
             resultMap = analysisService.analysis(request);
+            //result
+            if(isFinish){
+
+                //result 추가
+                AIResponseDTO.Response rep = (AIResponseDTO.Response) resultMap.get("result");
+                String phoneNumber = "010-1234-1111";
+                String androidId = "android2";
+                ResultDTO.Result res = ResultDTO.Result.builder()
+                        .androidId(androidId)
+                        .phoneNumber(phoneNumber)
+                        .category(rep.getTotalCategory())
+                        .risk(rep.getTotalCategoryScore())
+                        .build();
+
+                int rId = resultService.addResult(res);
+                System.out.println(rId);
+
+
+
+                //keyword 추가
+                AIResponseDTO.Response response = (AIResponseDTO.Response)resultMap.get("result");
+                List<AIResponseDTO.Result> resultList = response.getResults();
+
+                for (AIResponseDTO.Result r : resultList) {
+                    KeywordDTO.Keyword keywordDTO = KeywordDTO.Keyword.builder()
+                            .keyword(r.getSentKeyword())
+                            .category(r.getSentCategory())
+                            .count(0)
+                            .build();
+
+                    Boolean k = keywordService.addKeyword(keywordDTO);
+                }
+
+                for (AIResponseDTO.Result r : resultList) {
+                    KeywordSentenceDTO.KeywordSentence ksDTO = KeywordSentenceDTO.KeywordSentence
+                            .builder()
+                            .score(r.getKeywordScore())
+                            .keyword(r.getSentKeyword())
+                            .sentence(r.getSentence())
+                            .build();
+                    Boolean ksb = keywordSentenceService.addKeywordSentence(ksDTO);
+                }
+
+                for (AIResponseDTO.Result r : resultList) {
+                    ResultDetailDTO.ResultDetail rdDTO = ResultDetailDTO.ResultDetail.
+                            builder()
+                            .resultId(rId)
+                            .sentence(r.getSentence())
+                            .build();
+
+                    int rgd = resultDetailService.addResultDetail(rdDTO);
+                }
+
+
+
+                resultMap.put("key", response.getResults());
+
+
+            }
+
             return new ResponseEntity<Map<String,Object>>(resultMap,status);
         }
         return ResponseEntity.ok(result); //에러 처리 할 곳
@@ -188,7 +259,7 @@ public class AnalysisController {
                 .risk((int)rep.getTotalCategoryScore())
                 .build();
 
-        Boolean b = resultService.addResult(res);
+        int b = resultService.addResult(res);
         System.out.println(b);
 
 
@@ -255,6 +326,26 @@ public class AnalysisController {
 
 
     }
+    @PostMapping("/reqfile")
+    public ResponseEntity<?> reqFile(String sessionId, String filepath, boolean isFinish){
+        String result = null;
 
-
+        result = clovaSpeechClient.upload(new File(filepath), requestEntity);
+        int textIndex = result.lastIndexOf("\"text\":");
+        int commaIndex = result.indexOf(",", textIndex);
+        String txt = result.substring(textIndex + 8, commaIndex - 1);
+        
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+        if(result != null){
+            AIResponseDTO.Request request = AIResponseDTO.Request.builder()
+                    .text(txt)
+                    .isFinish(isFinish)
+                    .sessionId(sessionId)
+                    .build();
+            resultMap = analysisService.analysis(request);
+            return new ResponseEntity<Map<String,Object>>(resultMap,status);
+        }
+        return ResponseEntity.ok(result); //에러 처리 할 곳
+    }
 }
