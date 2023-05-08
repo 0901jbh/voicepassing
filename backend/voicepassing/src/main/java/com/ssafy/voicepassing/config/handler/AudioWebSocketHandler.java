@@ -99,6 +99,7 @@ public class AudioWebSocketHandler extends AbstractWebSocketHandler {
 			List<String> newFile = (List<String>) untruncResult.get("new_file");
 			String newFilePath = RECORD_PATH + "/" + session.getId() + "/part/";
 			sendAiServer(newFile, newFilePath, session,true);
+			break;
 		default:
 			logger.info("error");
 			break;
