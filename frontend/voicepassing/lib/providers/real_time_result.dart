@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:voicepassing/models/receive_message_model.dart';
 
 class RealTimeResult with ChangeNotifier {
-  ReceiveMessageModel _result = ReceiveMessageModel(
+  TotalResult _result = TotalResult(
     totalCategory: -1,
     totalCategoryScore: -1,
     results: [
-      Result(
+      ResultItem(
         sentCategory: 1,
         sentCategoryScore: 0,
         sentKeyword: '',
@@ -15,9 +15,9 @@ class RealTimeResult with ChangeNotifier {
       ),
     ],
   );
-  ReceiveMessageModel get result => _result;
+  TotalResult get result => _result;
 
-  void update(ReceiveMessageModel nextResult) {
+  void update(TotalResult nextResult) {
     _result = nextResult;
     notifyListeners();
   }

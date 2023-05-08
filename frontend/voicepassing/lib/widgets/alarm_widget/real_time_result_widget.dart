@@ -54,11 +54,11 @@ class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
         child: GestureDetector(
           onTap: () {
             FlutterOverlayWindow.resizeOverlay(320, 80);
-            ReceiveMessageModel newResult = ReceiveMessageModel(
+            TotalResult newResult = TotalResult(
               totalCategory: -1,
               totalCategoryScore: -1,
               results: [
-                Result(
+                ResultItem(
                   sentCategory: Random().nextInt(3) + 1,
                   sentCategoryScore: Random().nextInt(60) + 40,
                   sentKeyword: '녹취',

@@ -121,16 +121,17 @@ class _MainScreenState extends State<MainScreen> {
               ReceiveMessageModel.fromJson(jsonDecode(msg));
           // 받은 메세지 저장 -> 위젯에서 접근
           // 최종 결과 수신
-          if (receivedResult.totalCategoryScore != -1) {
-            if (receivedResult.totalCategoryScore >= 60) {
+          debugPrint('📊결과 수신 : $receivedResult');
+          if (receivedResult.isFinish) {
+            if (receivedResult.result.totalCategoryScore >= 60) {
               // provider에 저장
-              context.read<RealTimeResult>().update(receivedResult);
+              context.read<RealTimeResult>().update(receivedResult.result);
             }
             _ws.sink.close();
           } else {
-            if (receivedResult.results[0]!.sentCategoryScore >= 60) {
+            if (receivedResult.result.totalCategoryScore >= 60) {
               // provider에 저장
-              context.read<RealTimeResult>().update(receivedResult);
+              context.read<RealTimeResult>().update(receivedResult.result);
             }
           }
         });

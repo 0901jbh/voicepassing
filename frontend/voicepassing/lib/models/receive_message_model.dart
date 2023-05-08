@@ -1,39 +1,47 @@
 class ReceiveMessageModel {
-  int totalCategory;
-  double totalCategoryScore;
-  late List<Result?> results;
+  bool isFinish;
+  TotalResult result;
 
   ReceiveMessageModel({
-    required this.totalCategory,
-    required this.totalCategoryScore,
-    required this.results,
+    required this.isFinish,
+    required this.result,
   });
 
   factory ReceiveMessageModel.fromJson(Map<String, dynamic> jsonData) {
     return ReceiveMessageModel(
-      totalCategory: jsonData['totalCategory'],
-      totalCategoryScore: jsonData['totalCategoryScore'],
-      results: jsonData['results'],
+      isFinish: jsonData['isFinish'],
+      result: jsonData['result'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'totalCategory': totalCategory,
-      'totalCategoryScore': totalCategoryScore,
-      'results': results,
+      'isFinish': isFinish,
+      'result': result,
     };
   }
 }
 
-class Result {
+class TotalResult {
+  int totalCategory;
+  double totalCategoryScore;
+  late List<ResultItem?> results;
+
+  TotalResult({
+    required this.totalCategory,
+    required this.totalCategoryScore,
+    required this.results,
+  });
+}
+
+class ResultItem {
   int sentCategory;
   double sentCategoryScore;
   String sentKeyword;
   double keywordScore;
   String sentence;
 
-  Result({
+  ResultItem({
     required this.sentCategory,
     required this.sentCategoryScore,
     required this.sentKeyword,
