@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:voicepassing/models/case_model.dart';
+import 'package:unique_device_id/unique_device_id.dart';
+import 'package:voicepassing/models/result_model.dart';
 import 'package:voicepassing/screens/main_screen.dart';
+import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/widgets/head_bar.dart';
 import 'package:voicepassing/widgets/nav_bar.dart';
 import 'package:voicepassing/widgets/result/result_list.dart';
@@ -14,38 +16,58 @@ class ResultScreen extends StatefulWidget {
 
 // Todo: 임시로 넣어놓은 데이터, 삭제예정
 class _ResultScreenState extends State<ResultScreen> {
-  final List<CaseModel> cases = [
-    CaseModel(
-      50,
-      DateTime(2023),
-      "사칭",
-      ['대포통장', '신용평점', '수사관'],
-      [
-        '서울중앙지검형사7부 김진태 수사관입니다',
-        '신용평점 이라는게 어떤 방법으로든 당일날 바로 상향시키는 건 정상적인 방법으로는 불가능 하거든요'
-      ],
-    ),
-    CaseModel(
-      70,
-      DateTime(2023),
-      "대출",
-      ['서울', '정상', '불가능'],
-      [
-        '서울중앙지검형사7부 김진태 수사관입니다',
-        '신용평점 이라는게 어떤 방법으로든 당일날 바로 상향시키는 건 정상적인 방법으로는 불가능 하거든요'
-      ],
-    ),
-    CaseModel(
-      90,
-      DateTime(2023),
-      "사칭",
-      ['형사', '당일날', '수사관'],
-      [
-        '서울중앙지검형사7부 김진태 수사관입니다',
-        '신용평점 이라는게 어떤 방법으로든 당일날 바로 상향시키는 건 정상적인 방법으로는 불가능 하거든요'
-      ],
-    )
-  ];
+  late List<ResultModel> resultList;
+  bool isLoading = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+    initializer();
+  }
+
+  initializer() async {
+    await UniqueDeviceId.instance.getUniqueId().then((value) async {
+      resultList = await ApiService.getRecentResult('android2');
+      setState(() {
+        isLoading = true;
+      });
+    });
+// Todo: 임시로 넣어놓은 기기명, androidId로 바꿀예정
+  }
+
+  // final List<CaseModel> cases = [
+  //   CaseModel(
+  //     50,
+  //     DateTime(2023),
+  //     "사칭",
+  //     ['대포통장', '신용평점', '수사관'],
+  //     [
+  //       '서울중앙지검형사7부 김진태 수사관입니다',
+  //       '신용평점 이라는게 어떤 방법으로든 당일날 바로 상향시키는 건 정상적인 방법으로는 불가능 하거든요'
+  //     ],
+  //   ),
+  //   CaseModel(
+  //     70,
+  //     DateTime(2023),
+  //     "대출",
+  //     ['서울', '정상', '불가능'],
+  //     [
+  //       '서울중앙지검형사7부 김진태 수사관입니다',
+  //       '신용평점 이라는게 어떤 방법으로든 당일날 바로 상향시키는 건 정상적인 방법으로는 불가능 하거든요'
+  //     ],
+  //   ),
+  //   CaseModel(
+  //     90,
+  //     DateTime(2023),
+  //     "사칭",
+  //     ['형사', '당일날', '수사관'],
+  //     [
+  //       '서울중앙지검형사7부 김진태 수사관입니다',
+  //       '신용평점 이라는게 어떤 방법으로든 당일날 바로 상향시키는 건 정상적인 방법으로는 불가능 하거든요'
+  //     ],
+  //   )
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -67,18 +89,31 @@ class _ResultScreenState extends State<ResultScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                for (var caseinfo in cases)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: ResultList(
-                      caseInfo: caseinfo,
-                    ),
-                  ),
+                isLoading
+                    ? Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              for (var result in resultList)
+                                ResultList(caseInfo: result)
+                            ],
+                          ),
+                        ),
+                      )
+                    : const Text('...'),
+                // for (var caseinfo in resultList)
+                //   Padding(
+                //     padding: const EdgeInsets.only(bottom: 20),
+                //     child: ResultList(
+                //       caseInfo: caseinfo,
+                //     ),
+                //   ),
               ],
             ),
           );
         },
       ),
+
       bottomNavigationBar: const Navbar(selectedIndex: 3),
       // bottomNavigationBar: const Navbar(),
     );
