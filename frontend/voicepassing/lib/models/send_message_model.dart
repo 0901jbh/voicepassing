@@ -1,22 +1,22 @@
 class SendMessageModel {
-  int stateCode;
+  int state;
   String androidId;
 
   SendMessageModel({
-    required this.stateCode,
+    required this.state,
     required this.androidId,
   });
 
   factory SendMessageModel.fromJson(Map<String, dynamic> jsonData) {
     return SendMessageModel(
-      stateCode: jsonData['stateCode'],
+      state: jsonData['state'],
       androidId: jsonData['androidId'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'stateCode': stateCode,
+      'state': state,
       'androidId': androidId,
     };
   }
