@@ -55,8 +55,8 @@ class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
           onTap: () {
             FlutterOverlayWindow.resizeOverlay(320, 80);
             TotalResult newResult = TotalResult(
-              totalCategory: -1,
-              totalCategoryScore: -1,
+              totalCategory: Random().nextInt(3) + 1,
+              totalCategoryScore: Random().nextInt(60) + 40,
               results: [
                 ResultItem(
                   sentCategory: Random().nextInt(3) + 1,
@@ -122,7 +122,7 @@ class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
                                             .result
                                             .totalCategoryScore *
                                         100 >
-                                    80
+                                    30
                                 ? '위험'
                                 : '주의',
                             style: const TextStyle(
@@ -148,7 +148,7 @@ class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
                                                   .result
                                                   .totalCategoryScore *
                                               100 >
-                                          80
+                                          30
                                       ? ColorStyles.subLightGray
                                       : ColorStyles.textBlack,
                                   fontSize: 14,

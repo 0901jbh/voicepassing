@@ -125,13 +125,13 @@ class _MainScreenState extends State<MainScreen> {
             if (receivedResult.result != null &&
                 receivedResult.result!.results != null) {
               if (receivedResult.isFinish) {
-                if (receivedResult.result!.totalCategoryScore >= 0.6) {
+                if (receivedResult.result!.totalCategoryScore >= 0.1) {
                   // provider에 저장
                   context.read<RealTimeResult>().update(receivedResult.result!);
                 }
                 _ws.sink.close();
               } else {
-                if (receivedResult.result!.totalCategoryScore >= 0.6) {
+                if (receivedResult.result!.totalCategoryScore >= 0.1) {
                   // provider에 저장
                   context.read<RealTimeResult>().update(receivedResult.result!);
                 }
