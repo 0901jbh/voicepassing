@@ -4,6 +4,7 @@ package com.ssafy.voicepassing.model.service;
 import com.ssafy.voicepassing.model.dto.ResultDTO;
 import com.ssafy.voicepassing.model.entity.KeywordSentence;
 import com.ssafy.voicepassing.model.entity.Result;
+import com.ssafy.voicepassing.model.entity.ResultDetail;
 import com.ssafy.voicepassing.model.repository.KeywordSentenceRepository;
 import com.ssafy.voicepassing.model.repository.ResultDetailRepository;
 import com.ssafy.voicepassing.model.repository.ResultRepository;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -102,12 +104,15 @@ public class ResultServiceImpl implements ResultService {
         List<ResultDTO.ResultWithWords> resultList = new ArrayList<>();
         for (Result result: resultsEntity) {
             ResultDTO.Result resultDto = buildResult(result);
-            List<String> sentences = resultDetailRepository.findAllByResultId(resultDto.getResultId());
+            System.out.println(resultDto.getResultId());
+            List<ResultDetail> sentences = resultDetailRepository.findAllByResultId(resultDto.getResultId());
+            System.out.println(sentences.toString());
+            List<String> sentenceList = sentences.stream().map(ResultDetail::getSentence).collect(Collectors.toList());
             List<String> words = new ArrayList<>();
             String text = "사실";
             System.out.println(keywordSentenceRepository.findBySentenceStartsWith(text).toString());
             words.add(keywordSentenceRepository.findBySentenceStartsWith(text).getKeyword());
-            for (String sentence: sentences) {
+            for (String sentence: sentenceList) {
 //                String word = String.valueOf(keywordSentenceRepository.findKeywordBySentenceStartsWith(sentence));
 //                String word = String.valueOf(keywordSentenceRepository.findKeywordBySentenceStartsWith(text));
 //                words.add(word);
@@ -115,7 +120,7 @@ public class ResultServiceImpl implements ResultService {
             resultList.add(
                     ResultDTO.ResultWithWords.builder()
                             .keyword(words)
-                            .sentence(sentences)
+                            .sentence(sentenceList)
                             .risk(result.getRisk())
                             .category(result.getCategory())
                             .phoneNumber(result.getPhoneNumber())
