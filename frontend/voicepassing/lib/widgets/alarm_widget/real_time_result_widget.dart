@@ -67,17 +67,14 @@ class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
                 ),
               ],
             );
-            context.read<RealTimeResult>().update(newResult);
+            // context.read<RealTimeResult>().update(newResult);
           },
           child: Container(
             height: 80,
             width: 320,
             decoration: BoxDecoration(
-              color: context
-                          .watch<RealTimeResult>()
-                          .result
-                          .results[0]!
-                          .sentCategoryScore >
+              color: context.watch<RealTimeResult>().result.totalCategoryScore *
+                          100 >
                       80
                   ? ColorStyles.dangerText
                   : ColorStyles.warningText,
@@ -121,10 +118,10 @@ class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
                         children: [
                           Text(
                             context
-                                        .watch<RealTimeResult>()
-                                        .result
-                                        .results[0]!
-                                        .sentCategoryScore >
+                                            .watch<RealTimeResult>()
+                                            .result
+                                            .totalCategoryScore *
+                                        100 >
                                     80
                                 ? '위험'
                                 : '주의',
@@ -143,14 +140,14 @@ class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
                                 context
                                     .watch<RealTimeResult>()
                                     .result
-                                    .results[0]!
+                                    .results![0]
                                     .sentKeyword,
                                 style: TextStyle(
                                   color: context
-                                              .watch<RealTimeResult>()
-                                              .result
-                                              .results[0]!
-                                              .sentCategoryScore >
+                                                  .watch<RealTimeResult>()
+                                                  .result
+                                                  .totalCategoryScore *
+                                              100 >
                                           80
                                       ? ColorStyles.subLightGray
                                       : ColorStyles.textBlack,
@@ -184,11 +181,11 @@ class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
                         ),
                         alignment: Alignment.center,
                         child: Text(
-                          context
-                              .watch<RealTimeResult>()
-                              .result
-                              .results[0]!
-                              .sentCategoryScore
+                          (context
+                                      .watch<RealTimeResult>()
+                                      .result
+                                      .totalCategoryScore *
+                                  100)
                               .round()
                               .toString(),
                           style: const TextStyle(

@@ -8,20 +8,21 @@ import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
 import 'package:provider/provider.dart';
-import 'package:voicepassing/models/receive_message_model.dart';
-import 'package:voicepassing/models/send_message_model.dart';
-import 'package:voicepassing/providers/real_time_result.dart';
-import 'package:voicepassing/services/recent_file.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:unique_device_id/unique_device_id.dart';
 
+import 'package:voicepassing/models/receive_message_model.dart';
+import 'package:voicepassing/models/send_message_model.dart';
+import 'package:voicepassing/providers/real_time_result.dart';
+import 'package:voicepassing/services/recent_file.dart';
 import 'package:voicepassing/screens/analytics_screen.dart';
 import 'package:voicepassing/screens/result_screen.dart';
 import 'package:voicepassing/screens/search_screen.dart';
 import 'package:voicepassing/screens/statics_screen.dart';
 import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/widgets/img_button.dart';
+import 'package:voicepassing/widgets/main_widget/main_logo.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen({super.key});
@@ -117,21 +118,24 @@ class _MainScreenState extends State<MainScreen> {
 
         // 검사 결과 수신
         _ws.stream.listen((msg) {
-          ReceiveMessageModel receivedResult =
-              ReceiveMessageModel.fromJson(jsonDecode(msg));
-          // 받은 메세지 저장 -> 위젯에서 접근
-          // 최종 결과 수신
-          debugPrint('📊결과 수신 : $receivedResult');
-          if (receivedResult.isFinish) {
-            if (receivedResult.result.totalCategoryScore >= 60) {
-              // provider에 저장
-              context.read<RealTimeResult>().update(receivedResult.result);
-            }
-            _ws.sink.close();
-          } else {
-            if (receivedResult.result.totalCategoryScore >= 60) {
-              // provider에 저장
-              context.read<RealTimeResult>().update(receivedResult.result);
+          if (msg != null) {
+            ReceiveMessageModel receivedResult =
+                ReceiveMessageModel.fromJson(jsonDecode(msg));
+            // 최종 결과 수신
+            if (receivedResult.result != null &&
+                receivedResult.result!.results != null) {
+              if (receivedResult.isFinish) {
+                if (receivedResult.result!.totalCategoryScore >= 0.6) {
+                  // provider에 저장
+                  context.read<RealTimeResult>().update(receivedResult.result!);
+                }
+                _ws.sink.close();
+              } else {
+                if (receivedResult.result!.totalCategoryScore >= 0.6) {
+                  // provider에 저장
+                  context.read<RealTimeResult>().update(receivedResult.result!);
+                }
+              }
             }
           }
         });
@@ -264,17 +268,17 @@ class _MainScreenState extends State<MainScreen> {
       ),
       body: ChangeNotifierProvider(
         create: (BuildContext context) => RealTimeResult(),
-        child: const Center(
+        child: Center(
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              // MainLogo(widget: widget),
-              SizedBox(
+              MainLogo(widget: widget),
+              const SizedBox(
                 height: 30,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 315,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -291,10 +295,10 @@ class _MainScreenState extends State<MainScreen> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 315,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
