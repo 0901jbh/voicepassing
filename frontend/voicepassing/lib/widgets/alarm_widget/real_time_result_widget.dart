@@ -1,6 +1,6 @@
-import 'package:phone_state/phone_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+import 'package:vibration/vibration.dart';
 import 'package:voicepassing/models/receive_message_model.dart';
 import 'package:voicepassing/style/color_style.dart';
 
@@ -33,22 +33,24 @@ class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
       setState(() {
         resultData = TotalResult.fromJson(newResult);
         debugPrint('점수 : ${resultData.totalCategoryScore * 100}');
+        FlutterOverlayWindow.resizeOverlay(320, 80);
+        Vibration.vibrate();
       });
     });
-    setStream();
+    // setStream();
   }
 
-  void setStream() {
-    debugPrint('알림 위젯 setStream');
-    PhoneState.phoneStateStream.listen((event) {
-      if (event == PhoneStateStatus.CALL_STARTED) {
-        debugPrint('전화 이벤트 : $event');
-        setState(() {
-          FlutterOverlayWindow.resizeOverlay(320, 80);
-        });
-      }
-    });
-  }
+  // void setStream() {
+  //   debugPrint('알림 위젯 setStream');
+  //   PhoneState.phoneStateStream.listen((event) {
+  //     if (event == PhoneStateStatus.CALL_STARTED) {
+  //       debugPrint('전화 이벤트 : $event');
+  //       setState(() {
+  //         FlutterOverlayWindow.resizeOverlay(320, 80);
+  //       });
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +97,7 @@ class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                           ),
-                        )
+                        ),
                       ],
                     ),
                     Row(

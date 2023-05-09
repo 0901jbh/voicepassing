@@ -120,9 +120,9 @@ class _MainScreenState extends State<MainScreen> {
           if (msg != null) {
             ReceiveMessageModel receivedResult =
                 ReceiveMessageModel.fromJson(jsonDecode(msg));
-            // 최종 결과 수신
             if (receivedResult.result != null &&
                 receivedResult.result!.results != null) {
+              // 최종 결과 수신
               if (receivedResult.isFinish) {
                 if (receivedResult.result!.totalCategoryScore >= 0.6) {
                   // 알림 위젯으로 데이터 전달(shareData)
@@ -192,7 +192,7 @@ class _MainScreenState extends State<MainScreen> {
           TextButton(
             onPressed: () {
               var count = 10;
-              Timer.periodic(const Duration(seconds: 2), (timer) async {
+              Timer.periodic(const Duration(seconds: 1), (timer) async {
                 var data = TotalResult(
                   totalCategory: Random().nextInt(3),
                   totalCategoryScore: (Random().nextInt(50) + 50) / 100,
@@ -231,6 +231,8 @@ class _MainScreenState extends State<MainScreen> {
                   alignment: OverlayAlignment.center,
                   visibility: NotificationVisibility.visibilityPublic,
                   positionGravity: PositionGravity.auto,
+                  width: 0,
+                  height: 0,
                 );
 
                 setState(() {

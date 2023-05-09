@@ -29,7 +29,6 @@ class _CallEndedResultWidgetState extends State<CallEndedResultWidget> {
       color: Colors.transparent,
       elevation: 0.0,
       child: GestureDetector(
-        onTap: () {},
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,

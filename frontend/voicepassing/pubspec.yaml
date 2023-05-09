@@ -49,6 +49,7 @@ dependencies:
   unique_device_id: ^0.1.2
 
   fl_chart: ^0.62.0
+  vibration: ^1.7.7
 
 dev_dependencies:
   flutter_test:
