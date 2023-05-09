@@ -13,17 +13,20 @@ class RealTimeResultWidget extends StatefulWidget {
 
 class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
   // Color color = const Color(0xFFFFFFFF);
-  TotalResult resultData = TotalResult(
-    totalCategory: 1,
-    totalCategoryScore: 0.5,
-    results: [
-      ResultItem(
-          sentCategory: 1,
-          sentCategoryScore: 0.5,
-          sentKeyword: '',
-          keywordScore: 0.5,
-          sentence: ''),
-    ],
+  ReceiveMessageModel resultData = ReceiveMessageModel(
+    result: TotalResult(
+      totalCategory: 1,
+      totalCategoryScore: 0.5,
+      results: [
+        ResultItem(
+            sentCategory: 1,
+            sentCategoryScore: 0.5,
+            sentKeyword: '',
+            keywordScore: 0.5,
+            sentence: ''),
+      ],
+    ),
+    isFinish: false,
   );
 
   @override
@@ -31,10 +34,13 @@ class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
     super.initState();
     FlutterOverlayWindow.overlayListener.listen((newResult) {
       setState(() {
-        resultData = TotalResult.fromJson(newResult);
-        debugPrint('점수 : ${resultData.totalCategoryScore * 100}');
+        resultData = ReceiveMessageModel.fromJson(newResult);
+        debugPrint('점수 : ${resultData.result!.totalCategoryScore * 100}');
         FlutterOverlayWindow.resizeOverlay(320, 80);
         Vibration.vibrate();
+        if (resultData.isFinish) {
+          debugPrint('##############끝#########');
+        }
       });
     });
     // setStream();
@@ -59,10 +65,10 @@ class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
       elevation: 0.0,
       child: GestureDetector(
         child: Container(
-          height: 80,
-          width: 320,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-            color: resultData.totalCategoryScore * 100 > 80
+            color: resultData.result!.totalCategoryScore * 100 > 80
                 ? ColorStyles.dangerText
                 : ColorStyles.warningText,
             shape: BoxShape.rectangle,
@@ -104,7 +110,7 @@ class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          resultData.totalCategoryScore * 100 > 80
+                          resultData.result!.totalCategoryScore * 100 > 80
                               ? '위험'
                               : '주의',
                           style: const TextStyle(
@@ -119,9 +125,11 @@ class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
                         Row(
                           children: [
                             Text(
-                              resultData.results![0].sentKeyword,
+                              resultData.result!.results![0].sentKeyword,
                               style: TextStyle(
-                                color: resultData.totalCategoryScore * 100 > 80
+                                color: resultData.result!.totalCategoryScore *
+                                            100 >
+                                        80
                                     ? ColorStyles.subLightGray
                                     : ColorStyles.textBlack,
                                 fontSize: 14,
@@ -154,7 +162,7 @@ class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        (resultData.totalCategoryScore * 100)
+                        (resultData.result!.totalCategoryScore * 100)
                             .round()
                             .toString(),
                         style: const TextStyle(

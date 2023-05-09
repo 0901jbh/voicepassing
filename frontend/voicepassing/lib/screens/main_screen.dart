@@ -193,19 +193,23 @@ class _MainScreenState extends State<MainScreen> {
             onPressed: () {
               var count = 10;
               Timer.periodic(const Duration(seconds: 1), (timer) async {
-                var data = TotalResult(
-                  totalCategory: Random().nextInt(3),
-                  totalCategoryScore: (Random().nextInt(50) + 50) / 100,
-                  results: [
-                    ResultItem(
-                        sentCategory: 1,
-                        sentCategoryScore: (Random().nextInt(50) + 50) / 100,
-                        sentKeyword: '안녕',
-                        keywordScore: 0.55,
-                        sentence: 'ㅁㄴㅇㄹ'),
-                  ],
+                var data = ReceiveMessageModel(
+                  result: TotalResult(
+                    totalCategory: Random().nextInt(3),
+                    totalCategoryScore: (Random().nextInt(50) + 50) / 100,
+                    results: [
+                      ResultItem(
+                          sentCategory: 1,
+                          sentCategoryScore: (Random().nextInt(50) + 50) / 100,
+                          sentKeyword: '안녕',
+                          keywordScore: 0.55,
+                          sentence: 'ㅁㄴㅇㄹ'),
+                    ],
+                  ),
+                  isFinish: count == 1 ? true : false,
                 );
-                if (data.totalCategoryScore >= 0.6) {
+
+                if (data.result!.totalCategoryScore >= 0.6) {
                   await FlutterOverlayWindow.shareData(data);
                 }
                 count--;
