@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 
+import 'package:call_log/call_log.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
@@ -87,25 +88,25 @@ class _MainScreenState extends State<MainScreen> {
           phoneStatus = event;
         }
       });
-      // 전화 걸려올 때 크기 0인 위젯 생성(추후 수정할 것)
-      if (event == PhoneStateStatus.CALL_INCOMING) {
-        if (await FlutterOverlayWindow.isActive()) return;
-        await FlutterOverlayWindow.showOverlay(
-          enableDrag: true,
-          flag: OverlayFlag.defaultFlag,
-          alignment: OverlayAlignment.center,
-          visibility: NotificationVisibility.visibilityPublic,
-          positionGravity: PositionGravity.auto,
-          height: 400,
-          width: 400,
-        );
-      } else if (event == PhoneStateStatus.CALL_STARTED) {
-        // 통화 시작되면 웹소켓 연결
+      // 통화 연결
+      if (event == PhoneStateStatus.CALL_STARTED) {
+        // 크기 0인 알림 위젯 생성
+        if (!await FlutterOverlayWindow.isActive()) {
+          await FlutterOverlayWindow.showOverlay(
+            enableDrag: true,
+            flag: OverlayFlag.defaultFlag,
+            alignment: OverlayAlignment.center,
+            visibility: NotificationVisibility.visibilityPublic,
+            positionGravity: PositionGravity.auto,
+            height: 0,
+            width: 0,
+          );
+        }
+        // 웹소켓 연결
         _ws = WebSocketChannel.connect(
           Uri.parse('ws://k8a607.p.ssafy.io:8080/record'),
         );
-
-        // 웹소켓 연결되면 시작 메세지로 기기 식별 번호(SSAID) 전달
+        // 시작 메세지로 기기 식별 번호(SSAID) 전달
         var startMessage = SendMessageModel(
           state: 0,
           androidId: androidId,
@@ -125,13 +126,13 @@ class _MainScreenState extends State<MainScreen> {
               // 최종 결과 수신
               if (receivedResult.isFinish) {
                 if (receivedResult.result!.totalCategoryScore >= 0.6) {
-                  // 알림 위젯으로 데이터 전달(shareData)
+                  // 알림 위젯으로 데이터 전달
                   FlutterOverlayWindow.shareData(receivedResult.result);
                 }
                 _ws.sink.close();
               } else {
                 if (receivedResult.result!.totalCategoryScore >= 0.6) {
-                  // 알림 위젯으로 데이터 전달(shareData)
+                  // 알림 위젯으로 데이터 전달
                   FlutterOverlayWindow.shareData(receivedResult.result);
                 }
               }
@@ -165,10 +166,13 @@ class _MainScreenState extends State<MainScreen> {
           var splittedBytes = entireBytes.sublist(offset, nextOffset);
           offset = nextOffset;
           _ws.sink.add(splittedBytes);
+
           // stateCode 1 보내기
+          var callLog = await CallLog.get();
           var endMessage = SendMessageModel(
             state: 1,
             androidId: androidId,
+            phoneNumber: callLog.first.number,
           );
           _ws.sink.add(jsonEncode(endMessage));
         }
@@ -209,7 +213,9 @@ class _MainScreenState extends State<MainScreen> {
                   isFinish: count == 1 ? true : false,
                 );
 
-                if (data.result!.totalCategoryScore >= 0.6) {
+                if (data.isFinish) {
+                  await FlutterOverlayWindow.shareData(data);
+                } else if (data.result!.totalCategoryScore >= 0.6) {
                   await FlutterOverlayWindow.shareData(data);
                 }
                 count--;

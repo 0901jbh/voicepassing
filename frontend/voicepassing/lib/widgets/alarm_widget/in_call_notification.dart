@@ -1,62 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_overlay_window/flutter_overlay_window.dart';
-import 'package:vibration/vibration.dart';
 import 'package:voicepassing/models/receive_message_model.dart';
 import 'package:voicepassing/style/color_style.dart';
 
-class RealTimeResultWidget extends StatefulWidget {
-  const RealTimeResultWidget({Key? key}) : super(key: key);
+class InCallNotification extends StatelessWidget {
+  const InCallNotification({
+    super.key,
+    required this.resultData,
+  });
 
-  @override
-  State<RealTimeResultWidget> createState() => _RealTimeResultWidgetState();
-}
-
-class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
-  // Color color = const Color(0xFFFFFFFF);
-  ReceiveMessageModel resultData = ReceiveMessageModel(
-    result: TotalResult(
-      totalCategory: 1,
-      totalCategoryScore: 0.5,
-      results: [
-        ResultItem(
-            sentCategory: 1,
-            sentCategoryScore: 0.5,
-            sentKeyword: '',
-            keywordScore: 0.5,
-            sentence: ''),
-      ],
-    ),
-    isFinish: false,
-  );
-
-  @override
-  void initState() {
-    super.initState();
-    FlutterOverlayWindow.overlayListener.listen((newResult) {
-      setState(() {
-        resultData = ReceiveMessageModel.fromJson(newResult);
-        debugPrint('점수 : ${resultData.result!.totalCategoryScore * 100}');
-        FlutterOverlayWindow.resizeOverlay(320, 80);
-        Vibration.vibrate();
-        if (resultData.isFinish) {
-          debugPrint('##############끝#########');
-        }
-      });
-    });
-    // setStream();
-  }
-
-  // void setStream() {
-  //   debugPrint('알림 위젯 setStream');
-  //   PhoneState.phoneStateStream.listen((event) {
-  //     if (event == PhoneStateStatus.CALL_STARTED) {
-  //       debugPrint('전화 이벤트 : $event');
-  //       setState(() {
-  //         FlutterOverlayWindow.resizeOverlay(320, 80);
-  //       });
-  //     }
-  //   });
-  // }
+  final ReceiveMessageModel resultData;
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +17,8 @@ class _RealTimeResultWidgetState extends State<RealTimeResultWidget> {
       elevation: 0.0,
       child: GestureDetector(
         child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+          height: 80,
+          width: 320,
           decoration: BoxDecoration(
             color: resultData.result!.totalCategoryScore * 100 > 80
                 ? ColorStyles.dangerText

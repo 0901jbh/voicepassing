@@ -50,6 +50,7 @@ dependencies:
 
   fl_chart: ^0.62.0
   vibration: ^1.7.7
+  call_log: ^4.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:voicepassing/screens/main_screen.dart';
 
-import '../widgets/alarm_widget/real_time_result_widget.dart';
+import 'widgets/alarm_widget/alarm_widget.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
@@ -19,7 +19,7 @@ void overlayMain() {
   runApp(
     const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: RealTimeResultWidget(),
+      home: AlarmWidget(),
     ),
   );
 }
