@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -40,18 +41,10 @@ public class KeywordServiceImpl implements KeywordService{
     }
 
     @Override
-    public List<KeywordDTO.PopularKeyword> getPopularKeyword() {
-        List<Keyword> keywordList = keywordRepository.findAllByOrderByCountDesc();
-        List<KeywordDTO.PopularKeyword> resultList = new ArrayList<>();
-        for (int i = 0;i < 3;i ++) {
-            if (keywordList.size() > i) {
-                String keyword = keywordList.get(i).getKeyword();
-                resultList.add(
-                        KeywordDTO.PopularKeyword.builder()
-                                .keyword(keyword).build()
-                );
-            }
-        }
+    public List<List<Keyword>> getPopularKeyword() {
+        List<Keyword> keyword1List = keywordRepository.findTop3ByCategoryOrderByCountDesc(1);
+        List<Keyword> keyword2List = keywordRepository.findTop3ByCategoryOrderByCountDesc(2);
+        ArrayList<List<Keyword>> resultList = new ArrayList<>(Arrays.asList(keyword1List, keyword2List));
         return resultList;
     }
 }

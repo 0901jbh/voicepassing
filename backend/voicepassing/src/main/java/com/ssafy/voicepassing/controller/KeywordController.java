@@ -2,6 +2,7 @@ package com.ssafy.voicepassing.controller;
 
 import com.ssafy.voicepassing.model.dto.KeywordDTO;
 import com.ssafy.voicepassing.model.dto.KeywordSentenceDTO;
+import com.ssafy.voicepassing.model.entity.Keyword;
 import com.ssafy.voicepassing.model.service.KeywordService;
 import com.ssafy.voicepassing.model.service.KeywordSentenceService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,16 +35,20 @@ public class KeywordController {
     @GetMapping()
     public ResponseEntity<?> getPopularKeyword() {
         HttpStatus status;
-        Map<String, List<KeywordSentenceDTO.KeywordSentence>> resultMap = new HashMap<>();
-        List<KeywordDTO.PopularKeyword> keywordList = keywordService.getPopularKeyword();
-        List<KeywordSentenceDTO.KeywordSentence> resultList = new ArrayList<>();
+        Map<Integer, List<KeywordSentenceDTO.KeywordSentence>> resultMap = new HashMap<>();
+        List<List<Keyword>> keywordList = keywordService.getPopularKeyword();
+        for (int i=0; i < 2; i++) {
+            List<KeywordSentenceDTO.KeywordSentence> resultList = new ArrayList<>();
 
-        for (KeywordDTO.PopularKeyword keyword : keywordList) {
-            KeywordSentenceDTO.KeywordSentence keywordSentence = keywordSentenceService.getKeywordSentence(keyword.getKeyword());
-            resultList.add(keywordSentence);
+            for (Keyword keyword : keywordList.get(i)) {
+                KeywordSentenceDTO.KeywordSentence keywordSentence = keywordSentenceService.getKeywordSentence(keyword.getKeyword());
+                resultList.add(keywordSentence);
+            }
+
+            resultMap.put(i, resultList);
+
         }
         status = HttpStatus.OK;
-        resultMap.put("keywords", resultList);
-        return new ResponseEntity<Map<String, List<KeywordSentenceDTO.KeywordSentence>>>(resultMap, status);
+        return new ResponseEntity<Map<Integer, List<KeywordSentenceDTO.KeywordSentence>>>(resultMap, status);
     }
 }
