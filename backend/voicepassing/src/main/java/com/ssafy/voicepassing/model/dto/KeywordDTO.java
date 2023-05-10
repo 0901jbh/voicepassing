@@ -21,5 +21,10 @@ public class KeywordDTO {
         private int category;
     }
 
-
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class PopularKeyword {
+        private String keyword;
+    }
 }

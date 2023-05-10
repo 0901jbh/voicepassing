@@ -7,6 +7,9 @@ import com.ssafy.voicepassing.model.repository.ResultRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class KeywordServiceImpl implements KeywordService{
@@ -34,5 +37,21 @@ public class KeywordServiceImpl implements KeywordService{
 
         keywordRepository.save(keywordEntity);
         return true;
+    }
+
+    @Override
+    public List<KeywordDTO.PopularKeyword> getPopularKeyword() {
+        List<Keyword> keywordList = keywordRepository.findAllByOrderByCountDesc();
+        List<KeywordDTO.PopularKeyword> resultList = new ArrayList<>();
+        for (int i = 0;i < 3;i ++) {
+            if (keywordList.size() > i) {
+                String keyword = keywordList.get(i).getKeyword();
+                resultList.add(
+                        KeywordDTO.PopularKeyword.builder()
+                                .keyword(keyword).build()
+                );
+            }
+        }
+        return resultList;
     }
 }
