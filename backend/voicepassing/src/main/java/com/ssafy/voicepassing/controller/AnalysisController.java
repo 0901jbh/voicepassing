@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,8 +79,9 @@ public class AnalysisController {
         return ResponseEntity.ok(result); //에러 처리 할 곳
     }
 
-    @PostMapping("csAI")
+    @PostMapping("/csAI")
     public ResponseEntity<?> csAI(){
+        System.out.println("in");
         String result = null;
         String path = "C:\\Users\\SSAFY\\Desktop\\test\\1.mp3";
         result = clovaSpeechClient.upload(new File(path), requestEntity);
@@ -105,6 +107,40 @@ public class AnalysisController {
         }
         return ResponseEntity.ok(result); //에러 처리 할 곳
     }
+
+    //업로드 파일 분석
+    @PostMapping("/file")
+    public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
+
+        String result = null;
+        byte[] bytes = file.getBytes();
+        File newFile = new File(file.getOriginalFilename());
+        Files.write(newFile.toPath(), bytes);
+
+        result = clovaSpeechClient.upload(newFile, requestEntity);
+       int textIndex = result.lastIndexOf("\"text\":");
+        int commaIndex = result.indexOf(",", textIndex);
+        String txt = result.substring(textIndex + 8, commaIndex - 1);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+        if(result != null){
+            boolean isFinish = false;
+            String sessionId = "SSAFY1357";
+            AIResponseDTO.Request request = AIResponseDTO.Request.builder()
+                    .text(txt)
+                    .isFinish(false)
+                    .sessionId(sessionId)
+                    .build();
+            resultMap = analysisService.analysis(request);
+            if(newFile.exists()){
+                newFile.delete();
+            }
+            return new ResponseEntity<Map<String,Object>>(resultMap,status);
+        }
+        return ResponseEntity.ok(result);
+
+    }
+
 
     @PostMapping("csAIDB")
     public ResponseEntity<?> csAIDB(){
@@ -223,6 +259,8 @@ public class AnalysisController {
        return new ResponseEntity<Map<String,Object>>(resultMap,status);
     }
 
+
+
     @PostMapping("/colvaAIfront")
     public ResponseEntity<?> clovaAIfront(){
         Map<String, Object> resultMap = new HashMap<>();
@@ -303,29 +341,7 @@ public class AnalysisController {
 
 
 
-    @PostMapping("/file")
-    public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
-        //String text = analysisService.SpeechToText();
-        String text = analysisService.FileSpeechToText(file);
-        System.out.println("after file speech");
-        boolean isFinish = false;
-        String sessionId = "SSAFY1357";
-        AIResponseDTO.Request request = AIResponseDTO.Request.builder()
-                .text(text)
-                .isFinish(false)
-                .sessionId(sessionId)
-                .build();
 
-        HttpStatus status = HttpStatus.OK;
-        Map<String, Object> resultMap = new HashMap<>();
-
-        resultMap = analysisService.analysis(request);
-
-        System.out.println(resultMap.get("result"));
-        return new ResponseEntity<Map<String,Object>>(resultMap,status);
-
-
-    }
     @PostMapping("/reqfile")
     public ResponseEntity<?> reqFile(String sessionId, String filepath, boolean isFinish){
         String result = null;
