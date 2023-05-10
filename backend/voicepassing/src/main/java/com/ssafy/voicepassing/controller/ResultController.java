@@ -40,8 +40,18 @@ public class ResultController {
       resultMap.put("results",results);
       status = HttpStatus.OK;
        return new ResponseEntity<Map<String, Object>>(resultMap, status);
-
     }
+
+    @GetMapping("/category")
+    public ResponseEntity<?> getCategoryResults() {
+        HttpStatus status;
+        Map<String, List<Integer>> resultMap = new HashMap<>();
+        ResultDTO.CategoryResultNum results = resultService.getCategoryResultNum();
+        resultMap.put("categoryNum", results.getCategoryList());
+        status = HttpStatus.OK;
+        return new ResponseEntity<Map<String, List<Integer>>>(resultMap, status);
+    }
+
     @GetMapping()
     public ResponseEntity<?> getResults() {
         HttpStatus status;
@@ -50,9 +60,6 @@ public class ResultController {
         resultMap.put("resultNum",resultNum.getResultNum());
         status = HttpStatus.OK;
         return new ResponseEntity<Map<String, Long>>(resultMap,status);
-
-
-
     }
 
 }

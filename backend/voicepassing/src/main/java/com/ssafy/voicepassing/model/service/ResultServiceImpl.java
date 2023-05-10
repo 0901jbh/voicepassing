@@ -13,10 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -130,6 +128,25 @@ public class ResultServiceImpl implements ResultService {
         }
         return resultList;
 
+    }
+
+    @Override
+    public ResultDTO.CategoryResultNum getCategoryResultNum() {
+        LocalDateTime now = LocalDateTime.now();
+        List<Result> resultEntity = resultRepository.findByCreatedTimeBetween(now.minusMonths(1), now);
+        List<Integer> numList = new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0));
+        for (Result result: resultEntity) {
+            int category = result.getCategory();
+
+            if (category != -1) {
+                numList.set(category, numList.get(category) + 1);
+            }
+            else {
+                numList.set(4, numList.get(4) + 1);
+            }
+        }
+
+        return ResultDTO.CategoryResultNum.builder().categoryList(numList).build();
     }
 
 }
