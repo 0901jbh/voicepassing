@@ -66,4 +66,12 @@ public class ResultDTO{
         private List<String> sentence;
 
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class CategoryResultNum {
+        private List<Integer> categoryList;
+    }
 }
