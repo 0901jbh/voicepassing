@@ -9,8 +9,8 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResultDetailID implements Serializable {
-    private int detailId;
-    private int resultId;
+public class KeywordID implements Serializable {
+    private String keyword;
+    private int category;
 
 }

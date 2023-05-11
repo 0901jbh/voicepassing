@@ -342,7 +342,7 @@ public class AnalysisController {
 
 
 
-    @PostMapping("/reqfile")
+    @PostMapping("/file2text")
     public ResponseEntity<?> reqFile(String sessionId, String filepath, boolean isFinish){
         String result = null;
 

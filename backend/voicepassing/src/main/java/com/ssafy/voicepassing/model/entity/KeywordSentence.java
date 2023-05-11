@@ -24,5 +24,6 @@ public class KeywordSentence {
     @Column(nullable = false)
     private String keyword;
 
-
+    @Column(nullable = false)
+    private int category;
 }

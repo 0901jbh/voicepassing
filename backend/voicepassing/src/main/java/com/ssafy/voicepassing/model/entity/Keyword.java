@@ -11,6 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Builder
+@IdClass(KeywordID.class)
 public class Keyword{
 
     @Id
@@ -19,7 +20,7 @@ public class Keyword{
     @Column()
     private int count;
 
-    @Column()
+    @Id
     private int category;
 
 

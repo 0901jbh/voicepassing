@@ -30,6 +30,12 @@ public class AIResponseDTO {
         private int totalCategory;
         private float totalCategoryScore;
         private List<Result> results;
+		// @Override
+		// public String toString() {
+		// 	return "Response [totalCategory=" + totalCategory + ", totalCategoryScore=" + totalCategoryScore
+		// 			+ ", results=" + results + "]\n";
+		// }
+        
     }
 
     @Getter
@@ -42,5 +48,12 @@ public class AIResponseDTO {
         private String sentKeyword;
         private float keywordScore;
         private String sentence;
+		// @Override
+		// public String toString() {
+		// 	return "Result [sentCategory=" + sentCategory + ", sentCategoryScore=" + sentCategoryScore
+		// 			+ ", sentKeyword=" + sentKeyword + ", keywordScore=" + keywordScore + ", sentence=" + sentence
+		// 			+ "]\n";
+		// }
+        
     }
 }

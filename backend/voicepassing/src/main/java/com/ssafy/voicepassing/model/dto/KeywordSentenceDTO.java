@@ -17,6 +17,8 @@ public class KeywordSentenceDTO {
         private float score;
 
         private String keyword;
+        
+        private int category;
     }
 
 
