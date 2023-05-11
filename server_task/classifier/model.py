@@ -96,10 +96,7 @@ class bayesianClassifierPipeLine():
         prob_result = self.pipe_line.predict_proba(all_texts + [string])
         dif = prob_result - prob_result[-1]
 
-        # print("tokens : ", text_tokens)
-        # print("dif :", dif)
-
-        arg_idx = dif[:, label].argmin()
+        arg_idx = dif[:-1, label].argmin()
 
         return text_tokens[arg_idx], dif[arg_idx, label]
         
