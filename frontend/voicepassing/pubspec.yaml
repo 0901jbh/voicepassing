@@ -30,6 +30,8 @@ environment:
 dependencies:
   http: ^0.13.5
   url_launcher: ^6.1.10
+  file_picker: ^5.2.11
+  dio: ^5.1.1
   flutter:
     sdk: flutter
 
