@@ -46,7 +46,6 @@ public class KeywordController {
             }
 
             resultMap.put(i, resultList);
-
         }
         status = HttpStatus.OK;
         return new ResponseEntity<Map<Integer, List<KeywordSentenceDTO.KeywordSentence>>>(resultMap, status);
