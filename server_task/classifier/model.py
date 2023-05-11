@@ -9,6 +9,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from lime.lime_text import LimeTextExplainer
 import pandas as pd
+from kss import split_morphemes
 
 class VoicePassingTokenizer():
     def __init__(self):
@@ -64,16 +65,52 @@ class bayesianClassifierPipeLine():
 
     def __init__(self):
 
-        self.tokenizer = VoicePassingTokenizer()
+        # self.tokenizer = VoicePassingTokenizer()
 
-        with open("./classifier/vectorizer.pickle", "rb") as f:
+        print("======vectorizer 시작============")
+
+        self.vectorizer = TfidfVectorizer(tokenizer = self.tokenize)
+
+        # dataframe = pd.read_excel(r"C:\Users\SSAFY\Desktop\S08P31A607\data_task\dataset\train_data_final.xlsx", index_col = 0)
+
+        # self.cnt = 0
+
+        # data = dataframe.text.values
+        # label = dataframe.label.values
+
+        # total_vector = self.vectorizer.fit_transform(data)
+
+
+        # with open("./classifier/vectorizer2.pickle", "wb") as f:
+        #     pickle.dump(self.vectorizer, f)
+
+        # print("======vectorizer 완============")
+
+        # with open("./classifier/total_vector.pickle", "wb") as f:
+        #     pickle.dump(total_vector, f)
+
+        # print("======vector 완============")
+
+        # nb = MultinomialNB(alpha = .01)
+        # nb.fit(total_vector, label)
+
+        # with open("./classifier/nb2.pickle", "wb") as f:
+        #     pickle.dump(nb, f)
+
+        with open("./classifier/vectorizer2.pickle", "rb") as f:
             self.vectorizer = pickle.load(f)
 
-        with open("./classifier/nb.pickle", "rb") as f:
+        with open("./classifier/nb2.pickle", "rb") as f:
             self.bayesian_classifier = pickle.load(f)
 
         self.pipe_line = make_pipeline(self.vectorizer, self.bayesian_classifier)
 
+    def tokenize(self, string):
+        text_tokens_n_morphemes = split_morphemes(string)
+        tokens = zip(*text_tokens_n_morphemes)
+
+        return list(tokens)
+    
     def forward(self, string):
 
         prob_result = self.pipe_line.predict_proba(string)
@@ -82,14 +119,61 @@ class bayesianClassifierPipeLine():
     
     def extract_word_and_probs(self, string, label):
 
-        text_tokens = self.tokenizer.tokenize(string)
+        # text_tokens = self.tokenizer.tokenize(string)
+        text_tokens_n_morphemes = split_morphemes(string, drop_space=False)
 
-        all_cases = [text_tokens.copy() for _ in range(len(text_tokens))]
+        final_tokens = []
+        noun_locs = []
+
+        # 명사만 추출하기 + 합성어 처리하기
+        pre_morph = None
+
+        for token, morph in text_tokens_n_morphemes:
+
+            # final_tokens가 비어 있을 때
+            if not final_tokens:
+                final_tokens.append(token)
+                pre_morph = morph
+
+                if morph in {"NNG", "NNP"}:
+                    noun_locs.append(len(final_tokens)-1)
+                continue
+
+            # final_tokens가 비어있지 않을 때
+            if morph in {"NNG", "NNP"}: # 이번 토큰이 명사일 때
+
+                if pre_morph in {"NNG", "NNP"}: # 이전 토큰도 명사일 때
+                    last_token = final_tokens.pop()
+                    final_tokens.append(last_token + token)
+
+                    noun_locs.pop()
+                    noun_locs.append(len(final_tokens)-1)
+
+                else: # 이전 토큰이 명사가 아닐 때
+                    final_tokens.append(token)
+                    noun_locs.append(len(final_tokens)-1)
+
+                pre_morph = morph
+                continue
+
+            if token.isalpha() or token.isnumeric():
+                pre_morph = morph
+                final_tokens.append(token)
+                continue
+
+            pre_morph = morph
+
+        # print(f"final_tokens : {final_tokens}")
+        # for n_loc in noun_locs:
+            # print(f"nouns : {final_tokens[n_loc]}")
+
+        all_cases = [final_tokens.copy() for _ in range(len(noun_locs))]
         all_texts = []
 
         for idx, row in enumerate(all_cases):
-            row[idx] = ""
+            row[noun_locs[idx]] = ""
             all_texts.append("".join(row))
+            # print(row)
 
         del all_cases
 
@@ -98,7 +182,7 @@ class bayesianClassifierPipeLine():
 
         arg_idx = dif[:-1, label].argmin()
 
-        return text_tokens[arg_idx], dif[arg_idx, label]
+        return final_tokens[noun_locs[arg_idx]], dif[arg_idx, label]
         
 
 model = VoicePassingModel()
