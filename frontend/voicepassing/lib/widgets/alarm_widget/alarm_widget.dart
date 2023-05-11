@@ -27,7 +27,7 @@ class _AlarmWidgetState extends State<AlarmWidget> {
             sentence: ''),
       ],
     ),
-    isFinish: true,
+    isFinish: false,
   );
 
   @override
@@ -44,20 +44,7 @@ class _AlarmWidgetState extends State<AlarmWidget> {
         }
       });
     });
-    // setStream();
   }
-
-  // void setStream() {
-  //   debugPrint('알림 위젯 setStream');
-  //   PhoneState.phoneStateStream.listen((event) {
-  //     if (event == PhoneStateStatus.CALL_STARTED) {
-  //       debugPrint('전화 이벤트 : $event');
-  //       setState(() {
-  //         FlutterOverlayWindow.resizeOverlay(320, 80);
-  //       });
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {

@@ -146,7 +146,7 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
                   children: [
                     TextButton(
                       onPressed: () {
-                        // 번호 차단 api 연결
+                        // 번호 차단 기능 연결
                       },
                       style: ButtonStyle(
                         backgroundColor:

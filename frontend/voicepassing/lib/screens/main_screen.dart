@@ -77,7 +77,6 @@ class _MainScreenState extends State<MainScreen> {
     }
     recordDirectory = Directory(_recordDirectoryPath);
     androidId = await UniqueDeviceId.instance.getUniqueId() ?? '';
-    debugPrint('기기식별번호 : $androidId');
   }
 
   // 통화 상태 감지
@@ -149,7 +148,6 @@ class _MainScreenState extends State<MainScreen> {
     var offset = 0;
     if (targetFile is File) {
       Timer.periodic(const Duration(seconds: 6), (timer) async {
-        debugPrint('🙏🙏🙏🙏🙏🙏🙏');
         Uint8List entireBytes = targetFile!.readAsBytesSync();
         var nextOffset = entireBytes.length;
         var splittedBytes = entireBytes.sublist(offset, nextOffset);
@@ -167,12 +165,12 @@ class _MainScreenState extends State<MainScreen> {
           offset = nextOffset;
           _ws.sink.add(splittedBytes);
 
-          // stateCode 1 보내기
+          // state 1 보내기
           var callLog = await CallLog.get();
           var endMessage = SendMessageModel(
             state: 1,
             androidId: androidId,
-            phoneNumber: callLog.first.number,
+            phoneNumber: callLog.first.formattedNumber,
           );
           _ws.sink.add(jsonEncode(endMessage));
         }
