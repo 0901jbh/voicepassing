@@ -83,7 +83,7 @@ class _ResultScreenDetailState extends State<ResultScreenDetail> {
                   Card(
                     shape: roundedRectangleBorder,
                     elevation: 0,
-                    color: ColorStyles.backgroundLightBlue,
+                    color: ColorStyles.background,
                     child: Padding(
                       padding: const EdgeInsets.all(20),
                       child: SizedBox(

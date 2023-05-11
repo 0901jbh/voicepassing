@@ -29,7 +29,7 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
 
   void getPhoneNumber() async {
     var callLog = await CallLog.get();
-    phoneNumber = callLog.first.formattedNumber!;
+    phoneNumber = callLog.first.formattedNumber ?? '';
   }
 
   @override
@@ -42,9 +42,9 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-            color: widget.resultData.result!.totalCategoryScore >= 0.8
-                ? ColorStyles.danger
-                : ColorStyles.warning,
+            color: widget.resultData.result!.totalCategoryScore >= 0.9
+                ? ColorStyles.backgroundRed
+                : ColorStyles.backgroundYellow,
             shape: BoxShape.rectangle,
             borderRadius: const BorderRadius.all(Radius.circular(15)),
           ),
@@ -104,7 +104,7 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
                         Text(
                           phoneNumber ?? '',
                           style: const TextStyle(
-                            color: ColorStyles.dangerText,
+                            color: ColorStyles.themeRed,
                             fontSize: 15,
                             fontWeight: FontWeight.w700,
                           ),
@@ -157,8 +157,7 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
                           return Colors.white;
                         }),
                         overlayColor: MaterialStateProperty.resolveWith(
-                            (states) =>
-                                ColorStyles.dangerText.withOpacity(0.35)),
+                            (states) => ColorStyles.themeRed.withOpacity(0.35)),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -170,7 +169,7 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
                       child: const Text(
                         '차단하기',
                         style: TextStyle(
-                          color: ColorStyles.dangerText,
+                          color: ColorStyles.themeRed,
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                         ),

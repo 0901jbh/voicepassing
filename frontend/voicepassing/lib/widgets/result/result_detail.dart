@@ -15,12 +15,12 @@ class ResultDetailList extends StatelessWidget {
     Color backgroundColor;
     String state;
     if (caseInfo.score! >= 80) {
-      textColor = ColorStyles.dangerText;
-      backgroundColor = ColorStyles.danger;
+      textColor = ColorStyles.themeRed;
+      backgroundColor = ColorStyles.backgroundRed;
       state = '위험 ';
     } else {
-      textColor = ColorStyles.warningText;
-      backgroundColor = ColorStyles.warning;
+      textColor = ColorStyles.themeYellow;
+      backgroundColor = ColorStyles.backgroundYellow;
       state = '경고 ';
     }
     const roundedRectangleBorder = RoundedRectangleBorder(
