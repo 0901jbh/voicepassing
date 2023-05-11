@@ -73,7 +73,8 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
 
     output, _ = classifier(tokens)
 
-    # print(f"RAW : {output.squeeze()}")
+    print(f"RAW : {output.squeeze()}")
+
     if output.shape[0] != 1:
         label_probs = torch.nn.functional.softmax(output.squeeze() / T, dim = 1)
     else:
