@@ -32,7 +32,7 @@ class SearchDetail extends StatelessWidget {
                 tags: {
                   'b': StyledTextTag(
                       style: const TextStyle(
-                          color: ColorStyles.blueText,
+                          color: ColorStyles.themeLightBlue,
                           fontSize: 27,
                           fontWeight: FontWeight.w700))
                 },
@@ -45,7 +45,7 @@ class SearchDetail extends StatelessWidget {
                 tags: {
                   'b': StyledTextTag(
                       style: const TextStyle(
-                          color: ColorStyles.blueText,
+                          color: ColorStyles.themeLightBlue,
                           fontSize: 22,
                           fontWeight: FontWeight.w500))
                 },
@@ -158,7 +158,7 @@ class TopTitle extends StatelessWidget {
                 tags: {
                   'b': StyledTextTag(
                       style: const TextStyle(
-                          color: ColorStyles.dangerText,
+                          color: ColorStyles.themeRed,
                           fontSize: 22,
                           fontWeight: FontWeight.w600))
                 },

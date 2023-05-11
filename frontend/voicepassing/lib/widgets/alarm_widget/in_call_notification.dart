@@ -22,8 +22,8 @@ class InCallNotification extends StatelessWidget {
           decoration: BoxDecoration(
             color: resultData.result != null &&
                     resultData.result!.totalCategoryScore * 100 > 90
-                ? ColorStyles.dangerText
-                : ColorStyles.warningText,
+                ? ColorStyles.themeRed
+                : ColorStyles.themeYellow,
             shape: BoxShape.rectangle,
             borderRadius: const BorderRadius.all(Radius.circular(15)),
           ),

@@ -21,12 +21,12 @@ class ResultList extends StatelessWidget {
     Color backgroundColor;
     String state;
     if (caseInfo.score! >= 80) {
-      textColor = ColorStyles.dangerText;
-      backgroundColor = ColorStyles.danger;
+      textColor = ColorStyles.themeRed;
+      backgroundColor = ColorStyles.backgroundRed;
       state = '위험 ';
     } else {
-      textColor = ColorStyles.warningText;
-      backgroundColor = ColorStyles.warning;
+      textColor = ColorStyles.themeYellow;
+      backgroundColor = ColorStyles.backgroundYellow;
       state = '경고 ';
     }
     return GestureDetector(
@@ -73,7 +73,8 @@ class ResultList extends StatelessWidget {
                         width: 150,
                         child: Text(
                           caseInfo.words.toString(),
-                          style: const TextStyle(color: ColorStyles.grayText),
+                          style:
+                              const TextStyle(color: ColorStyles.subDarkGray),
                         ),
                       ),
                     ]),
