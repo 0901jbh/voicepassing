@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:voicepassing/screens/request_permissions_screen.dart';
 
 class HeadBar extends StatelessWidget implements PreferredSizeWidget {
   final Text title;
@@ -28,7 +29,10 @@ class HeadBar extends StatelessWidget implements PreferredSizeWidget {
       }),
       actions: [
         IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context)
+                  .push(_customRoute(const RequestPermissionsScreen()));
+            },
             icon: const Icon(
               Icons.settings,
               size: 24,
@@ -44,4 +48,22 @@ class HeadBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(appBar.preferredSize.height);
+}
+
+Route _customRoute(Widget route) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => route,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(1.0, 0.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }
