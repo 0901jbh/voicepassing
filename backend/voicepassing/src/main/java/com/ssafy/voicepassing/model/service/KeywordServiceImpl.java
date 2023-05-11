@@ -44,7 +44,8 @@ public class KeywordServiceImpl implements KeywordService{
     public List<List<Keyword>> getPopularKeyword() {
         List<Keyword> keyword1List = keywordRepository.findTop3ByCategoryOrderByCountDesc(1);
         List<Keyword> keyword2List = keywordRepository.findTop3ByCategoryOrderByCountDesc(2);
-        ArrayList<List<Keyword>> resultList = new ArrayList<>(Arrays.asList(keyword1List, keyword2List));
+        List<Keyword> keyword3List = keywordRepository.findTop3ByCategoryOrderByCountDesc(3);
+        ArrayList<List<Keyword>> resultList = new ArrayList<>(Arrays.asList(keyword1List, keyword2List, keyword3List));
         return resultList;
     }
 }

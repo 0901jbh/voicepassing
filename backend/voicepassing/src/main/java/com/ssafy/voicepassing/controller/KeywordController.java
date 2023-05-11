@@ -37,7 +37,7 @@ public class KeywordController {
         HttpStatus status;
         Map<Integer, List<KeywordSentenceDTO.KeywordSentence>> resultMap = new HashMap<>();
         List<List<Keyword>> keywordList = keywordService.getPopularKeyword();
-        for (int i=0; i < 2; i++) {
+        for (int i=0; i < 3; i++) {
             List<KeywordSentenceDTO.KeywordSentence> resultList = new ArrayList<>();
 
             for (Keyword keyword : keywordList.get(i)) {
@@ -45,7 +45,7 @@ public class KeywordController {
                 resultList.add(keywordSentence);
             }
 
-            resultMap.put(i, resultList);
+            resultMap.put(i + 1, resultList);
         }
         status = HttpStatus.OK;
         return new ResponseEntity<Map<Integer, List<KeywordSentenceDTO.KeywordSentence>>>(resultMap, status);
