@@ -27,4 +27,15 @@ public class KeywordSentenceServiceImpl implements KeywordSentenceService{
 
         return true;
     }
+
+    @Override
+    public KeywordSentenceDTO.KeywordSentence getKeywordSentence(String keyword) {
+        KeywordSentence keywordSentence = keywordSentenceRepository.findOneByKeywordOrderByScoreDesc(keyword);
+
+        return KeywordSentenceDTO.KeywordSentence.builder()
+                .keyword(keywordSentence.getKeyword())
+                .score(keywordSentence.getScore())
+                .sentence(keywordSentence.getSentence())
+                .build();
+    }
 }

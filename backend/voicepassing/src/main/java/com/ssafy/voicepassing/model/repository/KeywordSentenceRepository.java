@@ -12,4 +12,6 @@ import java.util.List;
 public interface KeywordSentenceRepository extends JpaRepository<KeywordSentence,String> {
     KeywordSentence findBySentenceStartsWith(String sentence);
 
+    KeywordSentence findOneByKeywordOrderByScoreDesc(String keyword);
+
 }

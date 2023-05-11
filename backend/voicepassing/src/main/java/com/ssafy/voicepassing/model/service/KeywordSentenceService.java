@@ -5,4 +5,5 @@ import com.ssafy.voicepassing.model.dto.KeywordSentenceDTO;
 
 public interface KeywordSentenceService {
     public boolean addKeywordSentence(KeywordSentenceDTO.KeywordSentence ksDTO);
+    public KeywordSentenceDTO.KeywordSentence getKeywordSentence(String keyword);
 }
