@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  call_log:
+    dependency: "direct main"
+    description:
+      name: call_log
+      sha256: "943fdc3cd1b2a395633817f4b66267c93accb38d359da4d95db1e389f8f898d6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0"
   characters:
     dependency: transitive
     description:
@@ -232,14 +240,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.0"
-  nested:
-    dependency: transitive
-    description:
-      name: nested
-      sha256: "03bac4c528c64c95c722ec99280375a6f2fc708eec17c7b3f07253b626cd2a20"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   path:
     dependency: transitive
     description:
@@ -304,14 +304,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  provider:
-    dependency: "direct main"
-    description:
-      name: provider
-      sha256: cdbe7530b12ecd9eb455bdaa2fcb8d4dad22e80b8afb4798b41479d5ce26847f
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.0.5"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -461,6 +453,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  vibration:
+    dependency: "direct main"
+    description:
+      name: vibration
+      sha256: "2938d4bf4ecfdb1cdac6b8f20f40cd3e7b7783edd6ca551a46d144a134473626"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.7.7"
   web_socket_channel:
     dependency: "direct main"
     description:
