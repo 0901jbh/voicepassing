@@ -1,27 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:voicepassing/models/receive_message_model.dart';
 import 'package:voicepassing/style/color_style.dart';
 
-class CallEndedResultWidget extends StatefulWidget {
-  const CallEndedResultWidget({Key? key}) : super(key: key);
+class InCallNotification extends StatelessWidget {
+  const InCallNotification({
+    super.key,
+    required this.resultData,
+  });
 
-  @override
-  State<CallEndedResultWidget> createState() => _CallEndedResultWidgetState();
-}
-
-class _CallEndedResultWidgetState extends State<CallEndedResultWidget> {
-  Color color = const Color(0xFFFFFFFF);
-  String status = 'default';
-  late List<String> dangerousKeywords = [
-    '중앙검찰',
-    '송금',
-    '대포통장',
-  ];
-  double score = 50;
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  final ReceiveMessageModel resultData;
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +16,13 @@ class _CallEndedResultWidgetState extends State<CallEndedResultWidget> {
       color: Colors.transparent,
       elevation: 0.0,
       child: GestureDetector(
-        onTap: () {},
         child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+          height: 80,
+          width: 320,
           decoration: BoxDecoration(
-            color:
-                score > 80 ? ColorStyles.dangerText : ColorStyles.warningText,
+            color: resultData.result!.totalCategoryScore * 100 > 80
+                ? ColorStyles.dangerText
+                : ColorStyles.warningText,
             shape: BoxShape.rectangle,
             borderRadius: const BorderRadius.all(Radius.circular(15)),
           ),
@@ -68,14 +55,16 @@ class _CallEndedResultWidgetState extends State<CallEndedResultWidget> {
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                           ),
-                        )
+                        ),
                       ],
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          score > 80 ? '위험' : '주의',
+                          resultData.result!.totalCategoryScore * 100 > 80
+                              ? '위험'
+                              : '주의',
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 24,
@@ -85,24 +74,25 @@ class _CallEndedResultWidgetState extends State<CallEndedResultWidget> {
                         const SizedBox(
                           width: 5,
                         ),
-                        for (var dangerousKeyword in dangerousKeywords)
-                          Row(
-                            children: [
-                              Text(
-                                dangerousKeyword,
-                                style: TextStyle(
-                                  color: score > 80
-                                      ? ColorStyles.subLightGray
-                                      : ColorStyles.textBlack,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        Row(
+                          children: [
+                            Text(
+                              resultData.result!.results![0].sentKeyword,
+                              style: TextStyle(
+                                color: resultData.result!.totalCategoryScore *
+                                            100 >
+                                        80
+                                    ? ColorStyles.subLightGray
+                                    : ColorStyles.textBlack,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
                               ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ],
@@ -124,7 +114,9 @@ class _CallEndedResultWidgetState extends State<CallEndedResultWidget> {
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        score.round().toString(),
+                        (resultData.result!.totalCategoryScore * 100)
+                            .round()
+                            .toString(),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 24,
