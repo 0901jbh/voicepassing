@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:math';
 
@@ -120,19 +121,20 @@ class _MainScreenState extends State<MainScreen> {
           if (msg != null) {
             ReceiveMessageModel receivedResult =
                 ReceiveMessageModel.fromJson(jsonDecode(msg));
+            inspect(receivedResult);
             if (receivedResult.result != null &&
                 receivedResult.result!.results != null) {
               // 최종 결과 수신
-              if (receivedResult.isFinish) {
-                if (receivedResult.result!.totalCategoryScore >= 0.6) {
+              if (receivedResult.isFinish == true) {
+                if (receivedResult.result!.totalCategoryScore >= 0.8) {
                   // 알림 위젯으로 데이터 전달
-                  FlutterOverlayWindow.shareData(receivedResult.result);
+                  FlutterOverlayWindow.shareData(receivedResult);
                 }
                 _ws.sink.close();
               } else {
-                if (receivedResult.result!.totalCategoryScore >= 0.6) {
+                if (receivedResult.result!.totalCategoryScore >= 0.8) {
                   // 알림 위젯으로 데이터 전달
-                  FlutterOverlayWindow.shareData(receivedResult.result);
+                  FlutterOverlayWindow.shareData(receivedResult);
                 }
               }
             }
@@ -210,8 +212,8 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   isFinish: count == 1 ? true : false,
                 );
-
-                if (data.isFinish) {
+                inspect(data);
+                if (data.isFinish == true) {
                   await FlutterOverlayWindow.shareData(data);
                 } else if (data.result!.totalCategoryScore >= 0.6) {
                   await FlutterOverlayWindow.shareData(data);

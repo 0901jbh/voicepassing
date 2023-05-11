@@ -20,7 +20,8 @@ class InCallNotification extends StatelessWidget {
           height: 80,
           width: 320,
           decoration: BoxDecoration(
-            color: resultData.result!.totalCategoryScore * 100 > 80
+            color: resultData.result != null &&
+                    resultData.result!.totalCategoryScore * 100 > 90
                 ? ColorStyles.dangerText
                 : ColorStyles.warningText,
             shape: BoxShape.rectangle,
@@ -62,7 +63,9 @@ class InCallNotification extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          resultData.result!.totalCategoryScore * 100 > 80
+                          resultData.result != null &&
+                                  resultData.result!.totalCategoryScore * 100 >
+                                      90
                               ? '위험'
                               : '주의',
                           style: const TextStyle(
@@ -77,11 +80,15 @@ class InCallNotification extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              resultData.result!.results![0].sentKeyword,
+                              resultData.result != null &&
+                                      resultData.result!.results != null
+                                  ? resultData.result!.results![0].sentKeyword
+                                  : '',
                               style: TextStyle(
-                                color: resultData.result!.totalCategoryScore *
-                                            100 >
-                                        80
+                                color: resultData.result != null &&
+                                        resultData.result!.totalCategoryScore *
+                                                100 >
+                                            90
                                     ? ColorStyles.subLightGray
                                     : ColorStyles.textBlack,
                                 fontSize: 14,
@@ -114,7 +121,9 @@ class InCallNotification extends StatelessWidget {
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        (resultData.result!.totalCategoryScore * 100)
+                        (resultData.result != null
+                                ? resultData.result!.totalCategoryScore * 100
+                                : 0)
                             .round()
                             .toString(),
                         style: const TextStyle(

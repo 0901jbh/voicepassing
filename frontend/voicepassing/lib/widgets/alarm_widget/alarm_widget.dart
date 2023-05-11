@@ -34,21 +34,23 @@ class _AlarmWidgetState extends State<AlarmWidget> {
   void initState() {
     super.initState();
     FlutterOverlayWindow.overlayListener.listen((newResult) {
-      setState(() {
-        resultData = ReceiveMessageModel.fromJson(newResult);
-        Vibration.vibrate();
-        if (resultData.isFinish) {
-          FlutterOverlayWindow.resizeOverlay(336, 276);
-        } else {
-          FlutterOverlayWindow.resizeOverlay(320, 80);
-        }
-      });
+      if (newResult['result'] != null) {
+        setState(() {
+          resultData = ReceiveMessageModel.fromJson(newResult);
+          Vibration.vibrate();
+          if (resultData.isFinish == true) {
+            FlutterOverlayWindow.resizeOverlay(336, 276);
+          } else {
+            FlutterOverlayWindow.resizeOverlay(320, 80);
+          }
+        });
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return resultData.isFinish
+    return resultData.isFinish == true
         ? AfterCallNotification(resultData: resultData)
         : InCallNotification(resultData: resultData);
   }

@@ -1,6 +1,6 @@
 class ReceiveMessageModel {
   late TotalResult? result;
-  late bool isFinish;
+  late bool? isFinish;
 
   ReceiveMessageModel({
     required this.result,

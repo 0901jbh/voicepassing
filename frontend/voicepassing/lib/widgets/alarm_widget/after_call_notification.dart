@@ -29,7 +29,7 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
 
   void getPhoneNumber() async {
     var callLog = await CallLog.get();
-    phoneNumber = callLog.first.formattedNumber!;
+    phoneNumber = callLog.first.formattedNumber ?? '';
   }
 
   @override
@@ -42,7 +42,7 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-            color: widget.resultData.result!.totalCategoryScore >= 0.8
+            color: widget.resultData.result!.totalCategoryScore >= 0.9
                 ? ColorStyles.danger
                 : ColorStyles.warning,
             shape: BoxShape.rectangle,
