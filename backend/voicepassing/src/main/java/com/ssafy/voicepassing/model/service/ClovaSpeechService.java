@@ -1,6 +1,7 @@
 package com.ssafy.voicepassing.model.service;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,21 +17,25 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
 public class ClovaSpeechService {
     // Clova Speech secret key
-    private static final String SECRET = "9d1468dcfb69470393bfb41fb35dbec2";
+	@Value("${SPEECH_SECRET}")
+    private String SPEECH_SECRET;
     // Clova Speech invoke URL
-    private static final String INVOKE_URL = "https://clovaspeech-gw.ncloud.com/external/v1/5107/6221c2582a93af12eac6dda509fc549195dad403db49f3e8258e6b0c6d794431";
-
+	@Value("${SPEECH_INVOKE_URL}")//SPEECH_INVOKE_URL
+    private String SPEECH_INVOKE_URL;
+	
     private CloseableHttpClient httpClient = HttpClients.createDefault();
     private Gson gson = new Gson();
 
-    private static final Header[] HEADERS = new Header[] {
-            new BasicHeader("Accept", "application/json"),
-            new BasicHeader("X-CLOVASPEECH-API-KEY", SECRET),
-    };
 
     public static class Boosting {
         private String words;
@@ -170,8 +175,8 @@ public class ClovaSpeechService {
      * @return string
      */
     public String url(String url, NestRequestEntity nestRequestEntity) {
-        HttpPost httpPost = new HttpPost(INVOKE_URL + "/recognizer/url");
-        httpPost.setHeaders(HEADERS);
+        HttpPost httpPost = new HttpPost(SPEECH_INVOKE_URL + "/recognizer/url");
+        httpPost.setHeaders(getHeader());
         Map<String, Object> body = new HashMap<>();
         body.put("url", url);
         body.put("language", nestRequestEntity.getLanguage());
@@ -195,8 +200,8 @@ public class ClovaSpeechService {
      * @return string
      */
     public String objectStorage(String dataKey, NestRequestEntity nestRequestEntity) {
-        HttpPost httpPost = new HttpPost(INVOKE_URL + "/recognizer/object-storage");
-        httpPost.setHeaders(HEADERS);
+        HttpPost httpPost = new HttpPost(SPEECH_INVOKE_URL + "/recognizer/object-storage");
+        httpPost.setHeaders(getHeader());
         Map<String, Object> body = new HashMap<>();
         body.put("dataKey", dataKey);
         body.put("language", nestRequestEntity.getLanguage());
@@ -220,9 +225,9 @@ public class ClovaSpeechService {
      * @param nestRequestEntity optional
      * @return string
      */
-    public String upload(File file, NestRequestEntity nestRequestEntity) {
-        HttpPost httpPost = new HttpPost(INVOKE_URL + "/recognizer/upload");
-        httpPost.setHeaders(HEADERS);
+    public String upload(File file, NestRequestEntity nestRequestEntity) {    	
+        HttpPost httpPost = new HttpPost(SPEECH_INVOKE_URL + "/recognizer/upload");
+        httpPost.setHeaders(getHeader());
         HttpEntity httpEntity = MultipartEntityBuilder.create()
                 .addTextBody("params", gson.toJson(nestRequestEntity), ContentType.APPLICATION_JSON)
                 .addBinaryBody("media", file, ContentType.MULTIPART_FORM_DATA, file.getName())
@@ -239,5 +244,10 @@ public class ClovaSpeechService {
             throw new RuntimeException(e);
         }
     }
-
+    private Header[] getHeader() {
+    	return new Header[] {
+                new BasicHeader("Accept", "application/json"),
+                new BasicHeader("X-CLOVASPEECH-API-KEY", SPEECH_SECRET),
+        };
+    } 
 }

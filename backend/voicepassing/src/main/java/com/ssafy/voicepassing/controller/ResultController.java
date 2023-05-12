@@ -33,15 +33,25 @@ public class ResultController {
         HttpStatus status = null;
 //        System.out.println(androidId);
         Map<String, Object> resultMap = new HashMap<>();
-        List<ResultDTO.Result> results = resultService.getResultList(androidId);
+        List<ResultDTO.ResultWithWords> results = resultService.getResults(androidId);
 
         if(results == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
       resultMap.put("results",results);
       status = HttpStatus.OK;
        return new ResponseEntity<Map<String, Object>>(resultMap, status);
-
     }
+
+    @GetMapping("/category")
+    public ResponseEntity<?> getCategoryResults() {
+        HttpStatus status;
+        Map<String, List<Integer>> resultMap = new HashMap<>();
+        ResultDTO.CategoryResultNum results = resultService.getCategoryResultNum();
+        resultMap.put("categoryNum", results.getCategoryList());
+        status = HttpStatus.OK;
+        return new ResponseEntity<Map<String, List<Integer>>>(resultMap, status);
+    }
+
     @GetMapping()
     public ResponseEntity<?> getResults() {
         HttpStatus status;
@@ -50,9 +60,6 @@ public class ResultController {
         resultMap.put("resultNum",resultNum.getResultNum());
         status = HttpStatus.OK;
         return new ResponseEntity<Map<String, Long>>(resultMap,status);
-
-
-
     }
 
 }

@@ -27,6 +27,10 @@ public class AnalysisServiceImpl implements AnalysisService{
     @Value("${SPRING_RECORD_TEMP_DIR}")//C:\Users\SSAFY\Desktop\test
     private String RECORD_PATH; //확인완료
 
+    
+    @Value("${AI_SERVER_URI}")
+    private String AI_SERVER_URI;
+    
     //@Value("${fastapi.url}")
     private String fastApiUrl;
 
@@ -35,10 +39,10 @@ public class AnalysisServiceImpl implements AnalysisService{
     public String FileSpeechToText(MultipartFile file) throws IOException {
         String clientId = "69z4ol7120";             // Application Client ID";
         String clientSecret = "BgrF1fA39jXxMM2v9OLdzIQMl4JNbjMBg17uptzP";     // Application Client Secret";
-        System.out.println("파일 찾기 전");
+        System.out.println("before find file");
         File voiceFile = mTF(file);
-        System.out.println("파일 찾기 후");
-        System.out.println("여기서 나가지나?");
+        System.out.println("after find file");
+        System.out.println("get out?");
         try {
             //String imgFile = RECORD_PATH+"/.m4a";
             //File voiceFile = new File(imgFile);
@@ -184,7 +188,7 @@ public class AnalysisServiceImpl implements AnalysisService{
         HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestBody, headers);
 
 //    // FastAPI URL 설정
-        String url = "http://localhost:8000/inference";
+        String url = AI_SERVER_URI + "/inference";
 
 //    // HTTP 요청 보내기
         ResponseEntity<AIResponseDTO.Response> responseEntity = restTemplate.postForEntity(url,httpEntity,AIResponseDTO.Response.class);
