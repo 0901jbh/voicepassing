@@ -3,24 +3,19 @@ import 'package:flutter/material.dart';
 class ImgButton extends StatelessWidget {
   final String title;
   final String imgName;
-  final Widget screenWidget;
+  final String routeName;
 
   const ImgButton(
       {super.key,
       required this.title,
       required this.imgName,
-      required this.screenWidget});
+      required this.routeName});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => screenWidget,
-          ),
-        );
+        Navigator.of(context).pushNamed(routeName);
       },
       child: Container(
         height: 150,

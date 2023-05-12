@@ -17,10 +17,6 @@ import 'package:unique_device_id/unique_device_id.dart';
 import 'package:voicepassing/models/receive_message_model.dart';
 import 'package:voicepassing/models/send_message_model.dart';
 import 'package:voicepassing/services/recent_file.dart';
-import 'package:voicepassing/screens/analytics_screen.dart';
-import 'package:voicepassing/screens/result_screen.dart';
-import 'package:voicepassing/screens/search_screen.dart';
-import 'package:voicepassing/screens/statics_screen.dart';
 import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/widgets/img_button.dart';
 import 'package:voicepassing/widgets/main_widget/main_logo.dart';
@@ -325,12 +321,12 @@ class _MainScreenState extends State<MainScreen> {
                   ImgButton(
                     title: '검사 결과',
                     imgName: 'ResultImg',
-                    screenWidget: ResultScreen(),
+                    routeName: '/result',
                   ),
                   ImgButton(
                       title: '통계 내용',
                       imgName: 'StaticsImg',
-                      screenWidget: StaticsScreen()),
+                      routeName: '/statistics'),
                 ],
               ),
             ),
@@ -343,13 +339,14 @@ class _MainScreenState extends State<MainScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
                   ImgButton(
-                      title: '검색',
-                      imgName: 'SearchImg',
-                      screenWidget: SearchScreen()),
+                    title: '검색',
+                    imgName: 'SearchImg',
+                    routeName: '/search',
+                  ),
                   ImgButton(
                       title: '녹음 파일 검사',
                       imgName: 'AnalyticsImg',
-                      screenWidget: AnalyticsScreen()),
+                      routeName: '/analytics'),
                 ],
               ),
             ),
