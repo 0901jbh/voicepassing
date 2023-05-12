@@ -102,23 +102,16 @@ public class ResultServiceImpl implements ResultService {
         List<ResultDTO.ResultWithWords> resultList = new ArrayList<>();
         for (Result result: resultsEntity) {
             ResultDTO.Result resultDto = buildResult(result);
-            System.out.println(resultDto.getResultId());
-            List<ResultDetail> sentences = resultDetailRepository.findAllByResultId(resultDto.getResultId());
-            System.out.println(sentences.toString());
-            List<String> sentenceList = sentences.stream().map(ResultDetail::getSentence).collect(Collectors.toList());
+            List<String> sentences = resultDetailRepository.findAllByResultId(resultDto.getResultId()).stream().map(ResultDetail::getSentence).collect(Collectors.toList());
             List<String> words = new ArrayList<>();
-            String text = "사실";
-            System.out.println(keywordSentenceRepository.findBySentenceStartsWith(text).toString());
-            words.add(keywordSentenceRepository.findBySentenceStartsWith(text).getKeyword());
-            for (String sentence: sentenceList) {
-//                String word = String.valueOf(keywordSentenceRepository.findKeywordBySentenceStartsWith(sentence));
-//                String word = String.valueOf(keywordSentenceRepository.findKeywordBySentenceStartsWith(text));
-//                words.add(word);
+            for (String sentence: sentences) {
+                String word = keywordSentenceRepository.findBySentenceStartsWith(sentence).getKeyword();
+                words.add(word);
             }
             resultList.add(
                     ResultDTO.ResultWithWords.builder()
                             .keyword(words)
-                            .sentence(sentenceList)
+                            .sentence(sentences)
                             .risk(result.getRisk())
                             .category(result.getCategory())
                             .phoneNumber(result.getPhoneNumber())
