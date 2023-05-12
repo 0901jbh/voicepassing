@@ -29,15 +29,20 @@ class _AlarmWidgetState extends State<AlarmWidget> {
     ),
     isFinish: false,
   );
+  String phoneNumber = '';
 
   @override
   void initState() {
     super.initState();
-    FlutterOverlayWindow.overlayListener.listen((newResult) {
-      if (newResult['result'] != null) {
+    FlutterOverlayWindow.overlayListener.listen((msg) {
+      if (msg['phoneNumber'] != null) {
         setState(() {
-          resultData = ReceiveMessageModel.fromJson(newResult);
-          Vibration.vibrate();
+          phoneNumber = msg['phoneNumber'];
+        });
+      } else if (msg['result'] != null) {
+        setState(() {
+          resultData = ReceiveMessageModel.fromJson(msg);
+          Vibration.vibrate(pattern: [0, 500, 300, 500]);
           if (resultData.isFinish == true) {
             FlutterOverlayWindow.resizeOverlay(336, 276);
           } else {
@@ -51,7 +56,10 @@ class _AlarmWidgetState extends State<AlarmWidget> {
   @override
   Widget build(BuildContext context) {
     return resultData.isFinish == true
-        ? AfterCallNotification(resultData: resultData)
+        ? AfterCallNotification(
+            resultData: resultData,
+            phoneNumber: phoneNumber,
+          )
         : InCallNotification(resultData: resultData);
   }
 }

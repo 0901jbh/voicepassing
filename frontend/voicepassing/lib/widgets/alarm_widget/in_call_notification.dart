@@ -21,7 +21,7 @@ class InCallNotification extends StatelessWidget {
           width: 320,
           decoration: BoxDecoration(
             color: resultData.result != null &&
-                    resultData.result!.totalCategoryScore * 100 > 90
+                    resultData.result!.totalCategoryScore * 100 > 70
                 ? ColorStyles.themeRed
                 : ColorStyles.themeYellow,
             shape: BoxShape.rectangle,
@@ -39,8 +39,8 @@ class InCallNotification extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Row(
-                      children: const [
+                    const Row(
+                      children: [
                         Image(
                           image: AssetImage('images/VoiceLogo.png'),
                           height: 22,
@@ -65,7 +65,7 @@ class InCallNotification extends StatelessWidget {
                         Text(
                           resultData.result != null &&
                                   resultData.result!.totalCategoryScore * 100 >
-                                      90
+                                      70
                               ? '위험'
                               : '주의',
                           style: const TextStyle(
@@ -81,14 +81,15 @@ class InCallNotification extends StatelessWidget {
                           children: [
                             Text(
                               resultData.result != null &&
-                                      resultData.result!.results != null
+                                      resultData.result!.results != null &&
+                                      resultData.result!.results!.isNotEmpty
                                   ? resultData.result!.results![0].sentKeyword
                                   : '',
                               style: TextStyle(
                                 color: resultData.result != null &&
                                         resultData.result!.totalCategoryScore *
                                                 100 >
-                                            90
+                                            70
                                     ? ColorStyles.subLightGray
                                     : ColorStyles.textBlack,
                                 fontSize: 14,

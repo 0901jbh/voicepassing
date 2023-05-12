@@ -26,7 +26,7 @@ class ReceiveMessageModel {
 
 class TotalResult {
   late int totalCategory;
-  late double totalCategoryScore;
+  late num totalCategoryScore;
   late List<ResultItem>? results;
 
   TotalResult({
@@ -59,9 +59,9 @@ class TotalResult {
 
 class ResultItem {
   late int sentCategory;
-  late double sentCategoryScore;
+  late num sentCategoryScore;
   late String sentKeyword;
-  late double keywordScore;
+  late num keywordScore;
   late String sentence;
 
   ResultItem({

@@ -51,10 +51,10 @@ class PieChart2State extends State {
               ),
             ),
           ),
-          Column(
+          const Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const <Widget>[
+            children: <Widget>[
               Indicator(
                 color: Colors.blue,
                 text: 'First',

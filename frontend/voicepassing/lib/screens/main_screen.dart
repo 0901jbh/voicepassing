@@ -4,12 +4,12 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:call_log/call_log.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
+import 'package:voicepassing/services/platform_channel.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:unique_device_id/unique_device_id.dart';
@@ -43,6 +43,7 @@ class _MainScreenState extends State<MainScreen> {
   late File? targetFile;
   late WebSocketChannel _ws;
   late String androidId;
+  late String phoneNumber = '';
   bool isWidgetOn = false;
 
   // 권한 요청
@@ -75,6 +76,12 @@ class _MainScreenState extends State<MainScreen> {
     bool reqPermission = await requestPermission();
     if (reqPermission) {
       setStream();
+      PlatformChannel().callStream().listen((event) {
+        setState(() {
+          phoneNumber = event;
+          debugPrint('*********전화 번호 입니다. $phoneNumber **************');
+        });
+      });
     }
     recordDirectory = Directory(_recordDirectoryPath);
     androidId = await UniqueDeviceId.instance.getUniqueId() ?? '';
@@ -101,6 +108,7 @@ class _MainScreenState extends State<MainScreen> {
             height: 0,
             width: 0,
           );
+          FlutterOverlayWindow.shareData(phoneNumber);
         }
         // 웹소켓 연결
         _ws = WebSocketChannel.connect(
@@ -126,13 +134,13 @@ class _MainScreenState extends State<MainScreen> {
                 receivedResult.result!.results != null) {
               // 최종 결과 수신
               if (receivedResult.isFinish == true) {
-                if (receivedResult.result!.totalCategoryScore >= 0.8) {
+                if (receivedResult.result!.totalCategoryScore >= 0.5) {
                   // 알림 위젯으로 데이터 전달
                   FlutterOverlayWindow.shareData(receivedResult);
                 }
                 _ws.sink.close();
               } else {
-                if (receivedResult.result!.totalCategoryScore >= 0.8) {
+                if (receivedResult.result!.totalCategoryScore >= 0.5) {
                   // 알림 위젯으로 데이터 전달
                   FlutterOverlayWindow.shareData(receivedResult);
                 }
@@ -168,11 +176,10 @@ class _MainScreenState extends State<MainScreen> {
           _ws.sink.add(splittedBytes);
 
           // state 1 보내기
-          var callLog = await CallLog.get();
           var endMessage = SendMessageModel(
             state: 1,
             androidId: androidId,
-            phoneNumber: callLog.first.formattedNumber,
+            phoneNumber: phoneNumber,
           );
           _ws.sink.add(jsonEncode(endMessage));
         }
@@ -215,7 +222,7 @@ class _MainScreenState extends State<MainScreen> {
                 inspect(data);
                 if (data.isFinish == true) {
                   await FlutterOverlayWindow.shareData(data);
-                } else if (data.result!.totalCategoryScore >= 0.6) {
+                } else if (data.result!.totalCategoryScore >= 0.5) {
                   await FlutterOverlayWindow.shareData(data);
                 }
                 count--;
@@ -317,11 +324,11 @@ class _MainScreenState extends State<MainScreen> {
             const SizedBox(
               height: 30,
             ),
-            SizedBox(
+            const SizedBox(
               width: 315,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   ImgButton(
                     title: '검사 결과',
                     imgName: 'ResultImg',
@@ -337,11 +344,11 @@ class _MainScreenState extends State<MainScreen> {
             const SizedBox(
               height: 10,
             ),
-            SizedBox(
+            const SizedBox(
               width: 315,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   ImgButton(
                       title: '검색',
                       imgName: 'SearchImg',
