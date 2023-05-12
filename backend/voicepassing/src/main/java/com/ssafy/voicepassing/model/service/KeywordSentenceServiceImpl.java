@@ -27,7 +27,7 @@ public class KeywordSentenceServiceImpl implements KeywordSentenceService{
 
         return true;
     }
-    
+
     @Override
     public KeywordSentence addKeywordSentenceReturn(KeywordSentenceDTO.KeywordSentence ksDTO) {
         KeywordSentence ks = KeywordSentence.builder()
@@ -39,5 +39,15 @@ public class KeywordSentenceServiceImpl implements KeywordSentenceService{
         keywordSentenceRepository.save(ks);
 
         return ks;
+
+    @Override
+    public KeywordSentenceDTO.KeywordSentence getKeywordSentence(String keyword) {
+        KeywordSentence keywordSentence = keywordSentenceRepository.findOneByKeywordOrderByScoreDesc(keyword);
+
+        return KeywordSentenceDTO.KeywordSentence.builder()
+                .keyword(keywordSentence.getKeyword())
+                .score(keywordSentence.getScore())
+                .sentence(keywordSentence.getSentence())
+                .build();
     }
 }

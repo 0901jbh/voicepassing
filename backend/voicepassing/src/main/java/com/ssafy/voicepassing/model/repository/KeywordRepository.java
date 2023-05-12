@@ -9,4 +9,5 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface KeywordRepository extends JpaRepository<Keyword,KeywordID> {
+    List<Keyword> findTop3ByCategoryOrderByCountDesc(int category);
 }
