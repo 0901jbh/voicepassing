@@ -41,10 +41,10 @@ class App extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
         textTheme: const TextTheme(
-
             // bodyText1: TextStyle(fontSize: 20),
             // bodyText2: TextStyle(fontSize: 20),
             ),
+        fontFamily: 'NotoSansKR',
       ),
     );
   }
