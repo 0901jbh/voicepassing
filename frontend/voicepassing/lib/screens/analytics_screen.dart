@@ -11,6 +11,8 @@ import 'package:dio/dio.dart';
 import 'package:voicepassing/models/result_model.dart';
 import 'dart:convert';
 import 'package:voicepassing/screens/result_screen_detail.dart';
+import 'package:voicepassing/screens/result_screen_detail_ok.dart';
+import 'package:voicepassing/style/color_style.dart';
 
 class AnalyticsScreen extends StatefulWidget {
   const AnalyticsScreen({super.key});
@@ -44,19 +46,32 @@ class _ResultScreenState extends State<AnalyticsScreen> {
     });
     print("before response");
     final response = await Dio().post(
-      'http://10.0.2.2:8080/api/analysis/file',
+      //'http://10.0.2.2:8080/api/analysis/file',
+      'http://k8a607.p.ssafy.io:8080/api/analysis/file',
       data: formData,
     );
     final jsonString = jsonEncode(response.data);
     final json = jsonDecode(jsonString);
     final resultModel = ResultModel.fromJson(json);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => ResultScreenDetail(
-                caseInfo: resultModel,
-              )),
-    );
+    isSend = false;
+    if (response.statusCode == 200) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ResultScreenDetail(
+                  caseInfo: resultModel,
+                )),
+      );
+    }
+    if (response.statusCode == 201) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ResultScreenDetailOK(
+                  caseInfo: resultModel,
+                )),
+      );
+    }
 
     setState(() {
       result = response.toString();
@@ -68,21 +83,28 @@ class _ResultScreenState extends State<AnalyticsScreen> {
     return Scaffold(
       appBar: HeadBar(
         navPage: MainScreen(),
-        title: const Text('녹음 파일 검사'),
+        title: const Text(
+          '녹음 파일 검사',
+          style: TextStyle(
+            fontSize: 18.0,
+            color: ColorStyles.textBlack,
+          ),
+        ),
         appBar: AppBar(),
       ),
       body: Builder(
         builder: (BuildContext context) {
           return Center(
-            child: Container(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
                 children: [
                   const SizedBox(
-                    height: 20,
+                    height: 40,
                   ),
                   //const TopTitle(),
                   SizedBox(
-                    width: 330,
+                    width: 230,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -94,20 +116,32 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                               tags: {
                                 'b': StyledTextTag(
                                     style: const TextStyle(
-                                        color: Colors.blue,
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w600))
+                                        color: ColorStyles.themeLightBlue,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700))
                               },
+                              style: const TextStyle(
+                                color: ColorStyles.textDarkGray,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                            Text(isSend ? '검사 중 입니다' : '검사할 수 있습니다'),
+                            StyledText(
+                                text: isSend ? '분석 중 입니다' : '검사할 수 있습니다',
+                                style: const TextStyle(
+                                  color: ColorStyles.textDarkGray,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                )),
                           ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Image.asset(
-                            'images/AnalyticstitleImg.png',
-                            height: 100,
-                          ),
+                        const SizedBox(width: 12),
+                        Image.asset(
+                          !isSend
+                              ? 'images/AnalyticstitleImg.png'
+                              : 'images/AnalyticsImg.png',
+                          height: 101,
+                          width: 79,
                         )
                       ],
                     ),
@@ -115,17 +149,36 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                   const SizedBox(
                     height: 50,
                   ),
-                  ElevatedButton(
-                    onPressed: _openFilePicker,
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all<EdgeInsets>(
-                          const EdgeInsets.all(0)),
+                  Visibility(
+                    visible: !isSend,
+                    child: ElevatedButton(
+                      onPressed: _openFilePicker,
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                            const EdgeInsets.all(0)),
+                      ),
+                      child: Image.asset(
+                        'images/FileButton.png',
+                        height: 150,
+                        width: 150,
+                      ),
                     ),
-                    child: Image.asset(
-                      !isSend
-                          ? 'images/FileButton.png'
-                          : 'images/VoiceLogo.png',
-                      height: 200,
+                  ),
+                  Visibility(
+                    visible: isSend,
+                    child: const SizedBox(
+                      height: 40,
+                    ),
+                  ),
+
+                  Visibility(
+                    visible: isSend,
+                    child: const SizedBox(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 15,
+                        backgroundColor: Colors.black,
+                        color: ColorStyles.themeLightBlue,
+                      ),
                     ),
                   ),
                 ],
@@ -136,47 +189,6 @@ class _ResultScreenState extends State<AnalyticsScreen> {
       ),
       bottomNavigationBar: const Navbar(selectedIndex: 4),
       // bottomNavigationBar: const Navbar(),
-    );
-  }
-}
-
-class TopTitle extends StatelessWidget {
-  const TopTitle({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 330,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              StyledText(
-                text: '<b>통화 음성 파일</b>을',
-                tags: {
-                  'b': StyledTextTag(
-                      style: const TextStyle(
-                          color: Colors.blue,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600))
-                },
-              ),
-              const Text('검사할 수 있습니다.'),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Image.asset(
-              'images/AnalyticstitleImg.png',
-              height: 100,
-            ),
-          )
-        ],
-      ),
     );
   }
 }
