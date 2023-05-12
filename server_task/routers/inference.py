@@ -22,7 +22,7 @@ sentence_store = dict() # SentenceModel을 저장
 prob_store = dict() # 문장의 분류 결과 (float[4])를 저장.
 
 T = 36
-THRESHOLD = 0.7
+THRESHOLD = 0.6
 @router.post("", response_model = PhoneCallModel, status_code = 200)
 async def classify_sentence(input_model : ReferenceInputModel, response : Response):
 
@@ -150,7 +150,6 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
 
         if call_label == 0:
             response.status_code = 201
-            return phone_call_model
 
     else: # 끝났을 경우
         
@@ -168,7 +167,7 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
         del sentence_store[session_id]
         del prob_store[session_id]
 
-        return phone_call_model
+    return phone_call_model
 
 @router.post("/test")
 async def test():
