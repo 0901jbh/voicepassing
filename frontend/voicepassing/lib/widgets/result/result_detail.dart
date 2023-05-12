@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:voicepassing/models/result_model.dart';
 import 'package:voicepassing/style/color_style.dart';
 import 'package:voicepassing/widgets/result/double_value_text_with_circle.dart';
+import 'package:styled_text/styled_text.dart';
 
 class ResultDetailList extends StatelessWidget {
   final ResultModel caseInfo;
@@ -14,14 +15,20 @@ class ResultDetailList extends StatelessWidget {
     Color textColor;
     Color backgroundColor;
     String state;
-    if (caseInfo.score! >= 80) {
+    bool crime = false;
+    if (caseInfo.score! >= 0.8 && caseInfo.type! >= 1) {
       textColor = ColorStyles.themeRed;
       backgroundColor = ColorStyles.backgroundRed;
       state = '위험 ';
-    } else {
+    } else if (caseInfo.score! >= 0.6 && caseInfo.type! >= 1) {
       textColor = ColorStyles.themeYellow;
       backgroundColor = ColorStyles.backgroundYellow;
       state = '경고 ';
+    } else {
+      textColor = ColorStyles.themeLightBlue;
+      backgroundColor = ColorStyles.backgroundBlue;
+      state = '정상 ';
+      crime = true;
     }
     const roundedRectangleBorder = RoundedRectangleBorder(
       borderRadius: BorderRadius.all(
@@ -58,7 +65,9 @@ class ResultDetailList extends StatelessWidget {
                     ),
                     const Text('으로'),
                   ]),
-                  const Text('의심됩니다')
+                  StyledText(
+                    text: crime ? '의심됩니다' : '판단됩니다',
+                  ),
                 ],
               ),
               SizedBox(
