@@ -115,9 +115,9 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
                         )
                       ],
                     ),
-                    const Column(
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                      children: const [
                         Text(
                           '??건', // api 연결하기
                           style: TextStyle(

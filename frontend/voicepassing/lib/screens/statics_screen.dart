@@ -25,7 +25,7 @@ class _ResultScreenState extends State<StaticsScreen> {
       ),
       body: Builder(
         builder: (BuildContext context) {
-          return Container(
+          return SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
