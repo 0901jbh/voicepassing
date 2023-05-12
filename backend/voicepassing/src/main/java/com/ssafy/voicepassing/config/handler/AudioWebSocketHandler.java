@@ -164,14 +164,16 @@ public class AudioWebSocketHandler extends AbstractWebSocketHandler {
 		
 		AIResponseDTO.Response aiDTO = gson.fromJson(gson.toJson(result.get("result")),AIResponseDTO.Response.class);
 		boolean isFinish = (Boolean)result.get("isFinish");
+			
+		session.sendMessage(textMessage);
 		
 		if(isFinish) { //result처리
 			String androidId = (String) session.getAttributes().get("androidId");
 			String phoneNumber = (String) session.getAttributes().get("phoneNumber");
+			logger.info("안드로이드 : {}  폰번호 : {}  로그기록을 시작합니다.",androidId,phoneNumber );
 			dataInput(aiDTO, phoneNumber, androidId);
 		}
 		
-		session.sendMessage(textMessage);
 	}
 
 	// 새로생성된 part파일을 분석하고 보내는 것 까지
