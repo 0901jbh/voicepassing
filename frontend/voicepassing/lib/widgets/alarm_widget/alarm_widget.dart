@@ -39,7 +39,8 @@ class _AlarmWidgetState extends State<AlarmWidget> {
         setState(() {
           phoneNumber = msg['phoneNumber'];
         });
-      } else if (msg['result'] != null) {
+      }
+      if (msg['result'] != null) {
         setState(() {
           resultData = ReceiveMessageModel.fromJson(msg);
           Vibration.vibrate(pattern: [0, 500, 300, 500]);

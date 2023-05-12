@@ -134,7 +134,8 @@ class _MainScreenState extends State<MainScreen> {
                 receivedResult.result!.results != null) {
               // 최종 결과 수신
               if (receivedResult.isFinish == true) {
-                if (receivedResult.result!.totalCategoryScore >= 0.5) {
+                // 최종 결과는 무조건 수신 -> 안전, 주의, 위험??
+                if (receivedResult.result!.totalCategoryScore >= 0.0) {
                   // 알림 위젯으로 데이터 전달
                   FlutterOverlayWindow.shareData(receivedResult);
                 }
@@ -210,11 +211,26 @@ class _MainScreenState extends State<MainScreen> {
                     totalCategoryScore: (Random().nextInt(50) + 50) / 100,
                     results: [
                       ResultItem(
-                          sentCategory: 1,
-                          sentCategoryScore: (Random().nextInt(50) + 50) / 100,
-                          sentKeyword: '안녕',
-                          keywordScore: 0.55,
-                          sentence: 'ㅁㄴㅇㄹ'),
+                        sentCategory: 1,
+                        sentCategoryScore: (Random().nextInt(50) + 50) / 100,
+                        sentKeyword: '안녕',
+                        keywordScore: 0.55,
+                        sentence: 'ㅁㄴㅇㄹ',
+                      ),
+                      ResultItem(
+                        sentCategory: 1,
+                        sentCategoryScore: (Random().nextInt(50) + 50) / 100,
+                        sentKeyword: '검',
+                        keywordScore: 0.55,
+                        sentence: '검사',
+                      ),
+                      ResultItem(
+                        sentCategory: 1,
+                        sentCategoryScore: (Random().nextInt(50) + 50) / 100,
+                        sentKeyword: '녹취',
+                        keywordScore: 0.55,
+                        sentence: 'ㅁㄴㅇㄹ',
+                      ),
                     ],
                   ),
                   isFinish: count == 1 ? true : false,
