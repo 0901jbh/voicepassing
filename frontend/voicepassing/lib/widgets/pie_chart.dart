@@ -57,10 +57,10 @@ class _PieChart2State extends State<PieChartSample2> {
           const SizedBox(
             width: 10,
           ),
-          Column(
+          const Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const <Widget>[
+            children: <Widget>[
               Indicator(
                 color: ColorStyles.themeRed,
                 text: '기관 사칭형',

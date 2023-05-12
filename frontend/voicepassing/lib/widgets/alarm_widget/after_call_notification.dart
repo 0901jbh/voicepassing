@@ -1,4 +1,3 @@
-import 'package:call_log/call_log.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:intl/intl.dart';
@@ -10,26 +9,20 @@ class AfterCallNotification extends StatefulWidget {
   const AfterCallNotification({
     super.key,
     required this.resultData,
+    required this.phoneNumber,
   });
 
   final ReceiveMessageModel resultData;
+  final String phoneNumber;
 
   @override
   State<AfterCallNotification> createState() => _AfterCallNotificationState();
 }
 
 class _AfterCallNotificationState extends State<AfterCallNotification> {
-  String? phoneNumber;
-
   @override
   void initState() {
     super.initState();
-    getPhoneNumber();
-  }
-
-  void getPhoneNumber() async {
-    var callLog = await CallLog.get();
-    phoneNumber = callLog.first.formattedNumber ?? '';
   }
 
   @override
@@ -42,16 +35,14 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-            color: widget.resultData.result!.totalCategoryScore >= 0.9
+            color: widget.resultData.result!.totalCategoryScore >= 0.7
                 ? ColorStyles.backgroundRed
                 : ColorStyles.backgroundYellow,
             shape: BoxShape.rectangle,
             borderRadius: const BorderRadius.all(Radius.circular(15)),
           ),
           padding: const EdgeInsets.fromLTRB(8, 6, 8, 12),
-          child: Wrap(
-            direction: Axis.vertical,
-            spacing: 6,
+          child: Column(
             children: [
               Container(
                 padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
@@ -85,7 +76,9 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
                   ],
                 ),
               ),
+              const SizedBox(height: 6),
               InCallNotification(resultData: widget.resultData),
+              const SizedBox(height: 6),
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -102,7 +95,7 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          phoneNumber ?? '',
+                          widget.phoneNumber,
                           style: const TextStyle(
                             color: ColorStyles.themeRed,
                             fontSize: 15,
@@ -122,9 +115,9 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
                         )
                       ],
                     ),
-                    Column(
+                    const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Text(
                           '??건', // api 연결하기
                           style: TextStyle(
@@ -138,6 +131,7 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
                   ],
                 ),
               ),
+              const SizedBox(height: 6),
               SizedBox(
                 width: 320,
                 height: 40,

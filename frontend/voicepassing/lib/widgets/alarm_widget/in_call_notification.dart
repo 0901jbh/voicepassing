@@ -10,6 +10,27 @@ class InCallNotification extends StatelessWidget {
 
   final ReceiveMessageModel resultData;
 
+  List<String> getKeywords() {
+    List<String> keywords = [];
+    if (resultData.result != null &&
+        resultData.result!.results != null &&
+        resultData.result!.results!.isNotEmpty) {
+      var rawData = resultData.result!.results!;
+      rawData
+          .sort((a, b) => a.sentCategoryScore.compareTo(b.sentCategoryScore));
+      if (rawData.length > 3) {
+        for (var item in rawData.sublist(0, 3)) {
+          keywords.add(item.sentKeyword);
+        }
+      } else {
+        for (var item in rawData) {
+          keywords.add(item.sentKeyword);
+        }
+      }
+    }
+    return keywords;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -21,7 +42,7 @@ class InCallNotification extends StatelessWidget {
           width: 320,
           decoration: BoxDecoration(
             color: resultData.result != null &&
-                    resultData.result!.totalCategoryScore * 100 > 90
+                    resultData.result!.totalCategoryScore * 100 > 70
                 ? ColorStyles.themeRed
                 : ColorStyles.themeYellow,
             shape: BoxShape.rectangle,
@@ -39,8 +60,8 @@ class InCallNotification extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Row(
-                      children: const [
+                    const Row(
+                      children: [
                         Image(
                           image: AssetImage('images/VoiceLogo.png'),
                           height: 22,
@@ -65,7 +86,7 @@ class InCallNotification extends StatelessWidget {
                         Text(
                           resultData.result != null &&
                                   resultData.result!.totalCategoryScore * 100 >
-                                      90
+                                      70
                               ? '위험'
                               : '주의',
                           style: const TextStyle(
@@ -79,22 +100,31 @@ class InCallNotification extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Text(
-                              resultData.result != null &&
-                                      resultData.result!.results != null
-                                  ? resultData.result!.results![0].sentKeyword
-                                  : '',
-                              style: TextStyle(
-                                color: resultData.result != null &&
-                                        resultData.result!.totalCategoryScore *
-                                                100 >
-                                            90
-                                    ? ColorStyles.subLightGray
-                                    : ColorStyles.textBlack,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            if (resultData.result != null &&
+                                resultData.result!.results is List &&
+                                resultData.result!.results!.isNotEmpty)
+                              for (var item in getKeywords())
+                                Row(
+                                  children: [
+                                    Text(
+                                      item,
+                                      style: TextStyle(
+                                        color: resultData.result != null &&
+                                                resultData.result!
+                                                            .totalCategoryScore *
+                                                        100 >
+                                                    70
+                                            ? ColorStyles.subLightGray
+                                            : ColorStyles.textBlack,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                  ],
+                                ),
                             const SizedBox(
                               width: 5,
                             ),
