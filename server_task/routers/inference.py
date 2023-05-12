@@ -37,26 +37,24 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
     text_splited = [t for t in kss.split_sentences(text) if len(t) > 10]
 
     if not text_splited: # 문장 없으면
+        weighted_probs, call_label = classify_phonecall(prob_store.get(session_id, None))
+
+        phone_call_model = {
+            "totalCategory" : call_label,
+            "totalCategoryScore" : weighted_probs[call_label].item(),
+            "results" : sentence_store.get(session_id, [])
+        }
+
+        if call_label == 0:
+            response.status_code = 201
+
         if is_finish: # 그래도 마지막이라면
-
-            weighted_probs, call_label = classify_phonecall(prob_store.get(session_id, None))
-
-            phone_call_model = {
-                "totalCategory" : call_label,
-                "totalCategoryScore" : weighted_probs[call_label].item(),
-                "results" : sentence_store.get(session_id, [])
-            }
-
             if sentence_store.get(session_id):
                 del sentence_store[session_id]
             if prob_store.get(session_id):
                 del prob_store[session_id]
 
-            return phone_call_model
-        
-        else: # 마지막 아니라면
-            response.status_code = 204
-            return response
+        return phone_call_model
     
     # 1. BERT Classification
     ## 1.1. Tokenization
@@ -144,16 +142,15 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
 
         weighted_probs, call_label = classify_phonecall(temp_prob_store)
 
-        if call_label == 0:
-            response.status_code = 204
-            return response
-
         phone_call_model = {
             "totalCategory" : call_label,
             "totalCategoryScore" : weighted_probs[call_label].item(),
             "results" : temp_sentence_store
         }
 
+        if call_label == 0:
+            response.status_code = 201
+            return phone_call_model
 
     else: # 끝났을 경우
         
@@ -165,10 +162,13 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
             "results" : sentence_store[session_id]
         }
 
+        if call_label == 0:
+            response.status_code = 201
+
         del sentence_store[session_id]
         del prob_store[session_id]
 
-    return phone_call_model
+        return phone_call_model
 
 @router.post("/test")
 async def test():
