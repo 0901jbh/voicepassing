@@ -21,12 +21,24 @@ public class KeywordSentenceServiceImpl implements KeywordSentenceService{
                 .keyword(ksDTO.getKeyword())
                 .sentence(ksDTO.getSentence())
                 .score(ksDTO.getScore())
+                .category(ksDTO.getCategory())
                 .build();
         keywordSentenceRepository.save(ks);
 
-
         return true;
     }
+
+    @Override
+    public KeywordSentence addKeywordSentenceReturn(KeywordSentenceDTO.KeywordSentence ksDTO) {
+        KeywordSentence ks = KeywordSentence.builder()
+                .keyword(ksDTO.getKeyword())
+                .sentence(ksDTO.getSentence())
+                .score(ksDTO.getScore())
+                .category(ksDTO.getCategory())
+                .build();
+        keywordSentenceRepository.save(ks);
+
+        return ks;
 
     @Override
     public KeywordSentenceDTO.KeywordSentence getKeywordSentence(String keyword) {
