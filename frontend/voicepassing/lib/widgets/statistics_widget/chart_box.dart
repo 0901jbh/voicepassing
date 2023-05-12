@@ -3,7 +3,9 @@ import 'package:voicepassing/style/color_style.dart';
 import 'package:voicepassing/widgets/pie_chart.dart';
 
 class ChartBox extends StatelessWidget {
-  const ChartBox({super.key});
+  ChartBox({super.key});
+
+  final List<double> tempData = [1, 1, 1];
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +17,18 @@ class ChartBox extends StatelessWidget {
           textAlign: TextAlign.start,
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
         ),
+        const SizedBox(
+          height: 5,
+        ),
         Container(
-          padding: const EdgeInsets.fromLTRB(24, 10, 24, 10),
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               color: ColorStyles.backgroundBlue),
-          child: const PieChartSample2(),
+          child: PieChartSample2(data: tempData),
+        ),
+        const SizedBox(
+          height: 36,
         ),
       ],
     );

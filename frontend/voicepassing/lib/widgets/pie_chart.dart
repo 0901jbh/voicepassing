@@ -1,16 +1,19 @@
 import 'package:fl_chart/fl_chart.dart';
 
 import 'package:flutter/material.dart';
+import 'package:voicepassing/style/color_style.dart';
 import 'package:voicepassing/widgets/indicator.dart';
 
 class PieChartSample2 extends StatefulWidget {
-  const PieChartSample2({super.key});
+  const PieChartSample2({super.key, required this.data});
+
+  final List data;
 
   @override
-  State<StatefulWidget> createState() => PieChart2State();
+  State<PieChartSample2> createState() => _PieChart2State();
 }
 
-class PieChart2State extends State {
+class _PieChart2State extends State<PieChartSample2> {
   int touchedIndex = -1;
 
   @override
@@ -46,69 +49,58 @@ class PieChart2State extends State {
                   ),
                   sectionsSpace: 0,
                   centerSpaceRadius: 0,
-                  sections: showingSections(),
+                  sections: showingSections(widget.data),
                 ),
               ),
             ),
+          ),
+          const SizedBox(
+            width: 10,
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const <Widget>[
               Indicator(
-                color: Colors.blue,
-                text: 'First',
+                color: ColorStyles.themeRed,
+                text: '기관 사칭형',
                 isSquare: true,
               ),
               SizedBox(
-                height: 4,
+                height: 10,
               ),
               Indicator(
-                color: Colors.yellow,
-                text: 'Second',
+                color: ColorStyles.themeLightBlue,
+                text: '대출 빙자형',
                 isSquare: true,
               ),
               SizedBox(
-                height: 4,
+                height: 10,
               ),
               Indicator(
-                color: Colors.purple,
-                text: 'Third',
+                color: ColorStyles.subDarkGray,
+                text: '기타 형태',
                 isSquare: true,
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Indicator(
-                color: Colors.green,
-                text: 'Fourth',
-                isSquare: true,
-              ),
-              SizedBox(
-                height: 18,
               ),
             ],
-          ),
-          const SizedBox(
-            width: 28,
           ),
         ],
       ),
     );
   }
 
-  List<PieChartSectionData> showingSections() {
-    return List.generate(4, (i) {
+  List<PieChartSectionData> showingSections(data) {
+    return List.generate(3, (i) {
       final isTouched = i == touchedIndex;
-      final fontSize = isTouched ? 20.0 : 15.0;
-      final radius = isTouched ? 100.0 : 90.0;
+      final fontSize = isTouched ? 17.0 : 16.0;
+      final radius = isTouched ? 85.0 : 80.0;
       const shadows = [Shadow(color: Colors.white, blurRadius: 2)];
       switch (i) {
         case 0:
           return PieChartSectionData(
-            color: Colors.blue,
-            value: 40,
-            title: '40%',
+            color: ColorStyles.themeRed,
+            value: data[0],
+            title: '${data[0].floor()}건',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -118,9 +110,9 @@ class PieChart2State extends State {
           );
         case 1:
           return PieChartSectionData(
-            color: Colors.yellow,
-            value: 30,
-            title: '30%',
+            color: ColorStyles.themeLightBlue,
+            value: data[1],
+            title: '${data[1].floor()}건',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -130,21 +122,9 @@ class PieChart2State extends State {
           );
         case 2:
           return PieChartSectionData(
-            color: Colors.purple,
-            value: 15,
-            title: '15%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              color: Colors.white,
-              shadows: shadows,
-            ),
-          );
-        case 3:
-          return PieChartSectionData(
-            color: Colors.green,
-            value: 15,
-            title: '15%',
+            color: ColorStyles.textDarkGray,
+            value: data[2],
+            title: '${data[2].floor()}건',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:voicepassing/routes.dart';
 import 'package:voicepassing/screens/main_screen.dart';
 
 import 'widgets/alarm_widget/alarm_widget.dart';
@@ -30,6 +31,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      routes: Routes.routes,
       builder: (context, child) {
         return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.1),
