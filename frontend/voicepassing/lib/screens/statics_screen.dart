@@ -3,6 +3,8 @@ import 'package:styled_text/styled_text.dart';
 import 'package:voicepassing/screens/main_screen.dart';
 import 'package:voicepassing/widgets/head_bar.dart';
 import 'package:voicepassing/widgets/nav_bar.dart';
+import 'package:voicepassing/widgets/statistics_widget/chart_box.dart';
+import 'package:voicepassing/widgets/statistics_widget/keyword_box.dart';
 
 class StaticsScreen extends StatefulWidget {
   const StaticsScreen({super.key});
@@ -23,13 +25,17 @@ class _ResultScreenState extends State<StaticsScreen> {
       ),
       body: Builder(
         builder: (BuildContext context) {
-          return Center(
+          return Container(
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
             child: Column(
-              children: const [
-                SizedBox(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
                   height: 20,
                 ),
-                TopTitle()
+                const TopTitle(),
+                ChartBox(),
+                const KeywordBox(),
               ],
             ),
           );

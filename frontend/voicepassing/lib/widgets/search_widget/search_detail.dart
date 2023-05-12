@@ -9,8 +9,11 @@ class SearchDetail extends StatelessWidget {
   final String phoneNumber;
   final List<ResultModel>? resultList;
 
-  const SearchDetail(
+  SearchDetail(
       {super.key, required this.phoneNumber, required this.resultList});
+
+  // 임시데이터
+  List categoryNum = [1, 1, 1, 1];
 
   @override
   Widget build(BuildContext context) {
@@ -75,8 +78,8 @@ class SearchDetail extends StatelessWidget {
             width: 320,
             child: Column(
               children: [
-                const SizedBox(
-                  child: PieChartSample2(),
+                SizedBox(
+                  child: PieChartSample2(data: categoryNum),
                 ),
                 for (var result in resultList!)
                   listInstances(
