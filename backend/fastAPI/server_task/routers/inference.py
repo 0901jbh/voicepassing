@@ -21,7 +21,7 @@ softmax = torch.nn.Softmax(dim = 0)
 sentence_store = dict() # SentenceModel을 저장
 prob_store = dict() # 문장의 분류 결과 (float[4])를 저장.
 
-T = 36
+T = 1
 THRESHOLD = 0.7
 @router.post("", response_model = PhoneCallModel, status_code = 200)
 async def classify_sentence(input_model : ReferenceInputModel, response : Response):
