@@ -34,73 +34,6 @@ public class AnalysisServiceImpl implements AnalysisService{
     //@Value("${fastapi.url}")
     private String fastApiUrl;
 
-    //clova upload file to text
-    @Override
-    public String FileSpeechToText(MultipartFile file) throws IOException {
-        String clientId = "69z4ol7120";             // Application Client ID";
-        String clientSecret = "BgrF1fA39jXxMM2v9OLdzIQMl4JNbjMBg17uptzP";     // Application Client Secret";
-        System.out.println("before find file");
-        File voiceFile = mTF(file);
-        System.out.println("after find file");
-        System.out.println("get out?");
-        try {
-            //String imgFile = RECORD_PATH+"/.m4a";
-            //File voiceFile = new File(imgFile);
-
-            //File voiceFile = file;
-
-            String language = "Kor";        // 언어 코드 ( Kor, Jpn, Eng, Chn )
-            String apiURL = "https://naveropenapi.apigw.ntruss.com/recog/v1/stt?lang=" + language;
-            URL url = new URL(apiURL);
-
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-            conn.setUseCaches(false);
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            conn.setRequestProperty("Content-Type", "application/octet-stream");
-            conn.setRequestProperty("X-NCP-APIGW-API-KEY-ID", clientId);
-            conn.setRequestProperty("X-NCP-APIGW-API-KEY", clientSecret);
-            System.out.println("살아있나?");
-            OutputStream outputStream = conn.getOutputStream();
-            System.out.println("진짜여기");
-            FileInputStream inputStream = new FileInputStream(voiceFile);
-            System.out.println("여기다");
-            byte[] buffer = new byte[4096];
-            int bytesRead = -1;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
-            outputStream.flush();
-            inputStream.close();
-            BufferedReader br = null;
-            int responseCode = conn.getResponseCode();
-            if(responseCode == 200) { // 정상 호출
-                br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            } else {  // 오류 발생
-                System.out.println("error!!!!!!! responseCode= " + responseCode);
-                br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            }
-            String inputLine;
-            System.out.println("문제");
-            if(br != null) {
-                StringBuffer response = new StringBuffer();
-                while ((inputLine = br.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                br.close();
-                String result = response.toString();
-                result = result.substring(9,result.length()-2);
-                return result;
-            } else {
-                System.out.println("error !!!");
-
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return "error";
-    }
-
     public File mTF(MultipartFile mfile) throws IOException {
         File file = new File(mfile.getOriginalFilename());
         mfile.transferTo(file);
@@ -239,6 +172,7 @@ public class AnalysisServiceImpl implements AnalysisService{
 
         return resultMap;
     }
+
 
 
 

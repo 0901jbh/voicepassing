@@ -11,11 +11,6 @@ import java.util.Map;
 
 public interface AnalysisService {
 
-
-
-    //upload_file clova TTS
-    public String FileSpeechToText(MultipartFile file) throws IOException;
-
     //multipartfile -> file
     public File mTF(MultipartFile mfile) throws IOException;
 

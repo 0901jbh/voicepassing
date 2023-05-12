@@ -89,6 +89,7 @@ public class AnalysisController {
         int textIndex = result.lastIndexOf("\"text\":");
         int commaIndex = result.indexOf(",", textIndex);
         String txt = result.substring(textIndex + 8, commaIndex - 1);
+        System.out.println(txt);
         // result = clovaSpeechClient.url("file URL", requestEntity);
         // result = clovaSpeechClient.objectStorage("Object Storage key", requestEntity);
         //System.out.println(result);
@@ -116,7 +117,7 @@ public class AnalysisController {
         byte[] bytes = file.getBytes();
         File newFile = new File(file.getOriginalFilename());
         Files.write(newFile.toPath(), bytes);
-
+        System.out.println("get file");
         result = clovaSpeechClient.upload(newFile, requestEntity);
        int textIndex = result.lastIndexOf("\"text\":");
         int commaIndex = result.indexOf(",", textIndex);
