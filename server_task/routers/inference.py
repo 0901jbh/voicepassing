@@ -22,8 +22,7 @@ sentence_store = dict() # SentenceModel을 저장
 prob_store = dict() # 문장의 분류 결과 (float[4])를 저장.
 
 T = 36
-THRESHOLD = 0.5
-
+THRESHOLD = 0.7
 @router.post("", response_model = PhoneCallModel, status_code = 200)
 async def classify_sentence(input_model : ReferenceInputModel, response : Response):
 
@@ -73,7 +72,7 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
 
     output, _ = classifier(tokens)
 
-    print(f"RAW : {output.squeeze()}")
+    # print(f"RAW : {output.squeeze()}")
 
     if output.shape[0] != 1:
         label_probs = torch.nn.functional.softmax(output.squeeze() / T, dim = 1)
@@ -172,7 +171,76 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
     return phone_call_model
 
 @router.post("/test")
-async def junghee_test(input_model : ReferenceInputModel):
+async def test():
+    
+    file_path = "./classifier/yh_test.csv"
+    text_splited = pd.read_csv(file_path, index_col = 0).sentence.values.tolist()
+
+    # print(text_splited)
+
+    # BERT 
+    tokens = tokenizer(
+        text = text_splited,
+        add_special_tokens = True,
+        truncation = True,
+        max_length = 512,
+        padding = True,
+        return_tensors = "pt"
+    )
+
+    output, _ = classifier(tokens)
+
+    if output.shape[0] != 1:
+        label_probs = torch.nn.functional.softmax(output.squeeze() / T, dim = 1)
+    else:
+        label_probs = torch.nn.functional.softmax(output / T, dim = 1)
+
+    pd.DataFrame(data = output.detach().numpy()).to_csv("raw_output.csv")
+
+    # 2. Bayesian Classification
+    
+    b_label_probs = pipeline.forward(text_splited)
+    b_label_probs = torch.FloatTensor(b_label_probs)
+
+    pd.DataFrame(data = b_label_probs.detach().numpy()).to_csv("b_label_props.csv")
+
+    # 3. get result and save
+
+    # print(f"BERT : {label_probs}")
+    # print(f"NB : {torch.FloatTensor(b_label_probs)}")
+
+    label_probs = (label_probs + b_label_probs) / 2
+    pd.DataFrame(data = label_probs.detach().numpy()).to_csv("label_props.csv")
+
+    # print(f"TOTAL : {label_probs}")
+    
+    label = torch.argmax(label_probs, dim = 1)
+    # print(f"LABEL : {label}")        
+    temp_prob_store = label_probs.detach().cpu().numpy().tolist()
+
+    ## 3.1. label 설정하기
+
+    answer_prob = torch.gather(label_probs, dim = 1, index = label.unsqueeze(1))
+    unqualified = torch.where(answer_prob < THRESHOLD)[0] # 기준 밑으로 혐의 없음
+    label[unqualified] = 0
+    
+    # 4. 특정 키워드 추출하기
+
+    temp_store = []
+
+    for idx, one_sentence in enumerate(text_splited):
+
+        cur_label = label[idx].item()
+
+        if cur_label == 0:
+            continue
+
+        word, prob = pipeline.extract_word_and_probs(one_sentence, cur_label)
+        temp_store.append([cur_label, label_probs[idx][cur_label].item(), word, abs(prob), text_splited[idx]])
+
+    df = pd.DataFrame(data = temp_store, columns = ['sentCategory', 'sentCategoryScore', 'sentKeyword', 'keywordScore', 'sentence'])
+    df.to_csv('yh_result.csv', encoding="utf-8-sig")
+
     return { "result" : [0.1, 0.2, 0.3, 0.4]}
 
     
