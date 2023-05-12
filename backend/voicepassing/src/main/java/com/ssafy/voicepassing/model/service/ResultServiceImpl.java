@@ -149,4 +149,5 @@ public class ResultServiceImpl implements ResultService {
         return ResultDTO.CategoryResultNum.builder().categoryList(numList).build();
     }
 
+
 }

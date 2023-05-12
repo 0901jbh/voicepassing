@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 
 
 public class KeywordDTO {
@@ -21,5 +22,11 @@ public class KeywordDTO {
         private int category;
     }
 
-
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class PopularKeyword {
+        private List<String> type1;
+        private List<String> type2;
+    }
 }
