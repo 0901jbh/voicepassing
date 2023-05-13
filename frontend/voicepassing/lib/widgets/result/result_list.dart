@@ -20,14 +20,18 @@ class ResultList extends StatelessWidget {
     Color textColor;
     Color backgroundColor;
     String state;
-    if (caseInfo.score! >= 80) {
+    if (caseInfo.score! >= 0.8 && caseInfo.type! >= 1) {
       textColor = ColorStyles.themeRed;
       backgroundColor = ColorStyles.backgroundRed;
       state = '위험 ';
-    } else {
+    } else if (caseInfo.score! >= 0.6 && caseInfo.type! >= 1) {
       textColor = ColorStyles.themeYellow;
       backgroundColor = ColorStyles.backgroundYellow;
       state = '경고 ';
+    } else {
+      textColor = ColorStyles.themeLightBlue;
+      backgroundColor = ColorStyles.backgroundBlue;
+      state = '정상 ';
     }
     return GestureDetector(
       onTap: () {

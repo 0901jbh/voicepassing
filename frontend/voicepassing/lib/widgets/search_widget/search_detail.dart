@@ -64,7 +64,11 @@ class SearchDetail extends StatelessWidget {
       );
     }
     for (ResultModel result in resultList!) {
-      categoryNum[result.type as int] += 1;
+      if (result.type! > 0) {
+        categoryNum[(result.type as int) - 1] += 1;
+      } else {
+        categoryNum[3] += 1;
+      }
     }
     return SingleChildScrollView(
       child: Column(

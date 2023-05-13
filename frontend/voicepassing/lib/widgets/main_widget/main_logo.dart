@@ -15,49 +15,54 @@ class MainLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: caseNum,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
-            return SizedBox(
-              width: 315,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      StyledText(
-                        text: '오늘 <b>보이스패싱</b>은',
-                        tags: {
-                          'b': StyledTextTag(
-                              style: const TextStyle(color: Colors.blue))
-                        },
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Flexible(
+          flex: 5,
+          child: Container(
+            child: FutureBuilder(
+                future: caseNum,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    return SizedBox(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          StyledText(
+                            text: '오늘 <b>보이스패싱</b>은',
+                            tags: {
+                              'b': StyledTextTag(
+                                  style: const TextStyle(color: Colors.blue))
+                            },
+                          ),
+                          StyledText(
+                            text: '<b>${snapshot.data['resultNum']}건</b>을',
+                            tags: {
+                              'b': StyledTextTag(
+                                  style: const TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 30))
+                            },
+                          ),
+                          const Text('잡았어요')
+                        ],
                       ),
-                      StyledText(
-                        text: '<b>${snapshot.data['resultNum']}건</b>을',
-                        tags: {
-                          'b': StyledTextTag(
-                              style: const TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 30))
-                        },
-                      ),
-                      const Text('잡았어요')
-                    ],
-                  ),
-                  Image.asset(
-                    'images/MainImg.png',
-                    height: 110,
-                  )
-                ],
-              ),
-            );
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        });
+                    );
+                  }
+                  return const CircularProgressIndicator();
+                }),
+          ),
+        ),
+        Flexible(
+          flex: 3,
+          child: Image.asset(
+            'images/MainImg.png',
+          ),
+        )
+      ],
+    );
   }
 }
