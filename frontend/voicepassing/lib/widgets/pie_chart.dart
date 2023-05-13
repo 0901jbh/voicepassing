@@ -65,6 +65,7 @@ class _PieChart2State extends State<PieChartSample2> {
                 color: ColorStyles.themeRed,
                 text: '기관 사칭형',
                 isSquare: true,
+                size: 12,
               ),
               SizedBox(
                 height: 10,
@@ -73,6 +74,7 @@ class _PieChart2State extends State<PieChartSample2> {
                 color: ColorStyles.themeLightBlue,
                 text: '대출 빙자형',
                 isSquare: true,
+                size: 12,
               ),
               SizedBox(
                 height: 10,
@@ -81,6 +83,7 @@ class _PieChart2State extends State<PieChartSample2> {
                 color: ColorStyles.subDarkGray,
                 text: '기타 형태',
                 isSquare: true,
+                size: 12,
               ),
             ],
           ),
@@ -93,7 +96,7 @@ class _PieChart2State extends State<PieChartSample2> {
     return List.generate(3, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 17.0 : 16.0;
-      final radius = isTouched ? 85.0 : 80.0;
+      final radius = isTouched ? 90.0 : 80.0;
       const shadows = [Shadow(color: Colors.white, blurRadius: 2)];
       switch (i) {
         case 0:
