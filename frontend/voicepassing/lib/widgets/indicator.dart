@@ -20,8 +20,8 @@ class Indicator extends StatelessWidget {
     return Row(
       children: <Widget>[
         Container(
-          width: size,
-          height: size,
+          width: 8,
+          height: 8,
           decoration: BoxDecoration(
             shape: isSquare ? BoxShape.circle : BoxShape.circle,
             color: color,
@@ -33,8 +33,8 @@ class Indicator extends StatelessWidget {
         Text(
           text,
           style: TextStyle(
-            fontSize: 16,
-            color: textColor,
+            fontSize: 12,
+            color: color,
           ),
         )
       ],

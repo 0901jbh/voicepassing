@@ -1,6 +1,7 @@
 import 'package:circle_progress_bar/circle_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:voicepassing/models/result_model.dart';
+import 'package:voicepassing/services/classify.dart';
 import 'package:voicepassing/style/color_style.dart';
 import 'package:voicepassing/widgets/result/double_value_text_with_circle.dart';
 import 'package:styled_text/styled_text.dart';
@@ -16,6 +17,7 @@ class ResultDetailList extends StatelessWidget {
     Color backgroundColor;
     String state;
     bool crime = false;
+    var category = Classify.getCategory(caseInfo.type as int);
     if (caseInfo.score! >= 0.8 && caseInfo.type! >= 1) {
       textColor = ColorStyles.themeRed;
       backgroundColor = ColorStyles.backgroundRed;
@@ -43,7 +45,6 @@ class ResultDetailList extends StatelessWidget {
         padding: const EdgeInsets.all(20.0),
         child: SizedBox(
           height: 100,
-          width: 300,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -52,22 +53,31 @@ class ResultDetailList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text(
-                    '해당 통화는',
-                  ),
+                  const Text('해당 통화는',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: ColorStyles.textDarkGray,
+                          fontSize: 15)),
                   Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
                     Text(
-                      '"${caseInfo.type}"',
+                      '"${category['type']}"',
                       style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w900,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
                           color: textColor),
                     ),
-                    const Text('으로'),
+                    const Text('으로',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: ColorStyles.textDarkGray,
+                            fontSize: 15)),
                   ]),
                   StyledText(
-                    text: crime ? '의심됩니다' : '판단됩니다',
-                  ),
+                      text: crime ? '의심됩니다' : '판단됩니다',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: ColorStyles.textDarkGray,
+                          fontSize: 15)),
                 ],
               ),
               SizedBox(
@@ -103,13 +113,13 @@ class CircleProgress extends StatelessWidget {
       backgroundColor: Colors.transparent,
       strokeWidth: 10,
       // value/1 표시
-      value: score / 100,
+      value: score,
       child: DoubleValueTextWithCircle(
         txt: state,
         style: TextStyle(
             color: textColor, fontWeight: FontWeight.w500, fontSize: 27),
         fractionDigits: 0,
-        count: score,
+        count: score * 100,
         unit: '',
         duration: const Duration(microseconds: 500),
       ),

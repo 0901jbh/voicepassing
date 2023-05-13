@@ -1,7 +1,8 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:voicepassing/models/result_model.dart';
 import 'package:voicepassing/services/api_service.dart';
+import 'package:voicepassing/style/color_style.dart';
 import 'package:voicepassing/widgets/search_widget/search_detail.dart';
 
 class SearchWidget extends StatefulWidget {
@@ -49,114 +50,129 @@ class _SearchWidgetState extends State<SearchWidget> {
     return Column(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      SizedBox(
-                        width: 180,
-                        height: 50,
-                        child: Card(
-                            color: Colors.blue,
-                            child: TextField(
-                              textInputAction: TextInputAction.go,
-                              onSubmitted: (value) async {
-                                caseInfo =
-                                    await ApiService.getPhoneNumber(value);
-                                setState(() {
-                                  phoneNumber = value;
-                                  hasData = true;
-                                });
-                                //Todo: 전화번호인지 확인하는 로직 나중에 추가할것
-                              },
-                              controller: myController,
-                              onChanged: (value) {
-                                setState(() {
-                                  textValue = value;
-                                });
-                              },
-                              autofocus: true,
-                              decoration: InputDecoration(
-                                suffixIconConstraints: const BoxConstraints(
-                                  maxHeight: 20,
-                                  maxWidth: 20,
-                                ),
-                                suffixIcon: Padding(
-                                  padding: const EdgeInsets.only(left: 0),
-                                  child: showSuffixIcon
-                                      ? IconButton(
-                                          padding: EdgeInsets.zero,
-                                          onPressed: () {
-                                            setState(() {
-                                              myController.clear();
-                                              textValue = '';
-                                            });
-                                          },
-                                          icon: const Icon(
-                                            Icons.cancel,
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                      : null,
-                                ),
-                              ),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                    ],
+            Expanded(
+              child: Container(
+                  height: 34,
+                  decoration: BoxDecoration(
+                    color: ColorStyles.themeLightBlue,
+                    borderRadius: BorderRadius.circular(13),
                   ),
-                )),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    child: Row(
+                      textBaseline: TextBaseline.alphabetic,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 20),
+                            child: SizedBox(
+                              height: 50,
+                              child: Card(
+                                color: ColorStyles.themeLightBlue,
+                                child: TextField(
+                                  textInputAction: TextInputAction.go,
+                                  onSubmitted: (value) async {
+                                    caseInfo =
+                                        await ApiService.getPhoneNumber(value);
+                                    setState(() {
+                                      phoneNumber = value;
+                                      hasData = true;
+                                    });
+                                    //Todo: 전화번호인지 확인하는 로직 나중에 추가할것
+                                  },
+                                  controller: myController,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      textValue = value;
+                                    });
+                                  },
+                                  autofocus: true,
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 12),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 20,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 0),
+                            child: showSuffixIcon
+                                ? IconButton(
+                                    padding: EdgeInsets.zero,
+                                    onPressed: () {
+                                      setState(() {
+                                        myController.clear();
+                                        textValue = '';
+                                      });
+                                    },
+                                    icon: const Icon(
+                                      Icons.cancel,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                  )
+                                : null,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
+            ),
+            const SizedBox(
+              width: 5,
+            ),
             Container(
-              height: 40,
-              width: 40,
+              height: 34,
+              width: 34,
               decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(15),
+                color: ColorStyles.themeLightBlue,
+                borderRadius: BorderRadius.circular(12),
               ),
               child: GestureDetector(
                   onTap: () async {
-                    ClipboardData? data =
-                        await Clipboard.getData(Clipboard.kTextPlain);
-                    String str = data?.text ?? '';
-
-                    if (str.isNotEmpty) {
-                      myController.text = (str);
-                    }
-                    // print(data);
-                    // print(data?.text);
-                    // print('눌값?');
+                    FlutterClipboard.paste().then((value) {
+                      myController.text = value;
+                      print(value);
+                      setState(() {});
+                    });
+                    // ClipboardData? data =
+                    //     await Clipboard.getData(Clipboard.kTextPlain);
+                    // String str = data?.text ?? '';
+                    // print(myController.text);
+                    // if (str.isNotEmpty) {
+                    //   print('뭔가 값이있음');
+                    //   myController.text = (str);
+                    // } else {
+                    //   print(data);
+                    //   print(data?.text);
+                    //   print('눌값?');
+                    // }
+                    // setState(() {});
                   },
                   child: const Icon(
                     Icons.paste_sharp,
                     color: Colors.white,
+                    size: 17,
                   )),
             )
           ],
@@ -171,7 +187,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                   resultList: caseInfo,
                 ),
               )
-            : const Text('결과없음')
+            : const Text('')
       ],
     );
   }
