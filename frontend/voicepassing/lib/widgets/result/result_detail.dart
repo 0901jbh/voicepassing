@@ -60,7 +60,7 @@ class ResultDetailList extends StatelessWidget {
                           fontSize: 15)),
                   Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
                     Text(
-                      '"${category['type']}"',
+                      state == "정상 " ? '"정상"' : '"${category['type']}"',
                       style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w700,
@@ -73,7 +73,7 @@ class ResultDetailList extends StatelessWidget {
                             fontSize: 15)),
                   ]),
                   StyledText(
-                      text: crime ? '의심됩니다' : '판단됩니다',
+                      text: crime ? '판단됩니다' : '의심됩니다',
                       style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           color: ColorStyles.textDarkGray,
