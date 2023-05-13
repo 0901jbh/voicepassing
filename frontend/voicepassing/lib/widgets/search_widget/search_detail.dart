@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:styled_text/styled_text.dart';
 import 'package:voicepassing/models/result_model.dart';
+import 'package:voicepassing/services/classify.dart';
 import 'package:voicepassing/style/color_style.dart';
 import 'package:voicepassing/widgets/pie_chart.dart';
 
@@ -13,7 +14,7 @@ class SearchDetail extends StatelessWidget {
       {super.key, required this.phoneNumber, required this.resultList});
 
   // 임시데이터
-  List categoryNum = [1, 1, 1, 1];
+  List<double> categoryNum = [0, 0, 0, 0];
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +63,9 @@ class SearchDetail extends StatelessWidget {
         ),
       );
     }
+    for (ResultModel result in resultList!) {
+      categoryNum[result.type as int] += 1;
+    }
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -71,15 +75,20 @@ class SearchDetail extends StatelessWidget {
           TopTitle(
             phoneNumber: phoneNumber,
           ),
+          const SizedBox(
+            height: 30,
+          ),
           Container(
             decoration: const BoxDecoration(
                 color: ColorStyles.backgroundBlue,
                 borderRadius: BorderRadius.all(Radius.circular(15))),
-            width: 320,
             child: Column(
               children: [
-                SizedBox(
-                  child: PieChartSample2(data: categoryNum),
+                Padding(
+                  padding: const EdgeInsets.only(right: 30),
+                  child: SizedBox(
+                    child: PieChartSample2(data: categoryNum),
+                  ),
                 ),
                 for (var result in resultList!)
                   listInstances(
@@ -102,6 +111,7 @@ class listInstances extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     late DateTime datetime;
+    var info = Classify.getCategory(result.type as int);
     if (result.date != null) {
       datetime = DateTime.parse(result.date.toString());
     } else {
@@ -111,31 +121,32 @@ class listInstances extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        width: 300,
         decoration: const BoxDecoration(color: Colors.white),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(DateFormat('yy.M.d').format(datetime)),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        result.type.toString(),
-                        style: const TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 17),
-                      ),
-                    ],
-                  ),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 16, top: 12, bottom: 12),
+                child: Text(DateFormat('yy.M.d').format(datetime),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w400, fontSize: 12)),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      info['type'],
+                      style: TextStyle(
+                          color: info['color'],
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15),
+                    ),
+                  ],
                 ),
-              ]),
-        ),
+              ),
+            ]),
       ),
     );
   }
@@ -148,12 +159,12 @@ class TopTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 330,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Flexible(
+          flex: 5,
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               StyledText(
@@ -170,15 +181,18 @@ class TopTitle extends StatelessWidget {
               const Text('발견했습니다')
             ],
           ),
-          Padding(
+        ),
+        Flexible(
+          flex: 5,
+          child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset(
-              'images/AnalyticstitleImg.png',
+              'images/search_find.png',
               height: 100,
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:unique_device_id/unique_device_id.dart';
 import 'package:voicepassing/models/result_model.dart';
 import 'package:voicepassing/screens/main_screen.dart';
 import 'package:voicepassing/services/api_service.dart';
+import 'package:voicepassing/style/color_style.dart';
 import 'package:voicepassing/widgets/head_bar.dart';
 import 'package:voicepassing/widgets/nav_bar.dart';
 import 'package:voicepassing/widgets/result/result_list.dart';
@@ -28,7 +29,7 @@ class _ResultScreenState extends State<ResultScreen> {
 
   initializer() async {
     await UniqueDeviceId.instance.getUniqueId().then((value) async {
-      resultList = await ApiService.getRecentResult('android2');
+      resultList = await ApiService.getRecentResult('22180b29a256dd39');
       setState(() {
         isLoading = true;
       });
@@ -80,35 +81,41 @@ class _ResultScreenState extends State<ResultScreen> {
       body: Builder(
         builder: (BuildContext context) {
           return Center(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                const ResultTitle(),
-                const SizedBox(
-                  height: 20,
-                ),
-                isLoading
-                    ? Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              for (var result in resultList)
-                                ResultList(caseInfo: result)
-                            ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const ResultTitle(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  isLoading
+                      ? Expanded(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                for (var result in resultList)
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 15),
+                                    child: ResultList(caseInfo: result),
+                                  ),
+                              ],
+                            ),
                           ),
-                        ),
-                      )
-                    : const Text('...'),
-                // for (var caseinfo in resultList)
-                //   Padding(
-                //     padding: const EdgeInsets.only(bottom: 20),
-                //     child: ResultList(
-                //       caseInfo: caseinfo,
-                //     ),
-                //   ),
-              ],
+                        )
+                      : const Text('...'),
+                  // for (var caseinfo in resultList)
+                  //   Padding(
+                  //     padding: const EdgeInsets.only(bottom: 20),
+                  //     child: ResultList(
+                  //       caseInfo: caseinfo,
+                  //     ),
+                  //   ),
+                ],
+              ),
             ),
           );
         },
@@ -127,35 +134,43 @@ class ResultTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 315,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
-                  Text(
-                    '지난 검사 결과',
-                    style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 20),
+    return Padding(
+      padding: const EdgeInsets.only(left: 15, right: 15),
+      child: SizedBox(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              flex: 5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: const [
+                      Text(
+                        '지난 검사 결과',
+                        style: TextStyle(
+                            color: ColorStyles.themeLightBlue,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18),
+                      ),
+                      Text('를'),
+                    ],
                   ),
-                  Text('를'),
+                  const Text('확인해보세요')
                 ],
               ),
-              const Text('확인해보세요')
-            ],
-          ),
-          Image.asset(
-            'images/ResultImg.png',
-            height: 110,
-          )
-        ],
+            ),
+            Flexible(
+              flex: 5,
+              child: Image.asset(
+                'images/ResultImg.png',
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
