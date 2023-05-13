@@ -38,9 +38,10 @@ class _CategoryButtonState extends State<CategoryButton> {
       child: Text(
         widget.category,
         style: TextStyle(
+            fontWeight: FontWeight.bold,
             color: widget.productNum == widget.selectedNum
                 ? Colors.white
-                : ColorStyles.themeBlue),
+                : ColorStyles.themeLightBlue),
       ),
     );
   }

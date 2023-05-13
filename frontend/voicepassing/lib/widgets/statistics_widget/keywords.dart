@@ -16,13 +16,13 @@ class _KeywordsState extends State<Keywords> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        for (String keyword in widget.keywordList) ...[
+        for (Map keyword in widget.keywordList) ...[
           Text(
-            keyword,
+            keyword["keyword"],
             style: const TextStyle(
                 color: ColorStyles.themeLightBlue,
                 fontWeight: FontWeight.bold,
-                fontSize: 20),
+                fontSize: 16),
           ),
         ]
       ],
