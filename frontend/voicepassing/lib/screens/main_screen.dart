@@ -4,11 +4,13 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
+import 'package:voicepassing/services/notification_controller.dart';
 import 'package:voicepassing/services/platform_channel.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -68,6 +70,7 @@ class _MainScreenState extends State<MainScreen> {
     await Permission.phone.request();
     await Permission.storage.request();
     await Permission.manageExternalStorage.request();
+    await AwesomeNotifications().requestPermissionToSendNotifications();
 
     bool reqPermission = await requestPermission();
     if (reqPermission) {
@@ -93,19 +96,19 @@ class _MainScreenState extends State<MainScreen> {
       });
       // 통화 연결
       if (event == PhoneStateStatus.CALL_STARTED) {
-        // 크기 0인 알림 위젯 생성
-        if (!await FlutterOverlayWindow.isActive()) {
-          await FlutterOverlayWindow.showOverlay(
-            enableDrag: true,
-            flag: OverlayFlag.defaultFlag,
-            alignment: OverlayAlignment.center,
-            visibility: NotificationVisibility.visibilityPublic,
-            positionGravity: PositionGravity.auto,
-            height: 0,
-            width: 0,
-          );
-          FlutterOverlayWindow.shareData(phoneNumber);
-        }
+        // // 크기 0인 알림 위젯 생성
+        // if (!await FlutterOverlayWindow.isActive()) {
+        //   await FlutterOverlayWindow.showOverlay(
+        //     enableDrag: true,
+        //     flag: OverlayFlag.defaultFlag,
+        //     alignment: OverlayAlignment.center,
+        //     visibility: NotificationVisibility.visibilityPublic,
+        //     positionGravity: PositionGravity.auto,
+        //     height: 0,
+        //     width: 0,
+        //   );
+        //   FlutterOverlayWindow.shareData(phoneNumber);
+        // }
         // 웹소켓 연결
         _ws = WebSocketChannel.connect(
           Uri.parse('ws://k8a607.p.ssafy.io:8080/record'),
@@ -121,7 +124,7 @@ class _MainScreenState extends State<MainScreen> {
         transferVoice();
 
         // 검사 결과 수신
-        _ws.stream.listen((msg) {
+        _ws.stream.listen((msg) async {
           if (msg != null) {
             ReceiveMessageModel receivedResult =
                 ReceiveMessageModel.fromJson(jsonDecode(msg));
@@ -132,14 +135,31 @@ class _MainScreenState extends State<MainScreen> {
               if (receivedResult.isFinish == true) {
                 // 최종 결과는 무조건 수신 -> 안전, 주의, 위험??
                 if (receivedResult.result!.totalCategoryScore >= 0.0) {
+                  // 크기 0인 알림 위젯 생성
+                  if (!await FlutterOverlayWindow.isActive()) {
+                    await FlutterOverlayWindow.showOverlay(
+                      enableDrag: true,
+                      flag: OverlayFlag.defaultFlag,
+                      alignment: OverlayAlignment.center,
+                      visibility: NotificationVisibility.visibilityPublic,
+                      positionGravity: PositionGravity.auto,
+                      height: 0,
+                      width: 0,
+                    );
+                    FlutterOverlayWindow.shareData(phoneNumber);
+                  }
                   // 알림 위젯으로 데이터 전달
                   FlutterOverlayWindow.shareData(receivedResult);
+                  // NotificationController.cancelNotifications();
+                  // NotificationController.createNewNotification(receivedResult);
                 }
                 _ws.sink.close();
               } else {
                 if (receivedResult.result!.totalCategoryScore >= 0.5) {
                   // 알림 위젯으로 데이터 전달
-                  FlutterOverlayWindow.shareData(receivedResult);
+                  // FlutterOverlayWindow.shareData(receivedResult);
+                  NotificationController.cancelNotifications();
+                  NotificationController.createNewNotification(receivedResult);
                 }
               }
             }

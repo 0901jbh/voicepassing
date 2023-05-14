@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:voicepassing/routes.dart';
 import 'package:voicepassing/screens/main_screen.dart';
+import 'package:voicepassing/services/notification_controller.dart';
 
 import 'widgets/alarm_widget/alarm_widget.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 void main() async {
   await dotenv.load(fileName: 'assets/config/.env');
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationController.initializeLocalNotifications();
   runApp(
     const App(),
   );
