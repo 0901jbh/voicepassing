@@ -23,10 +23,7 @@ class _SearchScreenResultState extends State<SearchScreenResult> {
         builder: (BuildContext context) {
           return const Padding(
             padding: EdgeInsets.all(30.0),
-            child: Hero(
-              tag: 'searchBar',
-              child: SearchWidget(),
-            ),
+            child: SearchWidget(),
           );
         },
       ),

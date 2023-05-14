@@ -50,78 +50,78 @@ class ResultList extends StatelessWidget {
         color: backgroundColor,
         child: SizedBox(
           height: 90,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              //
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 20, top: 12, bottom: 12, right: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      DateFormat('yy.M.d')
-                          .format(DateTime.parse(caseInfo.date.toString())),
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w700),
-                    ),
-                    // Text(
-                    //   caseInfo.date.toString(),
-                    //   style: const TextStyle(fontWeight: FontWeight.w900),
-                    // ),
-                    Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          Text(
-                            state,
-                            style: const TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.w700),
-                          ),
-                          SizedBox(
-                            width: 150,
-                            child: Text(
-                              caseInfo.words != null
-                                  ? caseInfo.words!.join(',')
-                                  : '',
-                              overflow: TextOverflow.ellipsis,
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 20, top: 12, bottom: 12, right: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        DateFormat('yy.M.d')
+                            .format(DateTime.parse(caseInfo.date.toString())),
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w700),
+                      ),
+                      // Text(
+                      //   caseInfo.date.toString(),
+                      //   style: const TextStyle(fontWeight: FontWeight.w900),
+                      // ),
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Text(
+                              state,
                               style: const TextStyle(
-                                  color: ColorStyles.subDarkGray,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700),
+                                  fontSize: 24, fontWeight: FontWeight.w700),
                             ),
-                          ),
-                        ]),
-                  ],
+                            Expanded(
+                              child: Text(
+                                caseInfo.words != null
+                                    ? caseInfo.words!.join(',')
+                                    : '',
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    color: ColorStyles.subDarkGray,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                          ]),
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: SizedBox(
-                  width: 60,
-                  child: CircleProgressBar(
-                    foregroundColor: textColor,
-                    backgroundColor: Colors.transparent,
-                    // value/1 표시
-                    value: caseInfo.score!,
-                    child: Center(
-                      child: AnimatedCount(
-                        style: TextStyle(
-                            color: textColor,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20),
-                        fractionDigits: 0,
-                        count: caseInfo.score! * 100,
-                        unit: '',
-                        duration: const Duration(microseconds: 500),
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: SizedBox(
+                    width: 60,
+                    child: CircleProgressBar(
+                      foregroundColor: textColor,
+                      backgroundColor: Colors.transparent,
+                      // value/1 표시
+                      value: caseInfo.score!,
+                      child: Center(
+                        child: AnimatedCount(
+                          style: TextStyle(
+                              color: textColor,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20),
+                          fractionDigits: 0,
+                          count: caseInfo.score! * 100,
+                          unit: '',
+                          duration: const Duration(microseconds: 500),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              )
-            ],
+              ],
+            ),
           ),
         ),
       ),
