@@ -109,21 +109,23 @@ class NotificationController {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: -1, // -1 is replaced by a random number
-        channelKey: 'alerts',
+        channelKey: 'voicepassing',
         color: Colors.white,
         backgroundColor: resultData.result != null &&
-                resultData.result!.totalCategoryScore * 100 > 70
+                resultData.result!.totalCategoryScore * 100 > 80
             ? ColorStyles.themeRed
             : ColorStyles.themeYellow,
-        title: '⚠️현재 통화가 보이스피싱으로 의심됩니다',
+        title: resultData.result != null &&
+                resultData.result!.totalCategoryScore * 100 > 80
+            ? "<span style='color: #FF525E;'>⚠️보이스피싱 위험</span>"
+            : "<span style='color: #FFC041;'>⚠️보이스피싱 주의</span>",
         body: resultData.result != null &&
-                resultData.result!.totalCategoryScore * 100 > 70
+                resultData.result!.totalCategoryScore * 100 > 80
             ? "상대방이 <span style='color: #FF525E;'>${getKeywords().join(', ')}</span> 등의 단어를 사용하는 경우 보이스피싱의 가능성이 높으니 주의하세요"
             : "상대방이 <span style='color: #FFC041;'>${getKeywords().join(', ')}</span> 등의 단어를 사용하는 경우 보이스피싱의 가능성이 높으니 주의하세요",
         bigPicture:
             'https://storage.googleapis.com/cms-storage-bucket/d406c736e7c4c57f5f61.png',
-        largeIcon:
-            'https://storage.googleapis.com/cms-storage-bucket/0dbfcc7a59cd1cf16282.png',
+        // largeIcon: 'voicepassing_logo.png',
         //'asset://assets/images/balloons-in-sky.jpg',
         notificationLayout: NotificationLayout.BigText,
         payload: {'notificationId': '1234567890'},

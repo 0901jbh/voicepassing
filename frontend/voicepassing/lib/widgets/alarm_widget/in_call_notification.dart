@@ -42,7 +42,7 @@ class InCallNotification extends StatelessWidget {
           width: 320,
           decoration: BoxDecoration(
             color: resultData.result != null &&
-                    resultData.result!.totalCategoryScore * 100 > 70
+                    resultData.result!.totalCategoryScore * 100 > 80
                 ? ColorStyles.themeRed
                 : ColorStyles.themeYellow,
             shape: BoxShape.rectangle,
@@ -60,8 +60,8 @@ class InCallNotification extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Row(
-                      children: const [
+                    const Row(
+                      children: [
                         Image(
                           image: AssetImage('images/VoiceLogo.png'),
                           height: 22,
@@ -86,7 +86,7 @@ class InCallNotification extends StatelessWidget {
                         Text(
                           resultData.result != null &&
                                   resultData.result!.totalCategoryScore * 100 >
-                                      70
+                                      80
                               ? '위험'
                               : '주의',
                           style: const TextStyle(
@@ -113,7 +113,7 @@ class InCallNotification extends StatelessWidget {
                                                 resultData.result!
                                                             .totalCategoryScore *
                                                         100 >
-                                                    70
+                                                    80
                                             ? ColorStyles.subLightGray
                                             : ColorStyles.textBlack,
                                         fontSize: 14,

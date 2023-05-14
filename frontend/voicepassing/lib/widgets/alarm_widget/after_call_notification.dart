@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:intl/intl.dart';
 import 'package:voicepassing/models/receive_message_model.dart';
+import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/style/color_style.dart';
 import 'package:voicepassing/widgets/alarm_widget/in_call_notification.dart';
 
@@ -23,6 +24,18 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
   @override
   void initState() {
     super.initState();
+    getPhishingNumber();
+  }
+
+  late int phishingNumber = 0;
+
+  Future<void> getPhishingNumber() async {
+    var res = await ApiService.getPhoneNumber(widget.phoneNumber);
+    if (res is List) {
+      setState(() {
+        phishingNumber = res.length;
+      });
+    }
   }
 
   @override
@@ -35,7 +48,7 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-            color: widget.resultData.result!.totalCategoryScore >= 0.7
+            color: widget.resultData.result!.totalCategoryScore >= 0.6
                 ? ColorStyles.backgroundRed
                 : ColorStyles.backgroundYellow,
             shape: BoxShape.rectangle,
@@ -117,10 +130,10 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Text(
-                          '??건', // api 연결하기
-                          style: TextStyle(
+                          '$phishingNumber 건', // api 연결하기
+                          style: const TextStyle(
                             color: ColorStyles.textBlack,
                             fontSize: 24,
                             fontWeight: FontWeight.w700,
@@ -132,78 +145,78 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
                 ),
               ),
               const SizedBox(height: 6),
-              SizedBox(
-                width: 320,
-                height: 40,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        // 번호 차단 기능 연결
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.resolveWith((states) {
-                          if (states.contains(MaterialState.pressed)) {
-                            return Colors.white70;
-                          }
-                          return Colors.white;
-                        }),
-                        overlayColor: MaterialStateProperty.resolveWith(
-                            (states) => ColorStyles.themeRed.withOpacity(0.35)),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        fixedSize:
-                            MaterialStateProperty.all(const Size(153, 40)),
-                      ),
-                      child: const Text(
-                        '차단하기',
-                        style: TextStyle(
-                          color: ColorStyles.themeRed,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        // 검사 결과 상세 페이지로 연결
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.resolveWith((states) {
-                          if (states.contains(MaterialState.pressed)) {
-                            return Colors.white70;
-                          }
-                          return Colors.white;
-                        }),
-                        overlayColor: MaterialStateProperty.resolveWith(
-                            (states) =>
-                                ColorStyles.subLightGray.withOpacity(0.45)),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        fixedSize:
-                            MaterialStateProperty.all(const Size(153, 40)),
-                      ),
-                      child: const Text(
-                        '상세보기',
-                        style: TextStyle(
-                          color: ColorStyles.textBlack,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // SizedBox(
+              //   width: 320,
+              //   height: 40,
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       TextButton(
+              //         onPressed: () {
+              //           // 번호 차단 기능 연결
+              //         },
+              //         style: ButtonStyle(
+              //           backgroundColor:
+              //               MaterialStateProperty.resolveWith((states) {
+              //             if (states.contains(MaterialState.pressed)) {
+              //               return Colors.white70;
+              //             }
+              //             return Colors.white;
+              //           }),
+              //           overlayColor: MaterialStateProperty.resolveWith(
+              //               (states) => ColorStyles.themeRed.withOpacity(0.35)),
+              //           shape: MaterialStateProperty.all(
+              //             RoundedRectangleBorder(
+              //               borderRadius: BorderRadius.circular(12),
+              //             ),
+              //           ),
+              //           fixedSize:
+              //               MaterialStateProperty.all(const Size(153, 40)),
+              //         ),
+              //         child: const Text(
+              //           '차단하기',
+              //           style: TextStyle(
+              //             color: ColorStyles.themeRed,
+              //             fontSize: 15,
+              //             fontWeight: FontWeight.w700,
+              //           ),
+              //         ),
+              //       ),
+              //       TextButton(
+              //         onPressed: () {
+              //           // 검사 결과 상세 페이지로 연결
+              //         },
+              //         style: ButtonStyle(
+              //           backgroundColor:
+              //               MaterialStateProperty.resolveWith((states) {
+              //             if (states.contains(MaterialState.pressed)) {
+              //               return Colors.white70;
+              //             }
+              //             return Colors.white;
+              //           }),
+              //           overlayColor: MaterialStateProperty.resolveWith(
+              //               (states) =>
+              //                   ColorStyles.subLightGray.withOpacity(0.45)),
+              //           shape: MaterialStateProperty.all(
+              //             RoundedRectangleBorder(
+              //               borderRadius: BorderRadius.circular(12),
+              //             ),
+              //           ),
+              //           fixedSize:
+              //               MaterialStateProperty.all(const Size(153, 40)),
+              //         ),
+              //         child: const Text(
+              //           '상세보기',
+              //           style: TextStyle(
+              //             color: ColorStyles.textBlack,
+              //             fontSize: 15,
+              //             fontWeight: FontWeight.w700,
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),
