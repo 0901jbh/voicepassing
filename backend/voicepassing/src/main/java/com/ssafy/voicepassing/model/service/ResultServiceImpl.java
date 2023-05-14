@@ -71,7 +71,7 @@ public class ResultServiceImpl implements ResultService {
     public List<ResultDTO.Result> searchByPhoneNumber(String phoneNumber) {
         if(phoneNumber.trim().length() < 1) {
             return null;}
-        List<Result> resultsEntity = resultRepository.findAllByPhoneNumber(phoneNumber);
+        List<Result> resultsEntity = resultRepository.findAllByPhoneNumberAndCategoryNotLike(phoneNumber);
         List<ResultDTO.Result> resultList = new ArrayList<>(resultsEntity.size());
         resultsEntity.forEach(result ->{
             resultList.add(ResultDTO.Result.builder()
