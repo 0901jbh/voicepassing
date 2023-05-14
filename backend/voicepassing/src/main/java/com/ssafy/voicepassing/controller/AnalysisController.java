@@ -51,6 +51,10 @@ import java.util.Map;
 public class AnalysisController {
 
     private static final Logger logger = LoggerFactory.getLogger(AnalysisController.class);
+    
+    @Value("${SPRING_RECORD_TEMP_DIR}")
+	private String RECORD_PATH;
+    
     private final ResultService resultService;
 
     private final AnalysisService analysisService;
@@ -425,7 +429,7 @@ public class AnalysisController {
 //		String json = gson.toJson(myResult);
 //		AIResponseDTO.Response aiDTO = gson.fromJson(gson.toJson(myResult.get("result")),AIResponseDTO.Response.class);
 //		dataInput(aiDTO,"01012341234","dump");
-		File file = new File("D:\\voicepassing\\WebSocket\\text.txt");
+		File file = new File(RECORD_PATH+"/text.txt");
 		int cnt = 0;
         try {
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -434,7 +438,7 @@ public class AnalysisController {
                 while ((line = br.readLine()) != null) {
                 	System.out.println(line + " " + (cnt%4==3));
                 	AIResponseDTO.Request request = AIResponseDTO.Request.builder()
-                            .text(line)
+                            .text("명사 " + line)
                             .isFinish(cnt%15==14)
                             .sessionId("temp"+(cnt/15))
                             .build();
