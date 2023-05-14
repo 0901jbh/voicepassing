@@ -34,11 +34,7 @@ public class AnalysisServiceImpl implements AnalysisService{
     //@Value("${fastapi.url}")
     private String fastApiUrl;
 
-    public File mTF(MultipartFile mfile) throws IOException {
-        File file = new File(mfile.getOriginalFilename());
-        mfile.transferTo(file);
-        return file;
-    }
+
 
     //Clova : file -> text
     @Override
@@ -129,93 +125,10 @@ public class AnalysisServiceImpl implements AnalysisService{
 //
 //// HTTP 응답 받기
         AIResponseDTO.Response responseBody = responseEntity.getBody();
+        resultMap.put("status",responseEntity.getStatusCode());
         resultMap.put("result",responseBody);
 
         return resultMap;
     }
 
-    //front return test
-    @Override
-    public Map<String, Object> getResult(AIResponseDTO.Request rb) {
-        Map<String, Object> resultMap = new HashMap<>();
-
-        AIResponseDTO.Result r = AIResponseDTO.Result.builder()
-                .sentCategory(1)
-                .sentCategoryScore((float)2.3)
-                .sentKeyword("경찰")
-                .keywordScore((float)1.1)
-                .sentence("경찰청 수사반입니다")
-                .build();
-
-        AIResponseDTO.Result r2 = AIResponseDTO.Result.builder()
-                .sentCategory(1)
-                .sentCategoryScore((float)3.4)
-                .sentKeyword("수사반")
-                .keywordScore((float)1.11)
-                .sentence("경찰청 수사반입니다")
-                .build();
-
-        List<AIResponseDTO.Result> results = new ArrayList<>();
-        results.add(r);
-        results.add(r2);
-
-        AIResponseDTO.Response result = AIResponseDTO.Response.builder()
-                .totalCategory(1)
-                .totalCategoryScore(90)
-                .results(results)
-                .build();
-
-        System.out.println(result.getTotalCategory());
-        System.out.println(result.getTotalCategoryScore());
-
-        resultMap.put("result",result);
-
-        return resultMap;
-    }
-
-
-
-
-    @Override
-    public String uploadFile(MultipartFile file) throws IOException {
-        String filename = file.getOriginalFilename();
-        long fileSize = file.getSize();
-        String contentType = file.getContentType();
-        System.out.println("Received file: " + filename + ", size: " + fileSize + ", type: " + contentType);
-        // 파일 처리 로직 작성
-        // ...
-        //String result =  uploadFileAI(file);
-        return null;
-    }
-
-
-    public String uploadFileAI(MultipartFile multipartFile) throws IOException {
-        String filename = multipartFile.getOriginalFilename();
-        long fileSize = multipartFile.getSize();
-        String contentType = multipartFile.getContentType();
-        System.out.println("Received file: " + filename + ", size: " + fileSize + ", type: " + contentType);
-        // Save the file locally to a temporary directory
-        byte[] bytes = multipartFile.getBytes();
-        Path tempDir = Files.createTempDirectory("upload");
-        Path tempFile = Paths.get(tempDir.toString(), UUID.randomUUID().toString());
-        Files.write(tempFile, bytes);
-
-        // Create the request body
-        MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-        requestBody.add("file", new FileSystemResource(tempFile.toFile()));
-
-        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
-
-        // Send the request to the fastapi server
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.exchange(fastApiUrl, HttpMethod.POST, requestEntity, String.class);
-
-        // Delete the temporary file
-        Files.deleteIfExists(tempFile);
-
-        return response.getBody();
-    }
 }
