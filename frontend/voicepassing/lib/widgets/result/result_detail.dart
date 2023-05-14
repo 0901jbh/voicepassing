@@ -37,6 +37,7 @@ class ResultDetailList extends StatelessWidget {
         Radius.circular(15),
       ),
     );
+    double fontsize = 0.9;
     return Card(
       shape: roundedRectangleBorder,
       elevation: 0,
@@ -53,41 +54,49 @@ class ResultDetailList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text('해당 통화는',
+                  Text('해당 통화는',
                       style: TextStyle(
                           fontWeight: FontWeight.w700,
                           color: ColorStyles.textDarkGray,
-                          fontSize: 15)),
+                          fontSize: 15 * fontsize)),
                   Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
                     Text(
                       state == "정상 " ? '"정상"' : '"${category['type']}"',
                       style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 24 * fontsize,
                           fontWeight: FontWeight.w700,
                           color: textColor),
                     ),
-                    const Text('으로',
+                    Text('으로',
                         style: TextStyle(
                             fontWeight: FontWeight.w700,
                             color: ColorStyles.textDarkGray,
-                            fontSize: 15)),
+                            fontSize: 15 * fontsize)),
                   ]),
                   StyledText(
                       text: !crime ? '의심됩니다' : '판단됩니다',
                       style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           color: ColorStyles.textDarkGray,
-                          fontSize: 15)),
+                          fontSize: 15 * fontsize)),
                 ],
               ),
-              SizedBox(
-                width: 90,
-                child: CircleProgress(
-                  textColor: textColor,
-                  score: caseInfo.score!,
-                  state: state,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        child: CircleProgress(
+                          textColor: textColor,
+                          score: caseInfo.score!,
+                          state: state,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              )
+              ),
             ],
           ),
         ),
