@@ -60,8 +60,8 @@ class InCallNotification extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const Row(
-                      children: [
+                    Row(
+                      children: const [
                         Image(
                           image: AssetImage('images/VoiceLogo.png'),
                           height: 22,

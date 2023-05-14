@@ -322,7 +322,9 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed("/setting");
+            },
             icon: const Icon(
               Icons.settings,
               size: 24,
@@ -350,17 +352,17 @@ class _MainScreenState extends State<MainScreen> {
         child: Column(
           children: [
             const SizedBox(
-              height: 20,
+              height: 50,
             ),
             MainLogo(widget: widget),
             const SizedBox(
-              height: 30,
+              height: 70,
             ),
-            const SizedBox(
+            SizedBox(
               width: 315,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: const [
                   ImgButton(
                     title: '검사 결과',
                     imgName: 'ResultImg',
@@ -376,11 +378,11 @@ class _MainScreenState extends State<MainScreen> {
             const SizedBox(
               height: 10,
             ),
-            const SizedBox(
+            SizedBox(
               width: 315,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: const [
                   ImgButton(
                     title: '검색',
                     imgName: 'SearchImg',
@@ -393,6 +395,12 @@ class _MainScreenState extends State<MainScreen> {
                 ],
               ),
             ),
+            // GestureDetector(
+            //   onTap: () {
+            //     Navigator.of(context).pushNamed("/setting");
+            //   },
+            //   child: const Text("/setting"),
+            // )
           ],
         ),
       ),

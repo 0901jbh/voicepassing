@@ -39,77 +39,111 @@ class _ResultScreenDetailState extends State<ResultScreenDetail> {
           );
           return SingleChildScrollView(
             child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    '범죄 유형',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  ResultDetailList(
-                    caseInfo: widget.caseInfo,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text(
-                    '의심되는 주요 단어',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Card(
-                    color: ColorStyles.backgroundBlue,
-                    shape: roundedRectangleBorder,
-                    elevation: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: SizedBox(
-                        width: 300,
-                        child: Text(
-                          widget.caseInfo.words.toString(),
-                          style: const TextStyle(
-                              color: Colors.blue, fontWeight: FontWeight.w800),
-                        ),
-                      ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 29,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text(
-                    '주요 단어를 사용한 문장',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Card(
-                    shape: roundedRectangleBorder,
-                    elevation: 0,
-                    color: ColorStyles.background,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: SizedBox(
-                        width: 300,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            for (var sentence in widget.caseInfo.sentences!)
-                              Padding(
-                                  padding: const EdgeInsets.only(bottom: 10),
-                                  child: StyledText(
-                                    text: sentence.toString(),
-                                    tags: {
-                                      'b': StyledTextTag(
-                                          style: const TextStyle(
-                                              color: Colors.blue,
-                                              fontSize: 30,
-                                              fontWeight: FontWeight.w900))
-                                    },
-                                  )),
-                          ],
-                        ),
-                      ),
+                    const Text(
+                      '  범죄 유형',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                     ),
-                  ),
-                ],
+                    ResultDetailList(
+                      caseInfo: widget.caseInfo,
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    const Text(
+                      '  의심되는 주요 단어',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                    ),
+                    const SizedBox(
+                      height: 3,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: ColorStyles.backgroundBlue,
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Text(
+                                widget.caseInfo.words != null
+                                    ? widget.caseInfo.words!.join('  ')
+                                    : "",
+                                style: const TextStyle(
+                                    color: ColorStyles.themeLightBlue,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    const Text(
+                      '  주요 단어를 사용한 문장',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                    ),
+                    const SizedBox(height: 3),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Card(
+                            shape: roundedRectangleBorder,
+                            elevation: 0,
+                            color: ColorStyles.background,
+                            child: Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: SizedBox(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    for (var sentence
+                                        in widget.caseInfo.sentences!)
+                                      Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 30),
+                                          child: StyledText(
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                color: ColorStyles.textDarkGray,
+                                                fontSize: 15),
+                                            text: sentence.toString(),
+                                            tags: {
+                                              'b': StyledTextTag(
+                                                  style: const TextStyle(
+                                                      color: ColorStyles
+                                                          .themeLightBlue,
+                                                      fontSize: 24,
+                                                      fontWeight:
+                                                          FontWeight.w700))
+                                            },
+                                          )),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           );

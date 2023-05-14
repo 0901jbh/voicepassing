@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:voicepassing/style/color_style.dart';
 
 class ImgButton extends StatelessWidget {
   final String title;
@@ -13,7 +14,7 @@ class ImgButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         Navigator.of(context).pushNamed(routeName);
       },
@@ -21,7 +22,8 @@ class ImgButton extends StatelessWidget {
         height: 150,
         width: 150,
         decoration: BoxDecoration(
-            color: Colors.blue, borderRadius: BorderRadius.circular(15)),
+            color: ColorStyles.themeLightBlue,
+            borderRadius: BorderRadius.circular(15)),
         child: Column(children: [
           Padding(
             padding: const EdgeInsets.all(15),
