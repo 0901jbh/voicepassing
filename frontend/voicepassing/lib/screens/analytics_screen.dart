@@ -13,6 +13,7 @@ import 'dart:convert';
 import 'package:voicepassing/screens/result_screen_detail.dart';
 import 'package:voicepassing/screens/result_screen_detail_ok.dart';
 import 'package:voicepassing/style/color_style.dart';
+import 'package:unique_device_id/unique_device_id.dart';
 
 class AnalyticsScreen extends StatefulWidget {
   const AnalyticsScreen({super.key});
@@ -27,6 +28,18 @@ class _ResultScreenState extends State<AnalyticsScreen> {
   String result = "a";
   int counter = 0;
   bool isSend = false;
+  late String androidId;
+
+  @override
+  void initState() {
+    super.initState();
+    initializer();
+  }
+
+  void initializer() async {
+    androidId = await UniqueDeviceId.instance.getUniqueId() ?? '';
+  }
+
   Future<void> _openFilePicker() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null) {
@@ -43,6 +56,7 @@ class _ResultScreenState extends State<AnalyticsScreen> {
     final file = File(_filePath!);
     final formData = FormData.fromMap({
       'file': await MultipartFile.fromFile(file.path),
+      'androidId': androidId,
     });
     print("before response");
     final response = await Dio().post(
