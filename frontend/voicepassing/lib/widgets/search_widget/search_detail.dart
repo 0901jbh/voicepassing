@@ -166,28 +166,24 @@ class TopTitle extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Flexible(
-          flex: 5,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              StyledText(
-                text: '<b>$phoneNumber</b>의',
-                tags: {
-                  'b': StyledTextTag(
-                      style: const TextStyle(
-                          color: ColorStyles.themeRed,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600))
-                },
-              ),
-              const Text('보이스피싱 이력을'),
-              const Text('발견했습니다')
-            ],
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            StyledText(
+              text: '<b>$phoneNumber</b>의',
+              tags: {
+                'b': StyledTextTag(
+                    style: const TextStyle(
+                        color: ColorStyles.themeRed,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600))
+              },
+            ),
+            const Text('보이스피싱 이력을'),
+            const Text('발견했습니다')
+          ],
         ),
-        Flexible(
-          flex: 5,
+        Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset(
@@ -195,7 +191,7 @@ class TopTitle extends StatelessWidget {
               height: 100,
             ),
           ),
-        )
+        ),
       ],
     );
   }
