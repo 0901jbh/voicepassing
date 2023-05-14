@@ -17,14 +17,7 @@ class SettingHeadBar extends StatelessWidget implements PreferredSizeWidget {
           return IconButton(
             icon: const Icon(Icons.arrow_back_ios),
             onPressed: () {
-              navPage == null
-                  ? Navigator.pop(context)
-                  : Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => navPage!,
-                      ),
-                    );
+              Navigator.pop(context);
             },
           );
         }),

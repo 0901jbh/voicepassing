@@ -302,7 +302,9 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed("/setting");
+            },
             icon: const Icon(
               Icons.settings,
               size: 24,
@@ -373,12 +375,12 @@ class _MainScreenState extends State<MainScreen> {
                 ],
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushNamed("/setting");
-              },
-              child: const Text("/setting"),
-            )
+            // GestureDetector(
+            //   onTap: () {
+            //     Navigator.of(context).pushNamed("/setting");
+            //   },
+            //   child: const Text("/setting"),
+            // )
           ],
         ),
       ),
