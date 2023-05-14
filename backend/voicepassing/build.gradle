@@ -34,7 +34,9 @@ dependencies {
 
 	// socket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket:2.6.2'
-
+	
+	//commons-io
+	implementation 'commons-io:commons-io:2.11.0'
 	// lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
