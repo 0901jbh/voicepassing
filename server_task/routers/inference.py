@@ -21,7 +21,7 @@ softmax = torch.nn.Softmax(dim = 0)
 sentence_store = dict() # SentenceModel을 저장
 prob_store = dict() # 문장의 분류 결과 (float[4])를 저장.
 
-T = 36
+T = 2
 THRESHOLD = 0.6
 @router.post("", response_model = PhoneCallModel, status_code = 200)
 async def classify_sentence(input_model : ReferenceInputModel, response : Response):
@@ -68,7 +68,13 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
         return_tensors = "pt"
     )
 
-    output, _ = classifier(tokens)
+    output, attention = classifier(tokens)
+
+    # col = tokenizer.tokenize(text_splited[0])
+    # print(col)
+
+    # a = pd.DataFrame(data = torch.mean(attention[-1], dim = 1).squeeze().detach().numpy(), columns = ["cls"] + col + ["sep"])
+    # a.to_excel("attention.xlsx")
 
     # print(f"RAW : {output.squeeze()}")
 
@@ -194,14 +200,14 @@ async def test():
     else:
         label_probs = torch.nn.functional.softmax(output / T, dim = 1)
 
-    pd.DataFrame(data = output.detach().numpy()).to_csv("raw_output.csv")
+    # pd.DataFrame(data = output.detach().numpy()).to_csv("raw_output.csv")
 
     # 2. Bayesian Classification
     
     b_label_probs = pipeline.forward(text_splited)
     b_label_probs = torch.FloatTensor(b_label_probs)
 
-    pd.DataFrame(data = b_label_probs.detach().numpy()).to_csv("b_label_props.csv")
+    # pd.DataFrame(data = b_label_probs.detach().numpy()).to_csv("b_label_props.csv")
 
     # 3. get result and save
 
@@ -209,7 +215,7 @@ async def test():
     # print(f"NB : {torch.FloatTensor(b_label_probs)}")
 
     label_probs = (label_probs + b_label_probs) / 2
-    pd.DataFrame(data = label_probs.detach().numpy()).to_csv("label_props.csv")
+    # pd.DataFrame(data = label_probs.detach().numpy()).to_csv("label_props.csv")
 
     # print(f"TOTAL : {label_probs}")
     
@@ -238,7 +244,7 @@ async def test():
         temp_store.append([cur_label, label_probs[idx][cur_label].item(), word, abs(prob), text_splited[idx]])
 
     df = pd.DataFrame(data = temp_store, columns = ['sentCategory', 'sentCategoryScore', 'sentKeyword', 'keywordScore', 'sentence'])
-    df.to_csv('yh_result.csv', encoding="utf-8-sig")
+    # df.to_csv('yh_result.csv', encoding="utf-8-sig")
 
     return { "result" : [0.1, 0.2, 0.3, 0.4]}
 
