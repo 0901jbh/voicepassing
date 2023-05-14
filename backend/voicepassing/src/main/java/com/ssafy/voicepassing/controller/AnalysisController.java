@@ -66,34 +66,6 @@ public class AnalysisController {
     
     ClovaSpeechService.NestRequestEntity requestEntity = new ClovaSpeechService.NestRequestEntity();
 
-    @PostMapping("/file2text")
-    public ResponseEntity<?> reqFile(String sessionId, String filepath, boolean isFinish){
-        String result = null;
-
-        result = clovaSpeechClient.upload(new File(filepath), requestEntity);
-        int textIndex = result.lastIndexOf("\"text\":");
-        int commaIndex = result.indexOf(",", textIndex);
-        String txt = result.substring(textIndex + 8, commaIndex - 1);
-        logger.info("클로바 텍스트 변환 결과 : {}", txt);
-        Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = HttpStatus.OK;
-        if(result != null){
-            AIResponseDTO.Request request = AIResponseDTO.Request.builder()
-                    .text(txt)
-                    .isFinish(isFinish)
-                    .sessionId(sessionId)
-                    .build();
-            resultMap = analysisService.analysis(request);
-
-            return new ResponseEntity<Map<String,Object>>(resultMap,status);
-        }
-        return ResponseEntity.ok(result); //에러 처리 할 곳
-    }
-
-
-
-
-
     @PostMapping("/file")
     public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file,
                                               @RequestParam("androidId") String androidId
@@ -417,7 +389,7 @@ public class AnalysisController {
 
 
     @PostMapping("/file2text")
-    public ResponseEntity<?> reqFile(String sessionId, String filepath, boolean isFinish){
+    public ResponseEntity<?> fileToText(String sessionId, String filepath, boolean isFinish){
         String result = null;
 
         result = clovaSpeechClient.upload(new File(filepath), requestEntity);
