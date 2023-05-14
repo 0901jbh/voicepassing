@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:voicepassing/screens/request_permissions_screen.dart';
 
 class HeadBar extends StatelessWidget implements PreferredSizeWidget {
   final Text title;
@@ -32,8 +31,9 @@ class HeadBar extends StatelessWidget implements PreferredSizeWidget {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.of(context)
-                    .push(_customRoute(const RequestPermissionsScreen()));
+                Navigator.of(context).pushNamed("/setting");
+                // Navigator.of(context)
+                //     .push(_customRoute(const RequestPermissionsScreen()));
               },
               icon: const Icon(
                 Icons.settings,
