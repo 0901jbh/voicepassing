@@ -330,11 +330,11 @@ class _MainScreenState extends State<MainScreen> {
         child: Column(
           children: [
             const SizedBox(
-              height: 20,
+              height: 50,
             ),
             MainLogo(widget: widget),
             const SizedBox(
-              height: 30,
+              height: 70,
             ),
             SizedBox(
               width: 315,
@@ -373,6 +373,12 @@ class _MainScreenState extends State<MainScreen> {
                 ],
               ),
             ),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed("/setting");
+              },
+              child: const Text("/setting"),
+            )
           ],
         ),
       ),

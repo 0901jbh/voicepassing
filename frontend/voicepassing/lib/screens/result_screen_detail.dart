@@ -65,6 +65,9 @@ class _ResultScreenDetailState extends State<ResultScreenDetail> {
                       style:
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                     ),
+                    const SizedBox(
+                      height: 3,
+                    ),
                     Row(
                       children: [
                         Expanded(
@@ -81,7 +84,7 @@ class _ResultScreenDetailState extends State<ResultScreenDetail> {
                                 style: const TextStyle(
                                     color: ColorStyles.themeLightBlue,
                                     fontWeight: FontWeight.w700,
-                                    fontSize: 20),
+                                    fontSize: 16),
                               ),
                             ),
                           ),
@@ -96,6 +99,7 @@ class _ResultScreenDetailState extends State<ResultScreenDetail> {
                       style:
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                     ),
+                    const SizedBox(height: 3),
                     Row(
                       children: [
                         Expanded(
@@ -123,7 +127,8 @@ class _ResultScreenDetailState extends State<ResultScreenDetail> {
                                             tags: {
                                               'b': StyledTextTag(
                                                   style: const TextStyle(
-                                                      color: Colors.blue,
+                                                      color: ColorStyles
+                                                          .themeLightBlue,
                                                       fontSize: 24,
                                                       fontWeight:
                                                           FontWeight.w700))

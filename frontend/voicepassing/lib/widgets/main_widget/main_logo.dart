@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:styled_text/styled_text.dart';
 import 'package:voicepassing/screens/main_screen.dart';
 import 'package:voicepassing/services/api_service.dart';
+import 'package:voicepassing/style/color_style.dart';
 
 class MainLogo extends StatelessWidget {
   final Future caseNum = ApiService.getCaseNum();
@@ -31,23 +32,37 @@ class MainLogo extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           StyledText(
-                            text: '오늘 <b>보이스패싱</b>은',
-                            tags: {
-                              'b': StyledTextTag(
-                                  style: const TextStyle(color: Colors.blue))
-                            },
-                          ),
-                          StyledText(
-                            text: '<b>${snapshot.data['resultNum']}건</b>을',
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
+                            text: '<b>보이스패싱</b>은',
                             tags: {
                               'b': StyledTextTag(
                                   style: const TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.w800,
-                                      fontSize: 30))
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorStyles.themeLightBlue))
                             },
                           ),
-                          const Text('잡았어요')
+                          StyledText(
+                            style: const TextStyle(fontSize: 18),
+                            text: '<b>모두 ${snapshot.data['resultNum']}건</b>을',
+                            tags: {
+                              'b': StyledTextTag(
+                                  style: const TextStyle(
+                                      color: ColorStyles.themeBlue,
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 24))
+                            },
+                          ),
+                          const SizedBox(height: 5),
+                          const Text(
+                            '잡았어요',
+                            style: TextStyle(
+                              fontSize: 18,
+                              // fontWeight: FontWeight.bold,
+                            ),
+                          )
                         ],
                       ),
                     );
