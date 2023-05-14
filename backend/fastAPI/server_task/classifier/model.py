@@ -9,6 +9,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from lime.lime_text import LimeTextExplainer
 import pandas as pd
+import json
 from kss import split_morphemes
 
 class VoicePassingTokenizer():
@@ -96,10 +97,13 @@ class bayesianClassifierPipeLine():
         # with open("./classifier/nb4.pickle", "wb") as f:
         #     pickle.dump(nb, f)
 
-        with open("./classifier/vectorizer4.pickle", "rb") as f:
+        with open("./classifier/assets/vectorizer4.pickle", "rb") as f:
             self.vectorizer = pickle.load(f)
+        
+        with open("./classifier/assets/word_weights.json", "r", encoding = "utf-8-sig") as f:
+            self.word_weights = json.load(f)
 
-        with open("./classifier/nb4.pickle", "rb") as f:
+        with open("./classifier/assets/nb4.pickle", "rb") as f:
             self.bayesian_classifier = pickle.load(f)
 
         self.pipe_line = make_pipeline(self.vectorizer, self.bayesian_classifier)
@@ -203,20 +207,33 @@ class bayesianClassifierPipeLine():
         all_cases = [final_tokens.copy() for _ in range(len(noun_locs))]
         all_texts = []
 
+        nouns = []
+
         for idx, row in enumerate(all_cases):
             row[noun_locs[idx]] = ""
+            nouns.append(final_tokens[noun_locs[idx]])
             all_texts.append("".join(row))
+            # print(final_tokens[noun_locs[idx]])
             # print(row)
 
         del all_cases
 
         prob_result = self.pipe_line.predict_proba(all_texts + [string])
         # print(f"prob result : {prob_result}")
-        dif = prob_result - prob_result[-1]
+        dif = (prob_result - prob_result[-1])[:-1, label]
+        weights = np.array([self.word_weights.get(noun, 1) for noun in nouns])
 
-        arg_idx = dif[:-1, label].argmin()
+        # print(f"dif : {dif}")
+        # print(f"nouns : {nouns}")
+        # print(f"weights : {weights}")
 
-        return final_tokens[noun_locs[arg_idx]], dif[arg_idx, label]
+        dif_weighted = dif * weights
+
+        # print(f"dif_weighted : {dif_weighted}")
+
+        arg_idx = dif_weighted.argmin()
+
+        return final_tokens[noun_locs[arg_idx]], dif_weighted[arg_idx]
         
 
 model = VoicePassingModel()
