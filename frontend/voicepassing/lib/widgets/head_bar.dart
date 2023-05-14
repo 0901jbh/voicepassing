@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:voicepassing/screens/request_permissions_screen.dart';
 
 class HeadBar extends StatelessWidget implements PreferredSizeWidget {
   final Text title;
@@ -11,38 +10,42 @@ class HeadBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      leading: Builder(builder: (BuildContext context) {
-        return IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            navPage == null
-                ? Navigator.pop(context)
-                : Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => navPage!,
-                    ),
-                  );
-          },
-        );
-      }),
-      actions: [
-        IconButton(
+    return Hero(
+      tag: 'headBar',
+      child: AppBar(
+        leading: Builder(builder: (BuildContext context) {
+          return IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
             onPressed: () {
-              Navigator.of(context)
-                  .push(_customRoute(const RequestPermissionsScreen()));
+              navPage == null
+                  ? Navigator.pop(context)
+                  : Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => navPage!,
+                      ),
+                    );
             },
-            icon: const Icon(
-              Icons.settings,
-              size: 24,
-            ))
-      ],
-      centerTitle: true,
-      elevation: 0.0,
-      backgroundColor: Colors.white.withOpacity(1),
-      foregroundColor: Colors.black,
-      title: title,
+          );
+        }),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed("/setting");
+                // Navigator.of(context)
+                //     .push(_customRoute(const RequestPermissionsScreen()));
+              },
+              icon: const Icon(
+                Icons.settings,
+                size: 24,
+              ))
+        ],
+        centerTitle: true,
+        elevation: 0.0,
+        backgroundColor: Colors.white.withOpacity(1),
+        foregroundColor: Colors.black,
+        title: title,
+      ),
     );
   }
 

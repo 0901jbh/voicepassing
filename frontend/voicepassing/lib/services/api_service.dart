@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:voicepassing/models/keyword_model.dart';
@@ -62,19 +61,25 @@ class ApiService {
     final url = Uri.parse('$baseUrl/keyword');
     final response = await http.get(url);
     if (response.statusCode == 200) {
-      return KeywordModel.fromJson(json.decode(response.body));
+      return KeywordModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
       throw Exception('failed to load data');
     }
   }
 
-  static Future getCategoryNum() async {
+  static Future<List<double>> getCategoryNum() async {
+    List<double> returnData = [0, 0, 0];
     final url = Uri.parse('$baseUrl/results/category');
     final response = await http.get(url);
     if (response.statusCode == 204) {
-      return [];
+      return [0, 0, 0];
     } else if (response.statusCode == 200) {
-      debugPrint(response.toString());
+      var json = List<int>.from(jsonDecode(response.body)['categoryNum']);
+      returnData[0] = json[1].toDouble();
+      returnData[1] = json[2].toDouble();
+      returnData[2] = json[3].toDouble();
+      return returnData;
     }
+    throw Error();
   }
 }

@@ -60,7 +60,7 @@ class ResultDetailList extends StatelessWidget {
                           fontSize: 15)),
                   Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
                     Text(
-                      '"${category['type']}"',
+                      state == "정상 " ? '"정상"' : '"${category['type']}"',
                       style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w700,
