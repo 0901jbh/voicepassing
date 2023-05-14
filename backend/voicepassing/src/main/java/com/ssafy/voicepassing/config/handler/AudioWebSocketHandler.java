@@ -167,7 +167,7 @@ public class AudioWebSocketHandler extends AbstractWebSocketHandler {
 			
 		session.sendMessage(textMessage);
 		
-		if(isFinish) { //result처리
+		if(isFinish && aiDTO.getTotalCategoryScore()>=0.6f) { //result처리 , 60%이상인 데이터만 우선 insert
 			String androidId = (String) session.getAttributes().get("androidId");
 			String phoneNumber = (String) session.getAttributes().get("phoneNumber");
 			logger.info("안드로이드 : {}  폰번호 : {}  로그기록을 시작합니다.",androidId,phoneNumber );

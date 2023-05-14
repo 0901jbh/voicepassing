@@ -6,18 +6,29 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.ssafy.voicepassing.model.dto.*;
+import com.ssafy.voicepassing.model.entity.Keyword;
+import com.ssafy.voicepassing.model.entity.KeywordSentence;
 import com.ssafy.voicepassing.model.entity.ResultDetail;
 import com.ssafy.voicepassing.model.service.*;
+import com.ssafy.voicepassing.util.RestAPIUtil;
+
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.socket.TextMessage;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +36,7 @@ import java.io.IOException;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
@@ -403,4 +415,101 @@ public class AnalysisController {
 //    }
 
 
+
+    @PostMapping("/file2text")
+    public ResponseEntity<?> reqFile(String sessionId, String filepath, boolean isFinish){
+        String result = null;
+
+        result = clovaSpeechClient.upload(new File(filepath), requestEntity);
+        int textIndex = result.lastIndexOf("\"text\":");
+        int commaIndex = result.indexOf(",", textIndex);
+        String txt = result.substring(textIndex + 8, commaIndex - 1);
+        logger.info("클로바 텍스트 변환 결과 : {}", txt);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+        if(result != null){
+            AIResponseDTO.Request request = AIResponseDTO.Request.builder()
+                    .text(txt)
+                    .isFinish(isFinish)
+                    .sessionId(sessionId)
+                    .build();
+            resultMap = analysisService.analysis(request);
+            return new ResponseEntity<Map<String,Object>>(resultMap,status);
+        }
+        return ResponseEntity.ok(result); //에러 처리 할 곳
+    }
+    
+    @GetMapping("/directAI")
+    public ResponseEntity<?> directAI() throws Exception{
+    	RestAPIUtil restApiUtil = new RestAPIUtil();
+    	AIResponseDTO.Request request = AIResponseDTO.Request.builder()
+                .text("네 다름이 아니고 본인과 관련된 명의도용 사건 때문에 네 가지 사실 확인차 연락을 드렸습니다.")
+                .isFinish(true)
+                .sessionId("temp")
+                .build();
+		Map<String, Object> myResult = analysisService.analysis(request);
+		System.out.println("테스트 : " + myResult);
+		
+		Gson gson = new Gson();
+		String json = gson.toJson(myResult);
+		AIResponseDTO.Response aiDTO = gson.fromJson(gson.toJson(myResult.get("result")),AIResponseDTO.Response.class);
+		dataInput(aiDTO,"01012341234","dump");
+		File file = new File("D:\\voicepassing\\WebSocket\\text.txt");
+		 
+        try {
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    System.out.println(line);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+		return new ResponseEntity<AIResponseDTO.Response>(aiDTO,HttpStatus.OK); //에러 처리 할 곳
+    }
+    
+    public void dataInput(AIResponseDTO.Response rep,String phoneNumber,String androidId) {
+		System.out.println("데이터베이스에 작업 시작");
+        ResultDTO.Result res = ResultDTO.Result.builder()
+                .androidId(androidId)
+                .phoneNumber(phoneNumber)
+                .category(rep.getTotalCategory())
+                .risk(rep.getTotalCategoryScore())
+                .build();
+
+        int rId = resultService.addResult(res);
+        System.out.println(rId);
+
+
+        List<AIResponseDTO.Result> resultList = rep.getResults();
+
+        for (AIResponseDTO.Result r : resultList) {
+        	KeywordDTO.Keyword keywordDTO = KeywordDTO.Keyword.builder()
+                    .keyword(r.getSentKeyword())
+                    .category(r.getSentCategory())
+                    .count(0)
+                    .build();
+
+            Keyword k = keywordService.addKeywordReturn(keywordDTO);
+        	
+            KeywordSentenceDTO.KeywordSentence ksDTO = KeywordSentenceDTO.KeywordSentence
+                    .builder()
+                    .score(r.getKeywordScore())
+                    .keyword(k.getKeyword())
+                    .sentence(r.getSentence())
+                    .category(k.getCategory())
+                    .build();
+            KeywordSentence ksb = keywordSentenceService.addKeywordSentenceReturn(ksDTO);
+            
+            ResultDetailDTO.ResultDetail rdDTO = ResultDetailDTO.ResultDetail.
+                    builder()
+                    .resultId(rId)
+                    .sentence(ksb.getSentence())
+                    .build();
+            int rgd = resultDetailService.addResultDetail(rdDTO);
+        }
+
+    
+	}
 }
