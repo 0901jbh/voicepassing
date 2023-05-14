@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:vibration/vibration.dart';
@@ -35,6 +37,7 @@ class _AlarmWidgetState extends State<AlarmWidget> {
   void initState() {
     super.initState();
     FlutterOverlayWindow.overlayListener.listen((msg) {
+      inspect(msg);
       if (msg['phoneNumber'] != null) {
         setState(() {
           phoneNumber = msg['phoneNumber'];

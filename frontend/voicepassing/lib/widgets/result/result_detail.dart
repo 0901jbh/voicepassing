@@ -75,7 +75,7 @@ class ResultDetailList extends StatelessWidget {
                   ]),
                   StyledText(
                       text: !crime ? '의심됩니다' : '판단됩니다',
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontWeight: FontWeight.w700,
                           color: ColorStyles.textDarkGray,
                           fontSize: 15 * fontsize)),
