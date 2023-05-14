@@ -413,32 +413,50 @@ public class AnalysisController {
     
     @GetMapping("/directAI")
     public ResponseEntity<?> directAI() throws Exception{
-    	RestAPIUtil restApiUtil = new RestAPIUtil();
-    	AIResponseDTO.Request request = AIResponseDTO.Request.builder()
-                .text("네 다름이 아니고 본인과 관련된 명의도용 사건 때문에 네 가지 사실 확인차 연락을 드렸습니다.")
-                .isFinish(true)
-                .sessionId("temp")
-                .build();
-		Map<String, Object> myResult = analysisService.analysis(request);
-		System.out.println("테스트 : " + myResult);
-		
-		Gson gson = new Gson();
-		String json = gson.toJson(myResult);
-		AIResponseDTO.Response aiDTO = gson.fromJson(gson.toJson(myResult.get("result")),AIResponseDTO.Response.class);
-		dataInput(aiDTO,"01012341234","dump");
+//    	AIResponseDTO.Request request = AIResponseDTO.Request.builder()
+//                .text("네 다름이 아니고 본인과 관련된 명의도용 사건 때문에 네 가지 사실 확인차 연락을 드렸습니다.")
+//                .isFinish(true)
+//                .sessionId("temp")
+//                .build();
+//		Map<String, Object> myResult = analysisService.analysis(request);
+//		System.out.println("테스트 : " + myResult);
+//		
+//		Gson gson = new Gson();
+//		String json = gson.toJson(myResult);
+//		AIResponseDTO.Response aiDTO = gson.fromJson(gson.toJson(myResult.get("result")),AIResponseDTO.Response.class);
+//		dataInput(aiDTO,"01012341234","dump");
 		File file = new File("D:\\voicepassing\\WebSocket\\text.txt");
-		 
+		int cnt = 0;
         try {
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                 String line;
+                
                 while ((line = br.readLine()) != null) {
-                    System.out.println(line);
+                	System.out.println(line + " " + (cnt%4==3));
+                	AIResponseDTO.Request request = AIResponseDTO.Request.builder()
+                            .text(line)
+                            .isFinish(cnt%15==14)
+                            .sessionId("temp"+(cnt/15))
+                            .build();
+            		Map<String, Object> myResult = analysisService.analysis(request);
+            		System.out.println("테스트 : " + myResult);
+            		
+            		Gson gson = new Gson();
+            		String json = gson.toJson(myResult);
+            		AIResponseDTO.Response aiDTO = gson.fromJson(gson.toJson(myResult.get("result")),AIResponseDTO.Response.class);
+            		System.out.println(aiDTO);
+            		if(cnt%4==3 && aiDTO.getTotalCategory()!=0) {
+            			dataInput(aiDTO,"0101111"+String.format("%04d",(cnt/15)),"temp"+(cnt/15));
+            		}
+            		
+                 	
+            		cnt++;
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-		return new ResponseEntity<AIResponseDTO.Response>(aiDTO,HttpStatus.OK); //에러 처리 할 곳
+		return new ResponseEntity<String>("finish",HttpStatus.OK); //에러 처리 할 곳
     }
     
     public void dataInput(AIResponseDTO.Response rep,String phoneNumber,String androidId) {
