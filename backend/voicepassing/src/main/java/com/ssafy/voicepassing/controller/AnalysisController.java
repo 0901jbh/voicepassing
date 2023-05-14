@@ -377,7 +377,7 @@ public class AnalysisController {
         return ResponseEntity.ok(result); //에러 처리 할 곳
     }
     
-    @PostMapping("/directAI")
+    @GetMapping("/directAI")
     public ResponseEntity<?> directAI() throws Exception{
     	RestAPIUtil restApiUtil = new RestAPIUtil();
     	AIResponseDTO.Request request = AIResponseDTO.Request.builder()
