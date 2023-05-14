@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface ResultRepository extends JpaRepository<Result,Integer> {
     List<Result> findAllByAndroidId(String androidId);
-    List<Result> findAllByPhoneNumber(String phoneNumber);
+    List<Result> findAllByPhoneNumberAndCategoryNotLike(String phoneNumber, int Category);
     List<Result> findByCreatedTimeBetween(LocalDateTime fromTime, LocalDateTime toTime);
 }
