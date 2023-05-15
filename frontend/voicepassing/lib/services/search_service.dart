@@ -53,6 +53,9 @@ class _SearchWidgetState extends State<SearchWidget> {
     bool showSuffixIcon = textValue.isNotEmpty;
     return Column(
       children: [
+        const SizedBox(
+          height: 20,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
