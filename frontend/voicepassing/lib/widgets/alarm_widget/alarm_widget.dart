@@ -5,6 +5,7 @@ import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:vibration/vibration.dart';
 
 import 'package:voicepassing/models/receive_message_model.dart';
+import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/widgets/alarm_widget/after_call_notification.dart';
 import 'package:voicepassing/widgets/alarm_widget/in_call_notification.dart';
 
@@ -32,16 +33,18 @@ class _AlarmWidgetState extends State<AlarmWidget> {
     isFinish: false,
   );
   String phoneNumber = '';
+  int phishingNumber = 0;
 
   @override
   void initState() {
     super.initState();
-    FlutterOverlayWindow.overlayListener.listen((msg) {
+    FlutterOverlayWindow.overlayListener.listen((msg) async {
       inspect(msg);
       if (msg['phoneNumber'] != null) {
         setState(() {
           phoneNumber = msg['phoneNumber'];
         });
+        phishingNumber = await ApiService.getPhoneNumber(phoneNumber);
       }
       if (msg['result'] != null) {
         setState(() {
@@ -63,6 +66,7 @@ class _AlarmWidgetState extends State<AlarmWidget> {
         ? AfterCallNotification(
             resultData: resultData,
             phoneNumber: phoneNumber,
+            phishingNumber: phishingNumber,
           )
         : InCallNotification(resultData: resultData);
   }

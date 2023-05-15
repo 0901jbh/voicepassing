@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:phone_state/phone_state.dart';
 import 'package:unique_device_id/unique_device_id.dart';
@@ -32,18 +31,15 @@ void setStream() async {
   });
 
   PhoneState.phoneStateStream.listen((event) async {
-    debugPrint('sdaf');
     if (event != null) {
       phoneStatus = event;
     }
     // 통화 연결
     if (event == PhoneStateStatus.CALL_STARTED) {
       // 웹소켓 연결
-      debugPrint('@');
       ws = WebSocketChannel.connect(
         Uri.parse('ws://k8a607.p.ssafy.io:8080/record'),
       );
-      debugPrint('#');
       // 시작 메세지로 기기 식별 번호(SSAID) 전달
       var startMessage = SendMessageModel(
         state: 0,
@@ -65,7 +61,6 @@ void setStream() async {
 
           //통화 종료
           if (phoneStatus == PhoneStateStatus.CALL_ENDED) {
-            debugPrint('END END END END END');
             // 타이머 종료
             timer.cancel();
             // 덜 전달된 마지막 오프셋까지 보내기
@@ -98,7 +93,6 @@ void setStream() async {
           inspect(receivedResult);
           if (receivedResult.isFinish == true) {
             ws.sink.close();
-            debugPrint('${receivedResult.isFinish}');
             if (receivedResult.result != null &&
                 receivedResult.result!.results != null) {
               if (receivedResult.result!.totalCategoryScore >= 0.6) {
@@ -112,7 +106,12 @@ void setStream() async {
                     height: 0,
                     width: 0,
                   );
-                  FlutterOverlayWindow.shareData(phoneNumber);
+                  SendMessageModel callInfo = SendMessageModel(
+                    state: 1,
+                    androidId: androidId,
+                    phoneNumber: phoneNumber,
+                  );
+                  FlutterOverlayWindow.shareData(callInfo);
                 }
                 // 알림 위젯으로 데이터 전달
                 FlutterOverlayWindow.shareData(receivedResult);
