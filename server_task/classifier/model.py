@@ -172,14 +172,14 @@ class bayesianClassifierPipeLine():
                 final_tokens.append(token)
                 pre_morph = morph
 
-                if morph in {"NNG", "NNP"}:
+                if morph in {"NNG", "NNP", "NP"}:
                     noun_locs.append(len(final_tokens)-1)
                 continue
 
             # final_tokens가 비어있지 않을 때
-            if morph in {"NNG", "NNP"}: # 이번 토큰이 명사일 때
+            if morph in {"NNG", "NNP", "NP"}: # 이번 토큰이 명사일 때
 
-                if pre_morph in {"NNG", "NNP"}: # 이전 토큰도 명사일 때
+                if pre_morph in {"NNG", "NNP", "NP"}: # 이전 토큰도 명사일 때
                     last_token = final_tokens.pop()
                     final_tokens.append(last_token + token)
 
@@ -231,9 +231,12 @@ class bayesianClassifierPipeLine():
 
         # print(f"dif_weighted : {dif_weighted}")
 
-        arg_idx = dif_weighted.argmin()
-
-        return final_tokens[noun_locs[arg_idx]], dif_weighted[arg_idx]
+        if dif_weighted:
+            arg_idx = dif_weighted.argmin()
+            return final_tokens[noun_locs[arg_idx]], dif_weighted[arg_idx]
+        
+        else:
+            return None, None
         
 
 model = VoicePassingModel()

@@ -93,12 +93,12 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
 
     # 3. get result and save
 
-    print(f"BERT : {label_probs}")
-    print(f"NB : {torch.FloatTensor(b_label_probs)}")
+    # print(f"BERT : {label_probs}")
+    # print(f"NB : {torch.FloatTensor(b_label_probs)}")
 
     label_probs = label_probs*BERT_WEIGHT + b_label_probs*NB_WEIGHT
 
-    print(f"TOTAL : {label_probs}")
+    # print(f"TOTAL : {label_probs}")
     
     label = torch.argmax(label_probs, dim = 1)
     # print(f"LABEL : {label}")        
@@ -124,15 +124,16 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
 
         word, prob = pipeline.extract_word_and_probs(one_sentence, cur_label)
 
-        sentence_model = SentenceModel(
-            sentCategory = cur_label,
-            sentCategoryScore = label_probs[idx][cur_label].item(),
-            sentKeyword = word,
-            keywordScore = abs(prob),
-            sentence = text_splited[idx]
-        )
+        if word is not None:
+            sentence_model = SentenceModel(
+                sentCategory = cur_label,
+                sentCategoryScore = label_probs[idx][cur_label].item(),
+                sentKeyword = word,
+                keywordScore = abs(prob),
+                sentence = text_splited[idx]
+            )
 
-        temp_sentence_store.append(sentence_model.dict())
+            temp_sentence_store.append(sentence_model.dict())
 
     prob_store_value = prob_store.get(session_id)
     sentence_store_value = sentence_store.get(session_id)
@@ -157,7 +158,7 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
             "results" : temp_sentence_store
         }
 
-        if call_label == 0:
+        if call_label == 0 or not temp_sentence_store:
             response.status_code = 201
 
     else: # 끝났을 경우
@@ -170,7 +171,7 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
             "results" : sentence_store[session_id]
         }
 
-        if call_label == 0:
+        if call_label == 0 or not temp_sentence_store:
             response.status_code = 201
 
         del sentence_store[session_id]
