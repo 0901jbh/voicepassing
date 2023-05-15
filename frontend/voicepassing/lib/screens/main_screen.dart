@@ -459,11 +459,11 @@ class _MainScreenState extends State<MainScreen> {
                         const SizedBox(
                           height: 70,
                         ),
-                        const SizedBox(
+                        SizedBox(
                           width: 315,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: const [
                               ImgButton(
                                 title: '검사 결과',
                                 imgName: 'ResultImg',
@@ -479,11 +479,11 @@ class _MainScreenState extends State<MainScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-                        const SizedBox(
+                        SizedBox(
                           width: 315,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: const [
                               ImgButton(
                                 title: '검색',
                                 imgName: 'SearchImg',

@@ -41,10 +41,10 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
           padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
           child: Column(
             children: [
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
-                children: [
+                children: const [
                   Text(
                     '약관 및 개인정보 처리 동의',
                     style: TextStyle(
@@ -59,9 +59,9 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
               ),
               Expanded(
                 child: Container(
-                  child: const SingleChildScrollView(
+                  child: SingleChildScrollView(
                     child: Column(
-                      children: [
+                      children: const [
                         Text.rich(
                           TextSpan(
                             style: TextStyle(
