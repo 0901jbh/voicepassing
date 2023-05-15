@@ -1,14 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
+// import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
 import 'package:styled_text/styled_text.dart';
-import 'package:voicepassing/services/notification_controller.dart';
 import 'package:voicepassing/services/set_stream.dart';
 import 'package:voicepassing/style/color_style.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -44,10 +43,11 @@ class _MainScreenState extends State<MainScreen> {
   Future<bool> checkPermissions() async {
     debugPrint('${await Permission.phone.isGranted}');
     debugPrint('${await Permission.manageExternalStorage.isGranted}');
-    debugPrint('${await AwesomeNotifications().isNotificationAllowed()}');
+    // debugPrint('${await AwesomeNotifications().isNotificationAllowed()}');
     if (await Permission.phone.isGranted &&
-        await Permission.manageExternalStorage.isGranted &&
-        await AwesomeNotifications().isNotificationAllowed()) {
+            await Permission.manageExternalStorage.isGranted
+        // && await AwesomeNotifications().isNotificationAllowed()
+        ) {
       return true;
     } else {
       return false;
@@ -75,8 +75,8 @@ class _MainScreenState extends State<MainScreen> {
       debugPrint('메서드 수신 ***************');
       // List<ResultModel> resultList =
       //     await ApiService.getRecentResult(_androidId);
-      NotificationController.createNewNotification(
-          ReceiveMessageModel(result: null, isFinish: true));
+      // NotificationController.createNewNotification(
+      //     ReceiveMessageModel(result: null, isFinish: true));
       // Navigate to the SecondPage when a message is received from the AlarmWidget
       Navigator.of(context).pushNamed('/result');
     }
@@ -251,8 +251,8 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   isFinish: count == 1 ? true : false,
                 );
-                NotificationController.cancelNotifications();
-                NotificationController.createNewNotification(data);
+                // NotificationController.cancelNotifications();
+                // NotificationController.createNewNotification(data);
               },
               child: const Text('푸시알림테스트'),
             ),
