@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
 import 'package:voicepassing/services/notification_controller.dart';
@@ -54,6 +56,28 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     initializer();
+    if (granted) {
+      setStream();
+    } else {
+      // 권한 동의 안 했을 시 페이지 리다이렉트
+      Future(() {
+        Navigator.of(context).pushNamed('/permission');
+      });
+    }
+    const MethodChannel('com.example.voicepassing/navigation')
+        .setMethodCallHandler(handleNavigation);
+  }
+
+  Future<dynamic> handleNavigation(MethodCall methodCall) async {
+    if (methodCall.method == 'navigateToDetailPage') {
+      debugPrint('메서드 수신 ***************');
+      // List<ResultModel> resultList =
+      //     await ApiService.getRecentResult(_androidId);
+      NotificationController.createNewNotification(
+          ReceiveMessageModel(result: null, isFinish: true));
+      // Navigate to the SecondPage when a message is received from the AlarmWidget
+      Navigator.of(context).pushNamed('/result');
+    }
   }
 
   void initializer() async {
@@ -65,14 +89,16 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {});
     debugPrint('$granted');
 
-    if (granted) {
-      setStream();
-      // PlatformChannel().callStream().listen((event) {
-      //   setState(() {
-      //     phoneNumber = event;
-      //   });
-      // });
-    }
+    // if (granted) {
+    //   setStream();
+    //   // PlatformChannel().callStream().listen((event) {
+    //   //   setState(() {
+    //   //     phoneNumber = event;
+    //   //   });
+    //   // });
+    // } else {
+    //   Navigator.of(context).pushNamed('/permission');
+    // }
   }
 
   // 통화 상태 감지
@@ -228,81 +254,81 @@ class _MainScreenState extends State<MainScreen> {
             },
             child: const Text('푸시알림테스트'),
           ),
-          // // 위젯 데이터 갱신 테스트용 버튼
-          // TextButton(
-          //   onPressed: () {
-          //     var count = 10;
-          //     Timer.periodic(const Duration(seconds: 1), (timer) async {
-          //       var data = ReceiveMessageModel(
-          //         result: TotalResult(
-          //           totalCategory: Random().nextInt(3),
-          //           totalCategoryScore: (Random().nextInt(50) + 50) / 100,
-          //           results: [
-          //             ResultItem(
-          //               sentCategory: 1,
-          //               sentCategoryScore: (Random().nextInt(50) + 50) / 100,
-          //               sentKeyword: '안녕',
-          //               keywordScore: 0.55,
-          //               sentence: 'ㅁㄴㅇㄹ',
-          //             ),
-          //             ResultItem(
-          //               sentCategory: 1,
-          //               sentCategoryScore: (Random().nextInt(50) + 50) / 100,
-          //               sentKeyword: '검',
-          //               keywordScore: 0.55,
-          //               sentence: '검사',
-          //             ),
-          //             ResultItem(
-          //               sentCategory: 1,
-          //               sentCategoryScore: (Random().nextInt(50) + 50) / 100,
-          //               sentKeyword: '녹취',
-          //               keywordScore: 0.55,
-          //               sentence: 'ㅁㄴㅇㄹ',
-          //             ),
-          //           ],
-          //         ),
-          //         isFinish: count == 1 ? true : false,
-          //       );
-          //       inspect(data);
-          //       if (data.isFinish == true) {
-          //         await FlutterOverlayWindow.shareData(data);
-          //       } else if (data.result!.totalCategoryScore >= 0.5) {
-          //         await FlutterOverlayWindow.shareData(data);
-          //       }
-          //       count--;
-          //       debugPrint(count.toString());
-          //       if (count == 0) {
-          //         timer.cancel();
-          //       }
-          //     });
-          //   },
-          //   child: const Text('TEST'),
-          // ),
-          // TextButton(
-          //   onPressed: () async {
-          //     if (await FlutterOverlayWindow.isActive()) {
-          //       FlutterOverlayWindow.closeOverlay();
-          //       setState(() {
-          //         isWidgetOn = false;
-          //       });
-          //     } else {
-          //       await FlutterOverlayWindow.showOverlay(
-          //         enableDrag: true,
-          //         flag: OverlayFlag.defaultFlag,
-          //         alignment: OverlayAlignment.center,
-          //         visibility: NotificationVisibility.visibilityPublic,
-          //         positionGravity: PositionGravity.auto,
-          //         width: 0,
-          //         height: 0,
-          //       );
+          // 위젯 데이터 갱신 테스트용 버튼
+          TextButton(
+            onPressed: () {
+              var count = 5;
+              Timer.periodic(const Duration(seconds: 1), (timer) async {
+                var data = ReceiveMessageModel(
+                  result: TotalResult(
+                    totalCategory: 2,
+                    totalCategoryScore: 0.87,
+                    results: [
+                      ResultItem(
+                        sentCategory: 2,
+                        sentCategoryScore: 0.82,
+                        sentKeyword: '안녕',
+                        keywordScore: 0.55,
+                        sentence: 'ㅁㄴㅇㄹ',
+                      ),
+                      ResultItem(
+                        sentCategory: 1,
+                        sentCategoryScore: 0.74,
+                        sentKeyword: '검',
+                        keywordScore: 0.55,
+                        sentence: '검사',
+                      ),
+                      ResultItem(
+                        sentCategory: 1,
+                        sentCategoryScore: 0.88,
+                        sentKeyword: '녹취',
+                        keywordScore: 0.55,
+                        sentence: 'ㅁㄴㅇㄹ',
+                      ),
+                    ],
+                  ),
+                  isFinish: count == 1 ? true : false,
+                );
 
-          //       setState(() {
-          //         isWidgetOn = true;
-          //       });
-          //     }
-          //   },
-          //   child: Text(isWidgetOn ? 'OFF' : 'ON'),
-          // ),
+                if (data.isFinish == true) {
+                  await FlutterOverlayWindow.shareData(data);
+                } else if (data.result!.totalCategoryScore >= 0.5) {
+                  await FlutterOverlayWindow.shareData(data);
+                }
+                count--;
+                debugPrint(count.toString());
+                if (count == 0) {
+                  timer.cancel();
+                }
+              });
+            },
+            child: const Text('TEST'),
+          ),
+          TextButton(
+            onPressed: () async {
+              if (await FlutterOverlayWindow.isActive()) {
+                FlutterOverlayWindow.closeOverlay();
+                setState(() {
+                  isWidgetOn = false;
+                });
+              } else {
+                await FlutterOverlayWindow.showOverlay(
+                  enableDrag: true,
+                  flag: OverlayFlag.defaultFlag,
+                  alignment: OverlayAlignment.center,
+                  visibility: NotificationVisibility.visibilityPublic,
+                  positionGravity: PositionGravity.auto,
+                  width: 0,
+                  height: 0,
+                );
+
+                setState(() {
+                  isWidgetOn = true;
+                });
+              }
+            },
+            child: Text(isWidgetOn ? 'OFF' : 'ON'),
+          ),
           // // 전화 권한
           // IconButton(
           //   onPressed: !granted

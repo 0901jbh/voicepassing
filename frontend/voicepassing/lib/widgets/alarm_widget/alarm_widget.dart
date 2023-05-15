@@ -32,6 +32,7 @@ class _AlarmWidgetState extends State<AlarmWidget> {
     ),
     isFinish: false,
   );
+  String androidId = 'unknown';
   String phoneNumber = '';
   int phishingNumber = 0;
 
@@ -43,6 +44,7 @@ class _AlarmWidgetState extends State<AlarmWidget> {
       if (msg['phoneNumber'] != null) {
         setState(() {
           phoneNumber = msg['phoneNumber'];
+          androidId = msg['androidId'];
         });
         phishingNumber = await ApiService.getPhoneNumber(phoneNumber);
       }
@@ -67,6 +69,7 @@ class _AlarmWidgetState extends State<AlarmWidget> {
             resultData: resultData,
             phoneNumber: phoneNumber,
             phishingNumber: phishingNumber,
+            androidId: androidId,
           )
         : InCallNotification(resultData: resultData);
   }

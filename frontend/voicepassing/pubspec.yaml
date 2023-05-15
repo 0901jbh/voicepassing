@@ -55,6 +55,7 @@ dependencies:
   vibration: ^1.7.7
   awesome_notifications: ^0.7.4+1
   flutter_wear_os_connectivity: ^1.0.0
+  android_intent_plus: ^4.0.0
 
 dev_dependencies:
   flutter_test:

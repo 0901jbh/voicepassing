@@ -17,8 +17,10 @@ void main() async {
 
 // 오버레이 위젯 설정
 @pragma("vm:entry-point")
-void overlayMain() {
+void overlayMain() async {
+  await dotenv.load(fileName: 'assets/config/.env');
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationController.initializeLocalNotifications();
   runApp(
     const MaterialApp(
       debugShowCheckedModeBanner: false,

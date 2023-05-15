@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:phone_state/phone_state.dart';
 import 'package:unique_device_id/unique_device_id.dart';
@@ -22,12 +22,15 @@ void setStream() async {
   late String androidId;
   const String recordDirectoryPath = "/storage/emulated/0/Recordings/Call";
   File? targetFile;
+  late ReceiveMessageModel lastMessage;
 
   recordDirectory = Directory(recordDirectoryPath);
   androidId = await UniqueDeviceId.instance.getUniqueId() ?? 'unknown';
 
   PlatformChannel().callStream().listen((event) {
-    phoneNumber = event;
+    if (event is String) {
+      phoneNumber = event;
+    }
   });
 
   PhoneState.phoneStateStream.listen((event) async {
@@ -96,6 +99,7 @@ void setStream() async {
             if (receivedResult.result != null &&
                 receivedResult.result!.results != null) {
               if (receivedResult.result!.totalCategoryScore >= 0.6) {
+                lastMessage = receivedResult;
                 if (!await FlutterOverlayWindow.isActive()) {
                   await FlutterOverlayWindow.showOverlay(
                     enableDrag: true,
