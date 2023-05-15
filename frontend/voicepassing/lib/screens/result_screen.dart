@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:styled_text/styled_text.dart';
 import 'package:unique_device_id/unique_device_id.dart';
 import 'package:voicepassing/models/result_model.dart';
 import 'package:voicepassing/screens/main_screen.dart';
@@ -29,8 +30,10 @@ class _ResultScreenState extends State<ResultScreen> {
 
   initializer() async {
     await UniqueDeviceId.instance.getUniqueId().then((value) async {
-      resultList = await ApiService.getRecentResult('22180b29a256dd39');
+      resultList = await ApiService.getRecentResult(value.toString());
       setState(() {
+        print(value);
+        print(resultList.toString());
         isLoading = true;
       });
     });
@@ -93,19 +96,22 @@ class _ResultScreenState extends State<ResultScreen> {
                     height: 20,
                   ),
                   isLoading
-                      ? Expanded(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                for (var result in resultList)
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 15),
-                                    child: ResultList(caseInfo: result),
-                                  ),
-                              ],
-                            ),
-                          ),
-                        )
+                      ? resultList.isEmpty
+                          ? const EmptyContent1()
+                          : Expanded(
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    for (var result in resultList)
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 15),
+                                        child: ResultList(caseInfo: result),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            )
                       : const Text('...'),
                   // for (var caseinfo in resultList)
                   //   Padding(
@@ -169,6 +175,46 @@ class ResultTitle extends StatelessWidget {
                 'images/ResultImg.png',
               ),
             )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class EmptyContent1 extends StatelessWidget {
+  const EmptyContent1({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(50.0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Image.asset(
+                'images/empty.png',
+                height: 180,
+              ),
+            ),
+            StyledText(
+              text: '<b>정보없음</b>',
+              tags: {
+                'b': StyledTextTag(
+                    style: const TextStyle(
+                        color: ColorStyles.themeLightBlue,
+                        fontSize: 27,
+                        fontWeight: FontWeight.w700))
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Text('지난 검사 결과가 없습니다')
           ],
         ),
       ),

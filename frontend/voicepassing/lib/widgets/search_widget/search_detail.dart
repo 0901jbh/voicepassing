@@ -19,49 +19,7 @@ class SearchDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (resultList == null) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(50.0),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(30.0),
-                child: Image.asset(
-                  'images/empty.png',
-                  height: 180,
-                ),
-              ),
-              StyledText(
-                text: '<b>정보없음</b>',
-                tags: {
-                  'b': StyledTextTag(
-                      style: const TextStyle(
-                          color: ColorStyles.themeLightBlue,
-                          fontSize: 27,
-                          fontWeight: FontWeight.w700))
-                },
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              StyledText(
-                text: '<b>$phoneNumber</b>의',
-                tags: {
-                  'b': StyledTextTag(
-                      style: const TextStyle(
-                          color: ColorStyles.themeLightBlue,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w500))
-                },
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text('보이스피싱 이력이 없습니다')
-            ],
-          ),
-        ),
-      );
+      return EmptyContent(phoneNumber: phoneNumber);
     }
     for (ResultModel result in resultList!) {
       if (result.type! > 0) {
@@ -102,6 +60,62 @@ class SearchDetail extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class EmptyContent extends StatelessWidget {
+  const EmptyContent({
+    super.key,
+    required this.phoneNumber,
+  });
+
+  final String phoneNumber;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(50.0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Image.asset(
+                'images/empty.png',
+                height: 180,
+              ),
+            ),
+            StyledText(
+              text: '<b>정보없음</b>',
+              tags: {
+                'b': StyledTextTag(
+                    style: const TextStyle(
+                        color: ColorStyles.themeLightBlue,
+                        fontSize: 27,
+                        fontWeight: FontWeight.w700))
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            StyledText(
+              text: '<b>$phoneNumber</b>의',
+              tags: {
+                'b': StyledTextTag(
+                    style: const TextStyle(
+                        color: ColorStyles.themeLightBlue,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500))
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Text('보이스피싱 이력이 없습니다')
+          ],
+        ),
       ),
     );
   }
