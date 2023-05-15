@@ -5,6 +5,7 @@ import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:vibration/vibration.dart';
 
 import 'package:voicepassing/models/receive_message_model.dart';
+import 'package:voicepassing/models/send_message_model.dart';
 import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/widgets/alarm_widget/after_call_notification.dart';
 import 'package:voicepassing/widgets/alarm_widget/in_call_notification.dart';
@@ -33,22 +34,24 @@ class _AlarmWidgetState extends State<AlarmWidget> {
     isFinish: false,
   );
   String androidId = 'unknown';
-  String phoneNumber = '';
-  int phishingNumber = 0;
+  String phoneNumber = '01012345678';
+  String phishingNumber = '0';
 
   @override
   void initState() {
     super.initState();
     FlutterOverlayWindow.overlayListener.listen((msg) async {
       inspect(msg);
-      if (msg['phoneNumber'] != null) {
+      debugPrint('${msg.runtimeType}');
+      if (msg is Map<String, dynamic> && msg['phoneNumber'] != null) {
         setState(() {
-          phoneNumber = msg['phoneNumber'];
-          androidId = msg['androidId'];
+          SendMessageModel callInfoData = SendMessageModel.fromJson(msg);
+          phoneNumber = callInfoData.phoneNumber ?? '01012345678';
+          androidId = callInfoData.androidId;
         });
         phishingNumber = await ApiService.getPhoneNumber(phoneNumber);
       }
-      if (msg['result'] != null) {
+      if (msg is Map<String, dynamic> && msg['result'] != null) {
         setState(() {
           resultData = ReceiveMessageModel.fromJson(msg);
           Vibration.vibrate(pattern: [0, 500, 300, 500]);

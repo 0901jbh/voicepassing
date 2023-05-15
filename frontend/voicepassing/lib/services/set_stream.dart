@@ -9,7 +9,7 @@ import 'package:phone_state/phone_state.dart';
 import 'package:unique_device_id/unique_device_id.dart';
 import 'package:voicepassing/models/receive_message_model.dart';
 import 'package:voicepassing/models/send_message_model.dart';
-// import 'package:voicepassing/services/notification_controller.dart';
+import 'package:voicepassing/services/notification_controller.dart';
 import 'package:voicepassing/services/platform_channel.dart';
 import 'package:voicepassing/services/recent_file.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -126,8 +126,8 @@ void setStream() async {
                 receivedResult.result!.results != null) {
               if (receivedResult.result!.totalCategoryScore >= 0.6) {
                 // 푸시 알림 전송
-                // NotificationController.cancelNotifications();
-                // NotificationController.createNewNotification(receivedResult);
+                NotificationController.cancelNotifications();
+                NotificationController.createNewNotification(receivedResult);
               }
             }
           }

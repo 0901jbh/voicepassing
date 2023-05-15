@@ -1,4 +1,4 @@
-// import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -19,7 +19,7 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
     await Permission.storage.request();
     await Permission.manageExternalStorage.request();
     await FlutterOverlayWindow.requestPermission();
-    // await AwesomeNotifications().requestPermissionToSendNotifications();
+    await AwesomeNotifications().requestPermissionToSendNotifications();
     setStream();
   }
 
@@ -41,10 +41,10 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
           padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
           child: Column(
             children: [
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
-                children: const [
+                children: [
                   Text(
                     '약관 및 개인정보 처리 동의',
                     style: TextStyle(
@@ -59,9 +59,9 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
               ),
               Expanded(
                 child: Container(
-                  child: SingleChildScrollView(
+                  child: const SingleChildScrollView(
                     child: Column(
-                      children: const [
+                      children: [
                         Text.rich(
                           TextSpan(
                             style: TextStyle(

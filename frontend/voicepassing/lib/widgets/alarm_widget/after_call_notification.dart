@@ -1,4 +1,6 @@
-import 'package:android_intent_plus/android_intent.dart';
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
@@ -20,7 +22,7 @@ class AfterCallNotification extends StatefulWidget {
 
   final ReceiveMessageModel resultData;
   final String phoneNumber;
-  final int phishingNumber;
+  final String phishingNumber;
   final String androidId;
 
   @override
@@ -32,9 +34,17 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
   void initState() {
     super.initState();
     // getCaseInfo();
+    final res = IsolateNameServer.registerPortWithName(
+      _receivePort.sendPort,
+      _kPortNameOverlay,
+    );
   }
 
   late ResultModel caseInfo;
+  static const String _kPortNameOverlay = 'OVERLAY';
+  static const String _kPortNameHome = 'UI';
+  final _receivePort = ReceivePort();
+  SendPort? homePort;
 
   final MethodChannel platform =
       const MethodChannel('com.example.voicepassing/navigation');
@@ -164,15 +174,20 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
                     TextButton(
                       onPressed: () async {
                         // 검사 결과 상세 페이지로 연결
-                        const intent = AndroidIntent(
-                          action: 'action_view',
-                          category: 'android.intent.category.LAUNCHER',
-                          // data: 'package:com.example.voicepassing',
-                          package: 'package:com.example.voicepassing',
-                          // flags: [Intent.FLAG_ACTIVITY_NEW_TASK],
-                        );
-                        await intent.launch();
+                        // const intent = AndroidIntent(
+                        //   action: 'action_view',
+                        //   category: 'android.intent.category.LAUNCHER',
+                        //   // data: 'package:com.example.voicepassing',
+                        //   package: 'package:com.example.voicepassing',
+                        //   // flags: [Intent.FLAG_ACTIVITY_NEW_TASK],
+                        // );
+                        // await intent.launch();
                         // platform.invokeMethod('navigateToDetailPage');
+                        // FlutterOverlayWindow.shareData('navigate');
+                        homePort = IsolateNameServer.lookupPortByName(
+                          _kPortNameHome,
+                        );
+                        homePort?.send('navigate');
                         FlutterOverlayWindow.closeOverlay();
                         //asdfsa
 

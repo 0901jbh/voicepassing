@@ -1,13 +1,17 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:isolate';
+import 'dart:ui';
 
-// import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:android_intent_plus/android_intent.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
 import 'package:styled_text/styled_text.dart';
+import 'package:voicepassing/services/notification_controller.dart';
 import 'package:voicepassing/services/set_stream.dart';
 import 'package:voicepassing/style/color_style.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -39,15 +43,18 @@ class _MainScreenState extends State<MainScreen> {
   late String _androidId;
   late String phoneNumber = '';
   bool isWidgetOn = false;
+  static const String _kPortNameOverlay = 'OVERLAY';
+  static const String _kPortNameHome = 'UI';
+  final _receivePort = ReceivePort();
+  SendPort? homePort;
 
   Future<bool> checkPermissions() async {
     debugPrint('${await Permission.phone.isGranted}');
     debugPrint('${await Permission.manageExternalStorage.isGranted}');
-    // debugPrint('${await AwesomeNotifications().isNotificationAllowed()}');
+    debugPrint('${await AwesomeNotifications().isNotificationAllowed()}');
     if (await Permission.phone.isGranted &&
-            await Permission.manageExternalStorage.isGranted
-        // && await AwesomeNotifications().isNotificationAllowed()
-        ) {
+        await Permission.manageExternalStorage.isGranted &&
+        await AwesomeNotifications().isNotificationAllowed()) {
       return true;
     } else {
       return false;
@@ -68,6 +75,21 @@ class _MainScreenState extends State<MainScreen> {
     }
     const MethodChannel('com.example.voicepassing/navigation')
         .setMethodCallHandler(handleNavigation);
+
+    IsolateNameServer.registerPortWithName(
+      _receivePort.sendPort,
+      _kPortNameHome,
+    );
+    _receivePort.listen((event) async {
+      debugPrint('received');
+      const intent = AndroidIntent(
+        action: 'android.intent.action.MAIN',
+        category: 'android.intent.category.LAUNCHER',
+        package: 'com.example.voicepassing',
+      );
+      intent.launch();
+      Navigator.pushNamed(context, '/result');
+    });
   }
 
   Future<dynamic> handleNavigation(MethodCall methodCall) async {
@@ -251,8 +273,8 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   isFinish: count == 1 ? true : false,
                 );
-                // NotificationController.cancelNotifications();
-                // NotificationController.createNewNotification(data);
+                NotificationController.cancelNotifications();
+                NotificationController.createNewNotification(data);
               },
               child: const Text('푸시알림테스트'),
             ),
@@ -459,8 +481,10 @@ class _MainScreenState extends State<MainScreen> {
                         const SizedBox(
                           height: 70,
                         ),
+                        // ignore: prefer_const_constructors
                         SizedBox(
                           width: 315,
+                          // ignore: prefer_const_constructors
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: const [
@@ -479,8 +503,10 @@ class _MainScreenState extends State<MainScreen> {
                         const SizedBox(
                           height: 10,
                         ),
+                        // ignore: prefer_const_constructors
                         SizedBox(
                           width: 315,
+                          // ignore: prefer_const_constructors
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: const [
