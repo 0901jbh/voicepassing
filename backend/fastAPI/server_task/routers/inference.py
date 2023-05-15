@@ -22,6 +22,9 @@ sentence_store = dict() # SentenceModel을 저장
 prob_store = dict() # 문장의 분류 결과 (float[4])를 저장.
 
 T = 1
+BERT_WEIGHT = 0.7
+NB_WEIGHT = 0.3
+
 THRESHOLD = 0.6
 @router.post("", response_model = PhoneCallModel, status_code = 200)
 async def classify_sentence(input_model : ReferenceInputModel, response : Response):
@@ -76,7 +79,7 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
     # a = pd.DataFrame(data = torch.mean(attention[-1], dim = 1).squeeze().detach().numpy(), columns = ["cls"] + col + ["sep"])
     # a.to_excel("attention.xlsx")
 
-    # print(f"RAW : {output.squeeze()}")
+    print(f"RAW : {output.squeeze()}")
 
     if output.shape[0] != 1:
         label_probs = torch.nn.functional.softmax(output.squeeze() / T, dim = 1)
@@ -93,7 +96,7 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
     # print(f"BERT : {label_probs}")
     # print(f"NB : {torch.FloatTensor(b_label_probs)}")
 
-    label_probs = (label_probs + b_label_probs) / 2
+    label_probs = label_probs*BERT_WEIGHT + b_label_probs*NB_WEIGHT
 
     # print(f"TOTAL : {label_probs}")
     
@@ -121,15 +124,16 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
 
         word, prob = pipeline.extract_word_and_probs(one_sentence, cur_label)
 
-        sentence_model = SentenceModel(
-            sentCategory = cur_label,
-            sentCategoryScore = label_probs[idx][cur_label].item(),
-            sentKeyword = word,
-            keywordScore = abs(prob),
-            sentence = text_splited[idx]
-        )
+        if word is not None:
+            sentence_model = SentenceModel(
+                sentCategory = cur_label,
+                sentCategoryScore = label_probs[idx][cur_label].item(),
+                sentKeyword = word,
+                keywordScore = abs(prob),
+                sentence = text_splited[idx]
+            )
 
-        temp_sentence_store.append(sentence_model.dict())
+            temp_sentence_store.append(sentence_model.dict())
 
     prob_store_value = prob_store.get(session_id)
     sentence_store_value = sentence_store.get(session_id)
@@ -154,7 +158,7 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
             "results" : temp_sentence_store
         }
 
-        if call_label == 0:
+        if call_label == 0 or not temp_sentence_store:
             response.status_code = 201
 
     else: # 끝났을 경우
@@ -167,7 +171,7 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
             "results" : sentence_store[session_id]
         }
 
-        if call_label == 0:
+        if call_label == 0 or not temp_sentence_store:
             response.status_code = 201
 
         del sentence_store[session_id]
