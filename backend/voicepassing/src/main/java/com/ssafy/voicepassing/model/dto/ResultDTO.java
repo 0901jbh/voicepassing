@@ -74,4 +74,12 @@ public class ResultDTO{
     public static class CategoryResultNum {
         private List<Integer> categoryList;
     }
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResultCount {
+        private List<Long> count;
+        private List<Integer> category;
+    }
 }
