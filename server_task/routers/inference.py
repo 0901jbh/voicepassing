@@ -21,7 +21,10 @@ softmax = torch.nn.Softmax(dim = 0)
 sentence_store = dict() # SentenceModel을 저장
 prob_store = dict() # 문장의 분류 결과 (float[4])를 저장.
 
-T = 2
+T = 1
+BERT_WEIGHT = 0.7
+NB_WEIGHT = 0.3
+
 THRESHOLD = 0.6
 @router.post("", response_model = PhoneCallModel, status_code = 200)
 async def classify_sentence(input_model : ReferenceInputModel, response : Response):
@@ -76,7 +79,7 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
     # a = pd.DataFrame(data = torch.mean(attention[-1], dim = 1).squeeze().detach().numpy(), columns = ["cls"] + col + ["sep"])
     # a.to_excel("attention.xlsx")
 
-    # print(f"RAW : {output.squeeze()}")
+    print(f"RAW : {output.squeeze()}")
 
     if output.shape[0] != 1:
         label_probs = torch.nn.functional.softmax(output.squeeze() / T, dim = 1)
@@ -90,12 +93,12 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
 
     # 3. get result and save
 
-    # print(f"BERT : {label_probs}")
-    # print(f"NB : {torch.FloatTensor(b_label_probs)}")
+    print(f"BERT : {label_probs}")
+    print(f"NB : {torch.FloatTensor(b_label_probs)}")
 
-    label_probs = (label_probs + b_label_probs) / 2
+    label_probs = label_probs*BERT_WEIGHT + b_label_probs*NB_WEIGHT
 
-    # print(f"TOTAL : {label_probs}")
+    print(f"TOTAL : {label_probs}")
     
     label = torch.argmax(label_probs, dim = 1)
     # print(f"LABEL : {label}")        
