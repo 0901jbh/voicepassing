@@ -174,6 +174,7 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
                         await intent.launch();
                         // platform.invokeMethod('navigateToDetailPage');
                         FlutterOverlayWindow.closeOverlay();
+                        //asdfsa
 
                         // Navigator.push(
                         //   context,
