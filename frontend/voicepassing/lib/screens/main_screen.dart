@@ -9,7 +9,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
+import 'package:styled_text/styled_text.dart';
 import 'package:voicepassing/services/platform_channel.dart';
+import 'package:voicepassing/style/color_style.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:unique_device_id/unique_device_id.dart';
@@ -30,6 +32,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final Future caseNum = ApiService.getCaseNum();
   final count = 283;
   // 통화 상태 감지 및 오버레이 위젯 띄우기 위한 임시 변수
   PhoneStateStatus phoneStatus = PhoneStateStatus.NOTHING;
@@ -193,197 +196,259 @@ class _MainScreenState extends State<MainScreen> {
     BuildContext context,
   ) {
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(1),
-      appBar: AppBar(
-        actions: [
-          // 위젯 데이터 갱신 테스트용 버튼
-          TextButton(
-            onPressed: () {
-              var count = 10;
-              Timer.periodic(const Duration(seconds: 1), (timer) async {
-                var data = ReceiveMessageModel(
-                  result: TotalResult(
-                    totalCategory: Random().nextInt(3),
-                    totalCategoryScore: (Random().nextInt(50) + 50) / 100,
-                    results: [
-                      ResultItem(
-                        sentCategory: 1,
-                        sentCategoryScore: (Random().nextInt(50) + 50) / 100,
-                        sentKeyword: '안녕',
-                        keywordScore: 0.55,
-                        sentence: 'ㅁㄴㅇㄹ',
+        backgroundColor: Colors.white.withOpacity(1),
+        appBar: AppBar(
+          actions: [
+            // 위젯 데이터 갱신 테스트용 버튼
+            TextButton(
+              onPressed: () {
+                var count = 10;
+                Timer.periodic(const Duration(seconds: 1), (timer) async {
+                  var data = ReceiveMessageModel(
+                    result: TotalResult(
+                      totalCategory: Random().nextInt(3),
+                      totalCategoryScore: (Random().nextInt(50) + 50) / 100,
+                      results: [
+                        ResultItem(
+                          sentCategory: 1,
+                          sentCategoryScore: (Random().nextInt(50) + 50) / 100,
+                          sentKeyword: '안녕',
+                          keywordScore: 0.55,
+                          sentence: 'ㅁㄴㅇㄹ',
+                        ),
+                        ResultItem(
+                          sentCategory: 1,
+                          sentCategoryScore: (Random().nextInt(50) + 50) / 100,
+                          sentKeyword: '검',
+                          keywordScore: 0.55,
+                          sentence: '검사',
+                        ),
+                        ResultItem(
+                          sentCategory: 1,
+                          sentCategoryScore: (Random().nextInt(50) + 50) / 100,
+                          sentKeyword: '녹취',
+                          keywordScore: 0.55,
+                          sentence: 'ㅁㄴㅇㄹ',
+                        ),
+                      ],
+                    ),
+                    isFinish: count == 1 ? true : false,
+                  );
+                  inspect(data);
+                  if (data.isFinish == true) {
+                    await FlutterOverlayWindow.shareData(data);
+                  } else if (data.result!.totalCategoryScore >= 0.5) {
+                    await FlutterOverlayWindow.shareData(data);
+                  }
+                  count--;
+                  debugPrint(count.toString());
+                  if (count == 0) {
+                    timer.cancel();
+                  }
+                });
+              },
+              child: const Text('TEST'),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (await FlutterOverlayWindow.isActive()) {
+                  FlutterOverlayWindow.closeOverlay();
+                  setState(() {
+                    isWidgetOn = false;
+                  });
+                } else {
+                  await FlutterOverlayWindow.showOverlay(
+                    enableDrag: true,
+                    flag: OverlayFlag.defaultFlag,
+                    alignment: OverlayAlignment.center,
+                    visibility: NotificationVisibility.visibilityPublic,
+                    positionGravity: PositionGravity.auto,
+                    width: 0,
+                    height: 0,
+                  );
+
+                  setState(() {
+                    isWidgetOn = true;
+                  });
+                }
+              },
+              child: Text(isWidgetOn ? 'OFF' : 'ON'),
+            ),
+            // 전화 권한
+            IconButton(
+              onPressed: !granted
+                  ? () async {
+                      bool temp = await requestPermission();
+                      setState(() {
+                        granted = temp;
+                        if (granted) {
+                          setStream();
+                        }
+                      });
+                    }
+                  : null,
+              icon: const Icon(
+                Icons.perm_phone_msg,
+                size: 24,
+                color: Colors.amber,
+              ),
+            ),
+            // 오버레이(다른 앱 위에 그리기) 권한
+            IconButton(
+              onPressed: () async {
+                await FlutterOverlayWindow.requestPermission();
+              },
+              icon: const Icon(
+                Icons.picture_in_picture,
+                size: 24,
+                color: Colors.amber,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed("/setting");
+              },
+              icon: const Icon(
+                Icons.settings,
+                size: 24,
+              ),
+            ),
+          ],
+          leadingWidth: 120,
+          leading: Builder(builder: (BuildContext context) {
+            return SizedBox(
+              width: 70,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Image.asset(
+                  'images/VoiceLogo.png',
+                  height: 30,
+                ),
+              ),
+            );
+          }),
+          backgroundColor: Colors.transparent,
+          foregroundColor: Colors.black,
+          elevation: 0,
+        ),
+        body: FutureBuilder(
+            future: caseNum,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                return Center(
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 50,
                       ),
-                      ResultItem(
-                        sentCategory: 1,
-                        sentCategoryScore: (Random().nextInt(50) + 50) / 100,
-                        sentKeyword: '검',
-                        keywordScore: 0.55,
-                        sentence: '검사',
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            flex: 5,
+                            child: Container(
+                                child: SizedBox(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  StyledText(
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                    ),
+                                    text: '<b>보이스패싱</b>은',
+                                    tags: {
+                                      'b': StyledTextTag(
+                                          style: const TextStyle(
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold,
+                                              color:
+                                                  ColorStyles.themeLightBlue))
+                                    },
+                                  ),
+                                  StyledText(
+                                    style: const TextStyle(fontSize: 18),
+                                    text:
+                                        '<b>모두 ${snapshot.data['resultNum']}건</b>을',
+                                    tags: {
+                                      'b': StyledTextTag(
+                                          style: const TextStyle(
+                                              color: ColorStyles.themeBlue,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 24))
+                                    },
+                                  ),
+                                  const SizedBox(height: 5),
+                                  const Text(
+                                    '잡았어요',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )),
+                          ),
+                          Flexible(
+                            flex: 3,
+                            child: Image.asset(
+                              'images/MainImg.png',
+                            ),
+                          )
+                        ],
                       ),
-                      ResultItem(
-                        sentCategory: 1,
-                        sentCategoryScore: (Random().nextInt(50) + 50) / 100,
-                        sentKeyword: '녹취',
-                        keywordScore: 0.55,
-                        sentence: 'ㅁㄴㅇㄹ',
+                      const SizedBox(
+                        height: 70,
                       ),
+                      SizedBox(
+                        width: 315,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const [
+                            ImgButton(
+                              title: '검사 결과',
+                              imgName: 'ResultImg',
+                              routeName: '/result',
+                            ),
+                            ImgButton(
+                                title: '통계 내용',
+                                imgName: 'StaticsImg',
+                                routeName: '/statistics'),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      SizedBox(
+                        width: 315,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const [
+                            ImgButton(
+                              title: '검색',
+                              imgName: 'SearchImg',
+                              routeName: '/search',
+                            ),
+                            ImgButton(
+                                title: '녹음 파일 검사',
+                                imgName: 'AnalyticsImg',
+                                routeName: '/analytics'),
+                          ],
+                        ),
+                      ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     Navigator.of(context).pushNamed("/setting");
+                      //   },
+                      //   child: const Text("/setting"),
+                      // )
                     ],
                   ),
-                  isFinish: count == 1 ? true : false,
                 );
-                inspect(data);
-                if (data.isFinish == true) {
-                  await FlutterOverlayWindow.shareData(data);
-                } else if (data.result!.totalCategoryScore >= 0.5) {
-                  await FlutterOverlayWindow.shareData(data);
-                }
-                count--;
-                debugPrint(count.toString());
-                if (count == 0) {
-                  timer.cancel();
-                }
-              });
-            },
-            child: const Text('TEST'),
-          ),
-          TextButton(
-            onPressed: () async {
-              if (await FlutterOverlayWindow.isActive()) {
-                FlutterOverlayWindow.closeOverlay();
-                setState(() {
-                  isWidgetOn = false;
-                });
-              } else {
-                await FlutterOverlayWindow.showOverlay(
-                  enableDrag: true,
-                  flag: OverlayFlag.defaultFlag,
-                  alignment: OverlayAlignment.center,
-                  visibility: NotificationVisibility.visibilityPublic,
-                  positionGravity: PositionGravity.auto,
-                  width: 0,
-                  height: 0,
-                );
-
-                setState(() {
-                  isWidgetOn = true;
-                });
               }
-            },
-            child: Text(isWidgetOn ? 'OFF' : 'ON'),
-          ),
-          // 전화 권한
-          IconButton(
-            onPressed: !granted
-                ? () async {
-                    bool temp = await requestPermission();
-                    setState(() {
-                      granted = temp;
-                      if (granted) {
-                        setStream();
-                      }
-                    });
-                  }
-                : null,
-            icon: const Icon(
-              Icons.perm_phone_msg,
-              size: 24,
-              color: Colors.amber,
-            ),
-          ),
-          // 오버레이(다른 앱 위에 그리기) 권한
-          IconButton(
-            onPressed: () async {
-              await FlutterOverlayWindow.requestPermission();
-            },
-            icon: const Icon(
-              Icons.picture_in_picture,
-              size: 24,
-              color: Colors.amber,
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed("/setting");
-            },
-            icon: const Icon(
-              Icons.settings,
-              size: 24,
-            ),
-          ),
-        ],
-        leadingWidth: 120,
-        leading: Builder(builder: (BuildContext context) {
-          return SizedBox(
-            width: 70,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Image.asset(
-                'images/VoiceLogo.png',
-                height: 30,
-              ),
-            ),
-          );
-        }),
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
-        elevation: 0,
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 50,
-            ),
-            MainLogo(widget: widget),
-            const SizedBox(
-              height: 70,
-            ),
-            SizedBox(
-              width: 315,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  ImgButton(
-                    title: '검사 결과',
-                    imgName: 'ResultImg',
-                    routeName: '/result',
-                  ),
-                  ImgButton(
-                      title: '통계 내용',
-                      imgName: 'StaticsImg',
-                      routeName: '/statistics'),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-              width: 315,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  ImgButton(
-                    title: '검색',
-                    imgName: 'SearchImg',
-                    routeName: '/search',
-                  ),
-                  ImgButton(
-                      title: '녹음 파일 검사',
-                      imgName: 'AnalyticsImg',
-                      routeName: '/analytics'),
-                ],
-              ),
-            ),
-            // GestureDetector(
-            //   onTap: () {
-            //     Navigator.of(context).pushNamed("/setting");
-            //   },
-            //   child: const Text("/setting"),
-            // )
-          ],
-        ),
-      ),
-    );
+              return const Text('');
+            }));
   }
 }
