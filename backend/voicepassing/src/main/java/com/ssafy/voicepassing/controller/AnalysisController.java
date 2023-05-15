@@ -98,8 +98,11 @@ public class AnalysisController {
             }
 
             status = (HttpStatus) resultMap.get("status");
-            boolean re = saveDB(resultMap,androidId);
-            if(re)
+            if(status == HttpStatus.CREATED)
+                return new ResponseEntity<Map<String,Object>>(resultMap,status);
+            else if(status == HttpStatus.OK)
+                saveDB(resultMap,androidId);
+
             return new ResponseEntity<Map<String,Object>>(resultMap,status);
         }
         return (ResponseEntity<?>) ResponseEntity.notFound();
