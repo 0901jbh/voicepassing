@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_wear_os_connectivity/flutter_wear_os_connectivity.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:voicepassing/providers/selected_wearable.dart';
 import 'package:voicepassing/screens/main_screen.dart';
@@ -39,13 +39,14 @@ class _ConnectWearableScreenState extends State<ConnectWearableScreen> {
       _flutterWearOsConnectivity.getConnectedDevices().then((value) {
         _updateDeviceList(value.toList());
       });
+      _flutterWearOsConnectivity.registerNewCapability('capability_1');
       _flutterWearOsConnectivity
           .findCapabilityByName("capability_1")
           .then((info) {
         debugPrint('노드는찾음');
         _updateDeviceList(info!.associatedDevices.toList());
       });
-      _flutterWearOsConnectivity.getAllDataItems().then(inspect);
+      // _flutterWearOsConnectivity.getAllDataItems().then(inspect);
       _connectedDeviceCapabilitySubscription = _flutterWearOsConnectivity
           .capabilityChanged(
               capabilityPathURI: Uri(
@@ -107,7 +108,18 @@ class _ConnectWearableScreenState extends State<ConnectWearableScreen> {
                       padding:
                           MaterialStateProperty.all(const EdgeInsets.all(10)),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
+                      if (await Permission.bluetoothScan.isGranted == false) {
+                        await Permission.bluetoothScan.request();
+                      }
+                      if (await Permission.bluetoothConnect.isGranted ==
+                          false) {
+                        await Permission.bluetoothConnect.request();
+                      }
+                      if (await Permission.bluetoothAdvertise.isGranted ==
+                          false) {
+                        await Permission.bluetoothAdvertise.request();
+                      }
                       findAvailableDevices();
                       setState(() {
                         isLoaded = true;
@@ -128,10 +140,13 @@ class _ConnectWearableScreenState extends State<ConnectWearableScreen> {
                         children: [
                           for (var device in _deviceList)
                             TextButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 context
                                     .read<SelectedWearable>()
                                     .update(device.id);
+
+                                FlutterWearOsConnectivity()
+                                    .registerNewCapability('capability_1');
                               },
                               child: Text(device.name),
                             ),
