@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:styled_text/styled_text.dart';
 import 'package:unique_device_id/unique_device_id.dart';
 import 'package:voicepassing/models/result_model.dart';
 import 'package:voicepassing/screens/main_screen.dart';
@@ -20,6 +21,7 @@ class _ResultScreenState extends State<ResultScreen> {
   late List<ResultModel> resultList;
   bool isLoading = false;
   late String androidId;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -29,11 +31,14 @@ class _ResultScreenState extends State<ResultScreen> {
   }
 
   initializer() async {
+    androidId = await UniqueDeviceId.instance.getUniqueId() ?? 'unknown';
     await UniqueDeviceId.instance.getUniqueId().then((value) async {
       androidId = value!;
-      print(androidId);
       resultList = await ApiService.getRecentResult(androidId);
+
       setState(() {
+        print(value);
+        print(resultList.toString());
         isLoading = true;
       });
     });
@@ -96,19 +101,22 @@ class _ResultScreenState extends State<ResultScreen> {
                     height: 20,
                   ),
                   isLoading
-                      ? Expanded(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                for (var result in resultList)
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 15),
-                                    child: ResultList(caseInfo: result),
-                                  ),
-                              ],
-                            ),
-                          ),
-                        )
+                      ? resultList.isEmpty
+                          ? const EmptyContent1()
+                          : Expanded(
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    for (var result in resultList)
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 15),
+                                        child: ResultList(caseInfo: result),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            )
                       : const Text('...'),
                   // for (var caseinfo in resultList)
                   //   Padding(
@@ -143,7 +151,7 @@ class ResultTitle extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Flexible(
+            const Flexible(
               flex: 5,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,7 +159,7 @@ class ResultTitle extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     textBaseline: TextBaseline.alphabetic,
-                    children: const [
+                    children: [
                       Text(
                         '지난 검사 결과',
                         style: TextStyle(
@@ -162,7 +170,7 @@ class ResultTitle extends StatelessWidget {
                       Text('를'),
                     ],
                   ),
-                  const Text('확인해보세요')
+                  Text('확인해보세요')
                 ],
               ),
             ),
@@ -172,6 +180,46 @@ class ResultTitle extends StatelessWidget {
                 'images/ResultImg.png',
               ),
             )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class EmptyContent1 extends StatelessWidget {
+  const EmptyContent1({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(50.0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Image.asset(
+                'images/empty.png',
+                height: 180,
+              ),
+            ),
+            StyledText(
+              text: '<b>정보없음</b>',
+              tags: {
+                'b': StyledTextTag(
+                    style: const TextStyle(
+                        color: ColorStyles.themeLightBlue,
+                        fontSize: 27,
+                        fontWeight: FontWeight.w700))
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Text('지난 검사 결과가 없습니다')
           ],
         ),
       ),

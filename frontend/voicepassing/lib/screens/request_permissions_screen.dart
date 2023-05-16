@@ -1,4 +1,8 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:voicepassing/services/set_stream.dart';
 import 'package:voicepassing/style/color_style.dart';
 
 class RequestPermissionsScreen extends StatefulWidget {
@@ -10,6 +14,15 @@ class RequestPermissionsScreen extends StatefulWidget {
 }
 
 class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
+  Future<void> requestPermissions() async {
+    await Permission.phone.request();
+    await Permission.storage.request();
+    await Permission.manageExternalStorage.request();
+    await FlutterOverlayWindow.requestPermission();
+    await AwesomeNotifications().requestPermissionToSendNotifications();
+    setStream();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,10 +41,10 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
           padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
           child: Column(
             children: [
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
-                children: const [
+                children: [
                   Text(
                     '약관 및 개인정보 처리 동의',
                     style: TextStyle(
@@ -46,9 +59,9 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
               ),
               Expanded(
                 child: Container(
-                  child: SingleChildScrollView(
+                  child: const SingleChildScrollView(
                     child: Column(
-                      children: const [
+                      children: [
                         Text.rich(
                           TextSpan(
                             style: TextStyle(
@@ -105,7 +118,10 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
               Column(
                 children: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      requestPermissions();
+                      Navigator.pop(context);
+                    },
                     style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(ColorStyles.themeLightBlue),
@@ -130,7 +146,9 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(ColorStyles.subGray),

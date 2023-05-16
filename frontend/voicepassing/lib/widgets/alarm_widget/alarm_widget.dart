@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:vibration/vibration.dart';
 
 import 'package:voicepassing/models/receive_message_model.dart';
+import 'package:voicepassing/models/send_message_model.dart';
+import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/widgets/alarm_widget/after_call_notification.dart';
 import 'package:voicepassing/widgets/alarm_widget/in_call_notification.dart';
 
@@ -29,18 +33,25 @@ class _AlarmWidgetState extends State<AlarmWidget> {
     ),
     isFinish: false,
   );
-  String phoneNumber = '';
+  String androidId = 'unknown';
+  String phoneNumber = '01012345678';
+  String phishingNumber = '0';
 
   @override
   void initState() {
     super.initState();
-    FlutterOverlayWindow.overlayListener.listen((msg) {
-      if (msg['phoneNumber'] != null) {
+    FlutterOverlayWindow.overlayListener.listen((msg) async {
+      inspect(msg);
+      debugPrint('${msg.runtimeType}');
+      if (msg is Map<String, dynamic> && msg['phoneNumber'] != null) {
         setState(() {
-          phoneNumber = msg['phoneNumber'];
+          SendMessageModel callInfoData = SendMessageModel.fromJson(msg);
+          phoneNumber = callInfoData.phoneNumber ?? '01012345678';
+          androidId = callInfoData.androidId;
         });
+        phishingNumber = await ApiService.getPhoneNumber(phoneNumber);
       }
-      if (msg['result'] != null) {
+      if (msg is Map<String, dynamic> && msg['result'] != null) {
         setState(() {
           resultData = ReceiveMessageModel.fromJson(msg);
           Vibration.vibrate(pattern: [0, 500, 300, 500]);
@@ -60,6 +71,8 @@ class _AlarmWidgetState extends State<AlarmWidget> {
         ? AfterCallNotification(
             resultData: resultData,
             phoneNumber: phoneNumber,
+            phishingNumber: phishingNumber,
+            androidId: androidId,
           )
         : InCallNotification(resultData: resultData);
   }
