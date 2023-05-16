@@ -47,6 +47,11 @@ android {
     }
 
     sourceSets {
+        main {
+            resources {
+                srcDirs += ['src/main/res/values']
+            }
+        }
         main.java.srcDirs += 'src/main/kotlin'
     }
 

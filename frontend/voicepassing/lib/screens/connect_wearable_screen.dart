@@ -28,6 +28,7 @@ class _ConnectWearableScreenState extends State<ConnectWearableScreen> {
   final List<StreamSubscription<List<DataEvent>>> _dataEventsSubscriptions = [];
   StreamSubscription<CapabilityInfo>? _connectedDeviceCapabilitySubscription;
   bool isLoaded = false;
+  Iterable<CapabilityInfo> caps = [];
 
   @override
   void initState() {
@@ -39,6 +40,11 @@ class _ConnectWearableScreenState extends State<ConnectWearableScreen> {
       _flutterWearOsConnectivity.getConnectedDevices().then((value) {
         _updateDeviceList(value.toList());
       });
+      // _flutterWearOsConnectivity.getAllCapabilities().then((value) {
+      //   setState(() {
+      //     caps = value.values;
+      //   });
+      // });
       _flutterWearOsConnectivity.registerNewCapability('capability_1');
       _flutterWearOsConnectivity
           .findCapabilityByName("capability_1")
@@ -169,6 +175,7 @@ class _ConnectWearableScreenState extends State<ConnectWearableScreen> {
                                 context.watch<SelectedWearable>().deviceId ??
                                     'none'),
                           ),
+                          Text(caps.toString()),
                         ],
                       ),
           );
