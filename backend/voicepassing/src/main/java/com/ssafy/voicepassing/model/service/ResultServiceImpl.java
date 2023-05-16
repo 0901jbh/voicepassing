@@ -111,7 +111,8 @@ public class ResultServiceImpl implements ResultService {
             List<String> sentences = resultDetailRepository.findAllByResultId(resultDto.getResultId()).stream().map(ResultDetail::getSentence).collect(Collectors.toList());
             List<String> words = new ArrayList<>();
             for (String sentence: sentences) {
-                String word = keywordSentenceRepository.findBySentenceStartsWith(sentence).getKeyword();
+                //String word = keywordSentenceRepository.findBySentenceStartsWith(sentence).getKeyword();
+                String word = keywordSentenceRepository.findById(sentence).get().getKeyword();
                 words.add(word);
             }
             resultList.add(
