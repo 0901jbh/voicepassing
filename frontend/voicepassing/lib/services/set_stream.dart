@@ -102,7 +102,7 @@ void setStream() async {
                 lastMessage = receivedResult;
                 if (!await FlutterOverlayWindow.isActive()) {
                   await FlutterOverlayWindow.showOverlay(
-                    enableDrag: true,
+                    enableDrag: false,
                     flag: OverlayFlag.defaultFlag,
                     alignment: OverlayAlignment.center,
                     visibility: NotificationVisibility.visibilityPublic,

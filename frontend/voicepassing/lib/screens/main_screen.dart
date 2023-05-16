@@ -6,7 +6,6 @@ import 'dart:ui';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
@@ -73,8 +72,6 @@ class _MainScreenState extends State<MainScreen> {
         Navigator.of(context).pushNamed('/permission');
       });
     }
-    const MethodChannel('com.example.voicepassing/navigation')
-        .setMethodCallHandler(handleNavigation);
 
     IsolateNameServer.registerPortWithName(
       _receivePort.sendPort,
@@ -90,18 +87,6 @@ class _MainScreenState extends State<MainScreen> {
       intent.launch();
       Navigator.pushNamed(context, '/result');
     });
-  }
-
-  Future<dynamic> handleNavigation(MethodCall methodCall) async {
-    if (methodCall.method == 'navigateToDetailPage') {
-      debugPrint('메서드 수신 ***************');
-      // List<ResultModel> resultList =
-      //     await ApiService.getRecentResult(_androidId);
-      // NotificationController.createNewNotification(
-      //     ReceiveMessageModel(result: null, isFinish: true));
-      // Navigate to the SecondPage when a message is received from the AlarmWidget
-      Navigator.of(context).pushNamed('/result');
-    }
   }
 
   void initializer() async {
