@@ -27,7 +27,7 @@ class _SearchScreenResultState extends State<SearchScreenResult> {
           );
         },
       ),
-      bottomNavigationBar: const Navbar(selectedIndex: 2),
+      bottomNavigationBar: const Navbar(selectedIndex: 3),
     );
   }
 }

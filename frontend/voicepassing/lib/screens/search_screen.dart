@@ -51,18 +51,18 @@ class SearchScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                                 color: ColorStyles.themeLightBlue,
                                 borderRadius: BorderRadius.circular(10)),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(
                                   vertical: 7, horizontal: 20),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  const Icon(Icons.search, color: Colors.white),
-                                  const SizedBox(
+                                  Icon(Icons.search, color: Colors.white),
+                                  SizedBox(
                                     width: 15,
                                   ),
                                   Column(
-                                    children: const [
+                                    children: [
                                       Text(
                                         '전화번호를 입력하세요',
                                         style: TextStyle(
@@ -95,7 +95,7 @@ class SearchScreen extends StatelessWidget {
           );
         },
       ),
-      bottomNavigationBar: const Navbar(selectedIndex: 2),
+      bottomNavigationBar: const Navbar(selectedIndex: 3),
     );
   }
 }
