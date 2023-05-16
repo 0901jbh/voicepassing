@@ -16,7 +16,7 @@ public interface ResultService {
 
     public List<ResultDTO.ResultWithWords> getResults(String androidId);
 
-    public ResultDTO.CategoryResultNum getCategoryResultNum();
+    public ResultDTO.ResultCount getCountByCategory();
 
 }
 

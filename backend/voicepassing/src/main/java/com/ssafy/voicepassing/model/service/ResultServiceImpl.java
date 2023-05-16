@@ -17,7 +17,11 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 @Service
 @RequiredArgsConstructor
 public class ResultServiceImpl implements ResultService {
@@ -26,6 +30,8 @@ public class ResultServiceImpl implements ResultService {
     private final ResultDetailRepository resultDetailRepository;
     private final KeywordSentenceRepository keywordSentenceRepository;
 
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public List<ResultDTO.Result> getResultList(String androidId) {
@@ -105,7 +111,8 @@ public class ResultServiceImpl implements ResultService {
             List<String> sentences = resultDetailRepository.findAllByResultId(resultDto.getResultId()).stream().map(ResultDetail::getSentence).collect(Collectors.toList());
             List<String> words = new ArrayList<>();
             for (String sentence: sentences) {
-                String word = keywordSentenceRepository.findBySentenceStartsWith(sentence).getKeyword();
+                //String word = keywordSentenceRepository.findBySentenceStartsWith(sentence).getKeyword();
+                String word = keywordSentenceRepository.findById(sentence).get().getKeyword();
                 words.add(word);
             }
             resultList.add(
@@ -124,22 +131,22 @@ public class ResultServiceImpl implements ResultService {
     }
 
     @Override
-    public ResultDTO.CategoryResultNum getCategoryResultNum() {
-        LocalDateTime now = LocalDateTime.now();
-        List<Result> resultEntity = resultRepository.findByCreatedTimeBetween(now.minusMonths(1), now);
-        List<Integer> numList = new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0));
-        for (Result result: resultEntity) {
-            int category = result.getCategory();
+    public ResultDTO.ResultCount getCountByCategory() {
+        LocalDateTime startDate = LocalDateTime.now().minus(1, ChronoUnit.MONTHS);
+        List<Object[]> results = resultRepository.countByCategoryAndCreatedTimeAfter(startDate);
+        ResultDTO.ResultCount rc = ResultDTO.ResultCount.builder()
+                .category(new ArrayList<>())
+                .count(new ArrayList<>())
+                .build();
 
-            if (category != -1) {
-                numList.set(category, numList.get(category) + 1);
-            }
-            else {
-                numList.set(4, numList.get(4) + 1);
-            }
+        for (Object[] result : results) {
+            Long count = (Long) result[0];
+            int category = (int) result[1];
+            rc.getCategory().add(category);
+            rc.getCount().add(count);
+            System.out.println(category + ": " + count);
         }
-
-        return ResultDTO.CategoryResultNum.builder().categoryList(numList).build();
+        return rc;
     }
 
 
