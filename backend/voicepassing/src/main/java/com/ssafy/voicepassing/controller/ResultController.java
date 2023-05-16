@@ -31,7 +31,6 @@ public class ResultController {
     @GetMapping("/{androidId}")
     public ResponseEntity<?> getResultbyId(@PathVariable String androidId) {
         HttpStatus status = null;
-//        System.out.println(androidId);
         Map<String, Object> resultMap = new HashMap<>();
         List<ResultDTO.ResultWithWords> results = resultService.getResults(androidId);
 

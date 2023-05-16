@@ -73,7 +73,6 @@ public class AnalysisServiceImpl implements AnalysisService{
             if(responseCode == 200) { // 정상 호출
                 br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             } else {  // 오류 발생
-                System.out.println("error!!!!!!! responseCode= " + responseCode);
                 br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             }
             String inputLine;
@@ -88,11 +87,9 @@ public class AnalysisServiceImpl implements AnalysisService{
                 result = result.substring(9,result.length()-2);
                 return result;
             } else {
-                System.out.println("error !!!");
 
             }
         } catch (Exception e) {
-            System.out.println(e);
         }
         return "error";
     }

@@ -227,7 +227,7 @@ public class AudioWebSocketHandler extends AbstractWebSocketHandler {
 
 	
 	public void dataInput(AIResponseDTO.Response rep,String phoneNumber,String androidId) {
-		System.out.println("데이터베이스에 작업 시작");
+
         ResultDTO.Result res = ResultDTO.Result.builder()
                 .androidId(androidId)
                 .phoneNumber(phoneNumber)
@@ -236,7 +236,7 @@ public class AudioWebSocketHandler extends AbstractWebSocketHandler {
                 .build();
 
         int rId = resultService.addResult(res);
-        System.out.println(rId);
+
 
 
         List<AIResponseDTO.Result> resultList = rep.getResults();

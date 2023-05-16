@@ -30,7 +30,6 @@ public class KeywordServiceImpl implements KeywordService{
                     .count(k.getCount()+1)
                     .build();
         } else {
-            System.out.println("존재하지 않아");
             keywordEntity = Keyword.builder()
                     .keyword(keyword.getKeyword())
                     .category(keyword.getCategory())
@@ -55,7 +54,6 @@ public class KeywordServiceImpl implements KeywordService{
                     .count(k.getCount()+1)
                     .build();
         } else {
-            System.out.println("존재하지 않아");
             keywordEntity = Keyword.builder()
                     .keyword(keyword.getKeyword())
                     .category(keyword.getCategory())
