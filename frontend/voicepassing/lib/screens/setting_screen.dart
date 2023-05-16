@@ -20,12 +20,21 @@ class SettingScreen extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(0, 5, 0, 24),
             child: Column(children: [
               SettingBtn(
-                  icon: const Icon(
-                    Icons.check_box,
-                    color: ColorStyles.themeLightBlue,
-                  ),
-                  content: "약관 및 개인정보 처리 동의",
-                  routeName: "/permission")
+                icon: const Icon(
+                  Icons.check_box,
+                  color: ColorStyles.themeLightBlue,
+                ),
+                content: "약관 및 개인정보 처리 동의",
+                routeName: "/permission",
+              ),
+              SettingBtn(
+                icon: const Icon(
+                  Icons.check_box,
+                  color: ColorStyles.themeLightBlue,
+                ),
+                content: "웨어러블 기기로 실시간 알림 받기",
+                routeName: "/wearable",
+              ),
             ]),
           );
         }));
