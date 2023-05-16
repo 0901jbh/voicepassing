@@ -38,6 +38,7 @@ class _ResultScreenState extends State<AnalyticsScreen> {
 
   void initializer() async {
     androidId = await UniqueDeviceId.instance.getUniqueId() ?? '';
+    isSend = false;
   }
 
   Future<void> _openFilePicker() async {
@@ -58,7 +59,6 @@ class _ResultScreenState extends State<AnalyticsScreen> {
       'file': await MultipartFile.fromFile(file.path),
       'androidId': androidId,
     });
-    print("before response");
     final response = await Dio().post(
       //'http://10.0.2.2:8080/api/analysis/file',
       'http://k8a607.p.ssafy.io:8080/api/analysis/file',
@@ -67,7 +67,7 @@ class _ResultScreenState extends State<AnalyticsScreen> {
     final jsonString = jsonEncode(response.data);
     final json = jsonDecode(jsonString);
     final resultModel = ResultModel.fromJson(json);
-    isSend = false;
+    //isSend = false;
     if (response.statusCode == 200) {
       Navigator.push(
         context,
@@ -96,7 +96,7 @@ class _ResultScreenState extends State<AnalyticsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HeadBar(
-        navPage: MainScreen(),
+        navPage: const MainScreen(),
         title: const Text(
           '녹음 파일 검사',
           style: TextStyle(
@@ -161,7 +161,7 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                     ),
                   ),
                   const SizedBox(
-                    height: 50,
+                    height: 70,
                   ),
                   Visibility(
                     visible: !isSend,
@@ -173,15 +173,15 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                       ),
                       child: Image.asset(
                         'images/FileButton.png',
-                        height: 150,
-                        width: 150,
+                        height: 200,
+                        width: 200,
                       ),
                     ),
                   ),
                   Visibility(
                     visible: isSend,
                     child: const SizedBox(
-                      height: 40,
+                      height: 70,
                     ),
                   ),
 
@@ -189,7 +189,7 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                     visible: isSend,
                     child: const SizedBox(
                       child: CircularProgressIndicator(
-                        strokeWidth: 15,
+                        strokeWidth: 18,
                         backgroundColor: Colors.black,
                         color: ColorStyles.themeLightBlue,
                       ),

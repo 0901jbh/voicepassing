@@ -42,7 +42,7 @@ class _ResultScreenState extends State<StaticsScreen> {
           );
         },
       ),
-      bottomNavigationBar: const Navbar(selectedIndex: 1),
+      bottomNavigationBar: const Navbar(selectedIndex: 2),
       // bottomNavigationBar: const Navbar(),
     );
   }

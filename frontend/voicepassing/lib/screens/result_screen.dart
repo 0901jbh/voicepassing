@@ -132,7 +132,7 @@ class _ResultScreenState extends State<ResultScreen> {
         },
       ),
 
-      bottomNavigationBar: const Navbar(selectedIndex: 3),
+      bottomNavigationBar: const Navbar(selectedIndex: 1),
       // bottomNavigationBar: const Navbar(),
     );
   }
