@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:isolate';
+import 'dart:ui';
 
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
@@ -40,6 +42,10 @@ class _MainScreenState extends State<MainScreen> {
   late String _androidId;
   late String phoneNumber = '';
   bool isWidgetOn = false;
+  static const String _kPortNameOverlay = 'OVERLAY';
+  static const String _kPortNameHome = 'UI';
+  final _receivePort = ReceivePort();
+  SendPort? homePort;
 
   Future<bool> checkPermissions() async {
     debugPrint('${await Permission.phone.isGranted}');
@@ -66,20 +72,21 @@ class _MainScreenState extends State<MainScreen> {
         Navigator.of(context).pushNamed('/permission');
       });
     }
-    const MethodChannel('com.example.voicepassing/navigation')
-        .setMethodCallHandler(handleNavigation);
-  }
 
-  Future<dynamic> handleNavigation(MethodCall methodCall) async {
-    if (methodCall.method == 'navigateToDetailPage') {
-      debugPrint('메서드 수신 ***************');
-      // List<ResultModel> resultList =
-      //     await ApiService.getRecentResult(_androidId);
-      NotificationController.createNewNotification(
-          ReceiveMessageModel(result: null, isFinish: true));
-      // Navigate to the SecondPage when a message is received from the AlarmWidget
-      Navigator.of(context).pushNamed('/result');
-    }
+    IsolateNameServer.registerPortWithName(
+      _receivePort.sendPort,
+      _kPortNameHome,
+    );
+    _receivePort.listen((event) async {
+      debugPrint('received');
+      const intent = AndroidIntent(
+        action: 'android.intent.action.MAIN',
+        category: 'android.intent.category.LAUNCHER',
+        package: 'com.example.voicepassing',
+      );
+      intent.launch();
+      Navigator.pushNamed(context, '/result');
+    });
   }
 
   void initializer() async {
@@ -459,11 +466,13 @@ class _MainScreenState extends State<MainScreen> {
                         const SizedBox(
                           height: 70,
                         ),
-                        const SizedBox(
+                        // ignore: prefer_const_constructors
+                        SizedBox(
                           width: 315,
+                          // ignore: prefer_const_constructors
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: const [
                               ImgButton(
                                 title: '검사 결과',
                                 imgName: 'ResultImg',
@@ -479,11 +488,13 @@ class _MainScreenState extends State<MainScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-                        const SizedBox(
+                        // ignore: prefer_const_constructors
+                        SizedBox(
                           width: 315,
+                          // ignore: prefer_const_constructors
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: const [
                               ImgButton(
                                 title: '검색',
                                 imgName: 'SearchImg',
