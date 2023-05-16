@@ -19,6 +19,7 @@ class ResultScreen extends StatefulWidget {
 class _ResultScreenState extends State<ResultScreen> {
   late List<ResultModel> resultList;
   bool isLoading = false;
+  late String androidId;
   @override
   void initState() {
     // TODO: implement initState
@@ -29,7 +30,9 @@ class _ResultScreenState extends State<ResultScreen> {
 
   initializer() async {
     await UniqueDeviceId.instance.getUniqueId().then((value) async {
-      resultList = await ApiService.getRecentResult('22180b29a256dd39');
+      androidId = value!;
+      print(androidId);
+      resultList = await ApiService.getRecentResult(androidId);
       setState(() {
         isLoading = true;
       });

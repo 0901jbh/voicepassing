@@ -25,7 +25,7 @@ class ResultModel {
   ResultModel.fromJson(Map<String, dynamic> json)
       : score = json['result']?['totalCategoryScore'] ?? 75.0,
         type = json['result']?['totalCategory'] ?? 0,
-        date = json['createdTime'] ?? DateTime(2023).toString(),
+        date = json['createdTime'] ?? DateTime.now().toString(),
         words = json['result']?['results'] != null &&
                 json['result']?['results'].isNotEmpty
             ? List<String>.from(json['result']['results']

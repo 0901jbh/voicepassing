@@ -7,7 +7,7 @@ import 'package:voicepassing/style/color_style.dart';
 import 'package:voicepassing/widgets/pie_chart.dart';
 
 class SearchDetail extends StatelessWidget {
-  final String phoneNumber;
+  String phoneNumber;
   final List<ResultModel>? resultList;
 
   SearchDetail(
@@ -18,6 +18,17 @@ class SearchDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String digitsOnly = phoneNumber.replaceAll(RegExp(r'[^\d]'), '');
+
+    if (digitsOnly.length == 10) {
+      phoneNumber = digitsOnly.replaceFirstMapped(
+          RegExp(r'^(\d{2})(\d{4})(\d{4})$'),
+          (match) => '${match[1]}-${match[2]}-${match[3]}');
+    } else if (digitsOnly.length == 11) {
+      phoneNumber = digitsOnly.replaceFirstMapped(
+          RegExp(r'^(\d{3})(\d{4})(\d{4})$'),
+          (match) => '${match[1]}-${match[2]}-${match[3]}');
+    }
     if (resultList == null) {
       return Center(
         child: Padding(

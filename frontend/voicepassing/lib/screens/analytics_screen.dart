@@ -60,8 +60,8 @@ class _ResultScreenState extends State<AnalyticsScreen> {
     });
     print("before response");
     final response = await Dio().post(
-      //'http://10.0.2.2:8080/api/analysis/file',
-      'http://k8a607.p.ssafy.io:8080/api/analysis/file',
+      'http://10.0.2.2:8080/api/analysis/file',
+      //'http://k8a607.p.ssafy.io:8080/api/analysis/file',
       data: formData,
     );
     final jsonString = jsonEncode(response.data);

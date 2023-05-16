@@ -36,27 +36,33 @@ class _ResultScreenDetailOKState extends State<ResultScreenDetailOK> {
             ),
           );
           return SingleChildScrollView(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    '범죄 유형',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  ResultDetailList(
-                    caseInfo: widget.caseInfo,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Image.asset(
-                    'images/result_ok.png',
-                    height: 250,
-                    width: 350,
-                  )
-                ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 29,
+                    ),
+                    const Text(
+                      '범죄 유형',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    ResultDetailList(
+                      caseInfo: widget.caseInfo,
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    Image.asset(
+                      'images/result_ok.png',
+                      height: 300,
+                      width: 400,
+                    )
+                  ],
+                ),
               ),
             ),
           );
