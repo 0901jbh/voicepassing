@@ -451,8 +451,9 @@ class _MainScreenState extends State<MainScreen> {
                                     StyledText(
                                       style: const TextStyle(
                                         fontSize: 18,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      text: '<b>보이스패싱</b>은',
+                                      text: '<b>보이스피싱</b>',
                                       tags: {
                                         'b': StyledTextTag(
                                             style: const TextStyle(
@@ -463,9 +464,12 @@ class _MainScreenState extends State<MainScreen> {
                                       },
                                     ),
                                     StyledText(
-                                      style: const TextStyle(fontSize: 18),
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                       text:
-                                          '<b>모두 ${snapshot.data['resultNum']}건</b>을',
+                                          '<b>${snapshot.data['resultNum']}건</b>을',
                                       tags: {
                                         'b': StyledTextTag(
                                             style: const TextStyle(
@@ -476,10 +480,10 @@ class _MainScreenState extends State<MainScreen> {
                                     ),
                                     const SizedBox(height: 5),
                                     const Text(
-                                      '잡았어요',
+                                      '찾았어요',
                                       style: TextStyle(
                                         fontSize: 18,
-                                        // fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     )
                                   ],
@@ -503,22 +507,24 @@ class _MainScreenState extends State<MainScreen> {
                             width: 315,
                             height: 80,
                             decoration: BoxDecoration(
-                              color: ColorStyles.themeLightBlue,
+                              color: isGranted
+                                  ? ColorStyles.themeLightBlue
+                                  : ColorStyles.textDarkGray,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: isGranted
                                 ? Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8, horizontal: 15),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        18, 12, 20, 12),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Text('실시간 감시중입니다',
+                                        const Text('실시간으로 통화를 분석합니다',
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w700,
-                                                fontSize: 18)),
+                                                fontSize: 15)),
                                         ColorSonar(
                                             contentAreaRadius: 10.0,
                                             waveMotion: WaveMotion.synced,
@@ -538,13 +544,27 @@ class _MainScreenState extends State<MainScreen> {
                                       ],
                                     ),
                                   )
-                                : const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text('권한을 설정해주세요',
+                                : const Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '실시간 통화 서비스를 위한 기기 권한이 없습니다',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w700,
-                                            fontSize: 18)),
+                                            fontSize: 12),
+                                      ),
+                                      SizedBox(height: 5),
+                                      Text(
+                                        '기기 권한 설정을 위해 이곳을 눌러주세요',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 12),
+                                      ),
+                                    ],
                                   ),
                           ),
                           onTap: () => {
@@ -562,12 +582,12 @@ class _MainScreenState extends State<MainScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               ImgButton(
-                                title: '검사 결과',
+                                title: '검사 이력',
                                 imgName: 'ResultImg',
                                 routeName: '/result',
                               ),
                               ImgButton(
-                                  title: '통계 내용',
+                                  title: '최근 범죄 통계',
                                   imgName: 'StaticsImg',
                                   routeName: '/statistics'),
                             ],
@@ -584,7 +604,7 @@ class _MainScreenState extends State<MainScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: const [
                               ImgButton(
-                                title: '검색',
+                                title: '전화번호 검색',
                                 imgName: 'SearchImg',
                                 routeName: '/search',
                               ),
