@@ -15,10 +15,18 @@ class RequestPermissionsScreen extends StatefulWidget {
 
 class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
   Future<void> requestPermissions() async {
-    await Permission.phone.request();
-    await Permission.storage.request();
-    await Permission.manageExternalStorage.request();
-    await FlutterOverlayWindow.requestPermission();
+    if (await Permission.phone.isDenied) {
+      await Permission.phone.request();
+    }
+    if (await Permission.storage.isDenied) {
+      await Permission.storage.request();
+    }
+    if (await Permission.manageExternalStorage.isDenied) {
+      await Permission.manageExternalStorage.request();
+    }
+    if (!(await FlutterOverlayWindow.isPermissionGranted())) {
+      await FlutterOverlayWindow.requestPermission();
+    }
     await AwesomeNotifications().requestPermissionToSendNotifications();
     setStream();
   }
@@ -41,10 +49,10 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
           padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
           child: Column(
             children: [
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
-                children: [
+                children: const [
                   Text(
                     '약관 및 개인정보 처리 동의',
                     style: TextStyle(
@@ -59,9 +67,9 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
               ),
               Expanded(
                 child: Container(
-                  child: const SingleChildScrollView(
+                  child: SingleChildScrollView(
                     child: Column(
-                      children: [
+                      children: const [
                         Text.rich(
                           TextSpan(
                             style: TextStyle(

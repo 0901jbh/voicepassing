@@ -44,7 +44,7 @@ dependencies:
   flutter_overlay_window: ^0.4.1
   phone_state: ^1.0.2
   permission_handler: ^10.2.0
-
+  flutter_foreground_task: ^4.1.0
   flutter_dotenv: ^5.0.2
 
   web_socket_channel: ^2.4.0

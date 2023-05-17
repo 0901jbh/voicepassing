@@ -14,7 +14,7 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: HeadBar(
-        navPage: MainScreen(),
+        navPage: const MainScreen(),
         title: const Text('검색'),
         appBar: AppBar(),
       ),
@@ -51,18 +51,18 @@ class SearchScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                                 color: ColorStyles.themeLightBlue,
                                 borderRadius: BorderRadius.circular(10)),
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
                                   vertical: 7, horizontal: 20),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.search, color: Colors.white),
-                                  SizedBox(
+                                  const Icon(Icons.search, color: Colors.white),
+                                  const SizedBox(
                                     width: 15,
                                   ),
                                   Column(
-                                    children: [
+                                    children: const [
                                       Text(
                                         '전화번호를 입력하세요',
                                         style: TextStyle(
