@@ -182,7 +182,14 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
                   TextButton(
                     onPressed: () async {
                       await requestPermissions();
-                      Navigator.pop(context);
+                      if (widget.fromMain == null) {
+                        Navigator.pop(context);
+                      }
+                      final loadedData = await Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MainScreen()),
+                      );
                     },
                     style: ButtonStyle(
                       backgroundColor:

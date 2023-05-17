@@ -13,7 +13,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_text/styled_text.dart';
-import 'package:voicepassing/screens/request_permissions_screen.dart';
 import 'package:voicepassing/services/notification_controller.dart';
 import 'package:voicepassing/services/permissionChecker.dart';
 import 'package:voicepassing/services/set_stream.dart';
@@ -388,12 +387,7 @@ class _MainScreenState extends State<MainScreen> {
             // ),
             IconButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const RequestPermissionsScreen(
-                              fromMain: true,
-                            )));
+                Navigator.of(context).pushNamed("/setting");
               },
               icon: const Icon(
                 Icons.settings,
