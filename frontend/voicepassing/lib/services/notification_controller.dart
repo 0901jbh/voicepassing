@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:voicepassing/main.dart';
 import 'package:voicepassing/models/receive_message_model.dart';
 import 'package:voicepassing/style/color_style.dart';
 
@@ -30,6 +33,7 @@ class NotificationController {
             defaultPrivacy: NotificationPrivacy.Private,
             defaultColor: ColorStyles.themeLightBlue,
             ledColor: ColorStyles.themeLightBlue,
+            enableVibration: false,
           ),
         ],
         debug: true);
@@ -37,6 +41,8 @@ class NotificationController {
     // Get initial notification action is optional
     initialAction = await AwesomeNotifications()
         .getInitialNotificationAction(removeFromActionEvents: false);
+
+    startListeningNotificationEvents();
   }
 
   ///  *********************************************
@@ -61,7 +67,16 @@ class NotificationController {
       debugPrint(
           'Message sent via notification input: "${receivedAction.buttonKeyInput}"');
       await executeLongTaskInBackground();
-    } else {}
+    } else {
+      debugPrint('WWWW');
+      debugPrint(App.navigatorKey.currentContext.toString());
+      App.navigatorKey.currentState?.pushNamed('/realtime');
+      // Navigator.pushNamed(
+      //   App.navigatorKey.currentContext!,
+      //   '/realtime',
+      //   // arguments: receivedAction,
+      // );
+    }
   }
 
   ///  *********************************************
@@ -117,34 +132,33 @@ class NotificationController {
             : ColorStyles.themeYellow,
         title: resultData.result != null &&
                 resultData.result!.totalCategoryScore * 100 > 80
-            ? "<span style='color: #FF525E;'>⚠️보이스피싱 위험</span>"
-            : "<span style='color: #FFC041;'>⚠️보이스피싱 주의</span>",
+            ? "<span style='color: #FF525E;'>⚠️보이스피싱 위험도 : ${(resultData.result!.totalCategoryScore * 100).round()}</span>"
+            : "<span style='color: #FFC041;'>⚠️보이스피싱 위험도 : ${(resultData.result!.totalCategoryScore * 100).round()}</span>",
         body: resultData.result != null &&
                 resultData.result!.totalCategoryScore * 100 > 80
-            ? "상대방이 <span style='color: #FF525E;'>${getKeywords().join(', ')}</span> 등의 단어를 사용하는 경우 보이스피싱의 가능성이 높으니 주의하세요"
-            : "상대방이 <span style='color: #FFC041;'>${getKeywords().join(', ')}</span> 등의 단어를 사용하는 경우 보이스피싱의 가능성이 높으니 주의하세요",
-        bigPicture:
-            'https://storage.googleapis.com/cms-storage-bucket/d406c736e7c4c57f5f61.png',
+            ? "<span style='color: #FF525E;'>${getKeywords().join(', ')}</span> 등의 단어가 감지되었습니다.<br> 이러한 단어가 사용되는 통화의 경우 보이스피싱의 가능성이 높으니 주의하세요."
+            : "<span style='color: #FFC041;'>${getKeywords().join(', ')}</span> 등의 단어가 감지되었습니다.<br> 이러한 단어가 사용되는 통화의 경우 보이스피싱의 가능성이 높으니 주의하세요.",
         // largeIcon: 'voicepassing_logo.png',
         //'asset://assets/images/balloons-in-sky.jpg',
         notificationLayout: NotificationLayout.BigText,
-        payload: {'notificationId': '1234567890'},
+        payload: {'resultData': jsonEncode(resultData)},
         category: NotificationCategory.Service,
-        // criticalAlert:
+        actionType: ActionType.Default,
       ),
-      // actionButtons: [
-      //   NotificationActionButton(key: 'REDIRECT', label: 'Redirect'),
-      //   NotificationActionButton(
-      //       key: 'REPLY',
-      //       label: 'Reply Message',
-      //       requireInputText: true,
-      //       actionType: ActionType.SilentAction),
-      //   NotificationActionButton(
-      //       key: 'DISMISS',
-      //       label: 'Dismiss',
-      //       actionType: ActionType.DismissAction,
-      //       isDangerousOption: true)
-      // ],
+      actionButtons: [
+        NotificationActionButton(
+            key: 'REDIRECT', label: 'Redirect', actionType: ActionType.Default),
+        //   NotificationActionButton(
+        //       key: 'REPLY',
+        //       label: 'Reply Message',
+        //       requireInputText: true,
+        //       actionType: ActionType.SilentAction),
+        //   NotificationActionButton(
+        //       key: 'DISMISS',
+        //       label: 'Dismiss',
+        //       actionType: ActionType.DismissAction,
+        //       isDangerousOption: true)
+      ],
     );
   }
 

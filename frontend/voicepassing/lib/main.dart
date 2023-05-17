@@ -38,6 +38,8 @@ void overlayMain() async {
 
 class App extends StatelessWidget {
   const App({super.key});
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +50,7 @@ class App extends StatelessWidget {
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.1),
             child: child!);
       },
-      home: Scaffold(
+      home: const Scaffold(
         body: MainScreen(),
       ),
       theme: ThemeData(

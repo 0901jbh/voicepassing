@@ -7,6 +7,7 @@ import 'package:voicepassing/screens/result_screen.dart';
 import 'package:voicepassing/screens/search_screen.dart';
 import 'package:voicepassing/screens/setting_screen.dart';
 import 'package:voicepassing/screens/statics_screen.dart';
+import 'package:voicepassing/screens/test_screen.dart';
 
 class Routes {
   Routes._();
@@ -19,9 +20,10 @@ class Routes {
   static const String setting = '/setting';
   static const String permission = '/permission';
   static const String wearable = '/wearable';
+  static const String realtime = '/realtime';
 
   static final routes = <String, WidgetBuilder>{
-    '/main': (context) => MainScreen(),
+    '/main': (context) => const MainScreen(),
     '/result': (context) => const ResultScreen(),
     '/search': (context) => const SearchScreen(),
     '/statistics': (constext) => const StaticsScreen(),
@@ -29,5 +31,6 @@ class Routes {
     '/setting': (context) => const SettingScreen(),
     '/permission': (context) => const RequestPermissionsScreen(),
     '/wearable': (context) => const ConnectWearableScreen(),
+    '/realtime': (context) => const TestScreen(),
   };
 }

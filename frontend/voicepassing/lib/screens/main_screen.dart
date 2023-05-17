@@ -262,6 +262,11 @@ class _MainScreenState extends State<MainScreen> {
               },
               child: const Text('푸시알림테스트'),
             ),
+            TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/realtime');
+                },
+                child: const Text('fds')),
             // 위젯 데이터 갱신 테스트용 버튼
             TextButton(
               onPressed: () {
