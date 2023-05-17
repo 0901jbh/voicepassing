@@ -13,7 +13,7 @@ class _RealtimeBodyWidgetState extends State<RealtimeBodyWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+      padding: const EdgeInsets.fromLTRB(6, 6, 6, 6),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           color: ColorStyles.themeLightBlue),
