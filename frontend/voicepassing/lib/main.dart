@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:voicepassing/providers/is_analyzing.dart';
 import 'package:voicepassing/providers/realtime_provider.dart';
 import 'package:voicepassing/providers/selected_wearable.dart';
 import 'package:voicepassing/routes.dart';
@@ -18,6 +19,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => SelectedWearable()),
         ChangeNotifierProvider(create: (_) => RealtimeProvider()),
+        ChangeNotifierProvider(create: (_) => IsAnalyzing()),
       ],
       child: const App(),
     ),
