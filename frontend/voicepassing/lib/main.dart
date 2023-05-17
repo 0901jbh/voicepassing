@@ -64,6 +64,7 @@ class _AppState extends State<App> {
       },
       home: const Scaffold(
         body: MainScreen(),
+        // body: Column(children: [children: ],)
       ),
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,

@@ -44,7 +44,7 @@ dependencies:
   flutter_overlay_window: ^0.4.1
   phone_state: ^1.0.2
   permission_handler: ^10.2.0
-
+  flutter_foreground_task: ^4.1.0
   flutter_dotenv: ^5.0.2
 
   web_socket_channel: ^2.4.0
@@ -56,6 +56,10 @@ dependencies:
   awesome_notifications: ^0.7.4+1
   flutter_wear_os_connectivity: ^1.0.0
   android_intent_plus: ^4.0.0
+  flutter_background_service: ^2.4.6
+  shared_preferences: ^2.1.1
+  flutter_background_service_android: ^3.0.3
+  loading_animation_widget: ^1.2.0+4
   provider: ^6.0.5
 
 dev_dependencies:
