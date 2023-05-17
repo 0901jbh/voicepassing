@@ -48,8 +48,9 @@ class App extends StatelessWidget {
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.1),
             child: child!);
       },
-      home: Scaffold(
+      home: const Scaffold(
         body: MainScreen(),
+        // body: Column(children: [children: ],)
       ),
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
