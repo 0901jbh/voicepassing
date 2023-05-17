@@ -33,7 +33,8 @@ class NotificationController {
             defaultPrivacy: NotificationPrivacy.Private,
             defaultColor: ColorStyles.themeLightBlue,
             ledColor: ColorStyles.themeLightBlue,
-            enableVibration: false,
+            enableVibration: true,
+            vibrationPattern: highVibrationPattern,
           ),
         ],
         debug: true);
