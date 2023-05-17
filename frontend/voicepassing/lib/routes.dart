@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:voicepassing/screens/analytics_screen.dart';
+import 'package:voicepassing/screens/connect_wearable_screen.dart';
 import 'package:voicepassing/screens/main_screen.dart';
 import 'package:voicepassing/screens/request_permissions_screen.dart';
 import 'package:voicepassing/screens/result_screen.dart';
@@ -17,6 +18,7 @@ class Routes {
   static const String analytics = '/analytics';
   static const String setting = '/setting';
   static const String permission = '/permission';
+  static const String wearable = '/wearable';
 
   static final routes = <String, WidgetBuilder>{
     '/main': (context) => MainScreen(),
@@ -26,5 +28,6 @@ class Routes {
     '/analytics': (context) => const AnalyticsScreen(),
     '/setting': (context) => const SettingScreen(),
     '/permission': (context) => const RequestPermissionsScreen(),
+    '/wearable': (context) => const ConnectWearableScreen(),
   };
 }
