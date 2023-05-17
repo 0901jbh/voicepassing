@@ -104,8 +104,6 @@ public class ResultServiceImpl implements ResultService {
     }
     @Override
     public List<ResultDTO.ResultWithWords> getResults(String androidId) {
-        //List<Result> resultsEntity = resultRepository.findAllByAndroidId(androidId);
-        System.out.println("in getresults");
         List<Result> resultsEntity = resultRepository.findAllByAndroidIdOrderByCreatedTimeDesc(androidId);
         List<ResultDTO.ResultWithWords> resultList = new ArrayList<>();
         for (Result result: resultsEntity) {
