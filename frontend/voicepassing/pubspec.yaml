@@ -46,11 +46,11 @@ dependencies:
   permission_handler: ^10.2.0
   flutter_foreground_task: ^4.1.0
   flutter_dotenv: ^5.0.2
-
+  lottie: ^2.3.2
   web_socket_channel: ^2.4.0
   intl: ^0.18.1
   unique_device_id: ^0.1.2
-
+  im_animations: ^0.1.2
   fl_chart: ^0.62.0
   vibration: ^1.7.7
   awesome_notifications: ^0.7.4+1
@@ -90,6 +90,7 @@ flutter:
   assets:
     - images/
     - assets/config/.env
+    - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

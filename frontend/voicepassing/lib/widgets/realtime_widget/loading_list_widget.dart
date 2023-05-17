@@ -1,9 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:provider/provider.dart';
-import 'package:voicepassing/providers/realtime_provider.dart';
 import 'package:voicepassing/style/color_style.dart';
 
 class LoadingListWidget extends StatelessWidget {
@@ -11,19 +7,17 @@ class LoadingListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var data = context.watch<RealtimeProvider>().realtimeDataList;
-    inspect(data);
     return Container(
+      padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(6)),
-      height: 60,
+          borderRadius: BorderRadius.circular(9),
+          color: ColorStyles.themeLightBlue),
       width: double.infinity,
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        LoadingAnimationWidget.staggeredDotsWave(
-            color: ColorStyles.themeLightBlue, size: 30),
+        LoadingAnimationWidget.staggeredDotsWave(color: Colors.white, size: 30),
         const Text("분석 중",
             style: TextStyle(
-              color: ColorStyles.themeLightBlue,
+              color: Colors.white,
               fontSize: 12,
               fontWeight: FontWeight.bold,
             )),

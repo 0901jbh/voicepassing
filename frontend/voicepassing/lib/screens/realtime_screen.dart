@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:voicepassing/models/receive_message_model.dart';
+import 'package:voicepassing/providers/realtime_provider.dart';
 import 'package:voicepassing/screens/main_screen.dart';
+import 'package:voicepassing/services/notification_controller.dart';
 import 'package:voicepassing/widgets/head_bar.dart';
 import 'package:voicepassing/widgets/realtime_widget/realtime_body_widget.dart';
 import 'package:voicepassing/widgets/realtime_widget/realtime_head_widget.dart';
@@ -16,7 +20,7 @@ class _RealtimeScreenState extends State<RealtimeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HeadBar(
-        navPage: MainScreen(),
+        navPage: const MainScreen(),
         title: const Text('실시간 통화 분석'),
         appBar: AppBar(),
       ),
@@ -31,7 +35,7 @@ class _RealtimeScreenState extends State<RealtimeScreen> {
                   height: 20,
                 ),
                 RealtimeHeadwidget(),
-                SizedBox(height: 20),
+                SizedBox(height: 30),
                 RealtimeBodyWidget(),
               ],
             ),
