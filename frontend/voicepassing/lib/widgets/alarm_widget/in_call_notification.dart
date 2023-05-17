@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:voicepassing/models/receive_message_model.dart';
 import 'package:voicepassing/style/color_style.dart';
+import 'package:voicepassing/widgets/realtime_widget/realtime_circle_progress_bar.dart';
 
 class InCallNotification extends StatelessWidget {
   const InCallNotification({
@@ -117,33 +118,9 @@ class InCallNotification extends StatelessWidget {
               ),
               SizedBox(
                 height: 60,
-                child: Column(
-                  children: [
-                    Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          width: 5,
-                          color: Colors.white,
-                        ),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        (resultData.result != null
-                                ? resultData.result!.totalCategoryScore * 100
-                                : 0)
-                            .round()
-                            .toString(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
-                  ],
+                child: RealtimeCircleProgressBar(
+                  textColor: Colors.white,
+                  score: resultData.result!.totalCategoryScore as double,
                 ),
               ),
             ],
