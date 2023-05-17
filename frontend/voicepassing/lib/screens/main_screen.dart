@@ -481,16 +481,16 @@ class _MainScreenState extends State<MainScreen> {
                           ],
                         ),
                         const SizedBox(
-                          height: 70,
+                          height: 50,
                         ),
                         // ignore: prefer_const_constructors
                         GestureDetector(
                           child: Container(
                             width: 315,
-                            height: 50,
+                            height: 80,
                             decoration: BoxDecoration(
                               color: ColorStyles.themeLightBlue,
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(12),
                             ),
                             child: isGranted
                                 ? Padding(
@@ -539,7 +539,7 @@ class _MainScreenState extends State<MainScreen> {
                           },
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 12,
                         ),
                         const SizedBox(
                           width: 315,
