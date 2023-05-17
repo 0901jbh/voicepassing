@@ -101,31 +101,45 @@ public class AnalysisServiceImpl implements AnalysisService{
         RestTemplate restTemplate = new RestTemplate();
 
 //    // 요청 Body 생성
-        Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("text", rb.getText());
-        requestBody.put("isFinish", Boolean.toString(rb.isFinish()));
-        requestBody.put("sessionId", rb.getSessionId());
+		Map<String, Object> requestBody = new HashMap<>();
+		requestBody.put("text", rb.getText());
+		requestBody.put("isFinish", Boolean.toString(rb.isFinish()));
+		requestBody.put("sessionId", rb.getSessionId());
 
 //    // HTTP Header 생성
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 
 //    // HTTP 요청 생성
-        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestBody, headers);
+		HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestBody, headers);
 
 //    // FastAPI URL 설정
-        String url = AI_SERVER_URI + "/inference";
+		String url = AI_SERVER_URI + "/inference";
 
 //    // HTTP 요청 보내기
-        ResponseEntity<AIResponseDTO.Response> responseEntity = restTemplate.postForEntity(url,httpEntity,AIResponseDTO.Response.class);
+		ResponseEntity<AIResponseDTO.Response> responseEntity = restTemplate.postForEntity(url, httpEntity,
+				AIResponseDTO.Response.class);
 
 //
 //// HTTP 응답 받기
-        AIResponseDTO.Response responseBody = responseEntity.getBody();
-        resultMap.put("status",responseEntity.getStatusCode());
-        resultMap.put("result",responseBody);
+		AIResponseDTO.Response responseBody = responseEntity.getBody();
+		resultMap.put("status", responseEntity.getStatusCode());
+		resultMap.put("result", responseBody);
 
-        return resultMap;
-    }
+		return resultMap;
+	}
 
+	public String maskingData(String data) {
+		StringBuilder sb = new StringBuilder(data);
+		StringBuilder mask = new StringBuilder();
+		for(int i = 0 ; i < sb.length();i++) {
+			char target = sb.charAt(i);
+			if(target>='0'&& target<='9') {
+				mask.append('0');
+			}else {
+				mask.append(target);
+			}
+		}
+		return mask.toString();
+	}
 }
