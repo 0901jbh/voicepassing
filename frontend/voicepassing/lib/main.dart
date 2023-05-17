@@ -36,14 +36,26 @@ void overlayMain() async {
   );
 }
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({super.key});
   static final GlobalKey<NavigatorState> navigatorKey =
       GlobalKey<NavigatorState>();
 
   @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  @override
+  void initState() {
+    super.initState();
+    NotificationController.startListeningNotificationEvents();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: App.navigatorKey,
       routes: Routes.routes,
       builder: (context, child) {
         return MediaQuery(

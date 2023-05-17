@@ -41,8 +41,6 @@ class NotificationController {
     // Get initial notification action is optional
     initialAction = await AwesomeNotifications()
         .getInitialNotificationAction(removeFromActionEvents: false);
-
-    startListeningNotificationEvents();
   }
 
   ///  *********************************************
@@ -68,14 +66,11 @@ class NotificationController {
           'Message sent via notification input: "${receivedAction.buttonKeyInput}"');
       await executeLongTaskInBackground();
     } else {
-      debugPrint('WWWW');
-      debugPrint(App.navigatorKey.currentContext.toString());
-      App.navigatorKey.currentState?.pushNamed('/realtime');
-      // Navigator.pushNamed(
-      //   App.navigatorKey.currentContext!,
-      //   '/realtime',
-      //   // arguments: receivedAction,
-      // );
+      Navigator.pushNamed(
+        App.navigatorKey.currentContext!,
+        '/realtime',
+        // arguments: receivedAction,
+      );
     }
   }
 
