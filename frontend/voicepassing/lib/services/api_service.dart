@@ -74,10 +74,12 @@ class ApiService {
     if (response.statusCode == 204) {
       return [0, 0, 0];
     } else if (response.statusCode == 200) {
-      var json = List<int>.from(jsonDecode(response.body)['categoryNum']);
-      returnData[0] = json[1].toDouble();
-      returnData[1] = json[2].toDouble();
-      returnData[2] = json[3].toDouble();
+      var jsonData = jsonDecode(response.body)['result'];
+      var countList = List<int>.from(jsonData['count']);
+      returnData[0] = countList[0].toDouble();
+      returnData[1] = countList[1].toDouble();
+      returnData[2] = countList[2].toDouble();
+
       return returnData;
     }
     throw Error();
