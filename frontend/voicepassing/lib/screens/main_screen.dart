@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:call_log/call_log.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:im_animations/im_animations.dart';
@@ -13,6 +14,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_text/styled_text.dart';
+import 'package:voicepassing/models/send_message_model.dart';
 import 'package:voicepassing/services/notification_controller.dart';
 import 'package:voicepassing/services/permissionChecker.dart';
 import 'package:voicepassing/services/set_stream.dart';
@@ -293,21 +295,21 @@ class _MainScreenState extends State<MainScreen> {
                         ResultItem(
                           sentCategory: 2,
                           sentCategoryScore: 0.82,
-                          sentKeyword: '안녕',
+                          sentKeyword: '서울중앙지방검찰청',
                           keywordScore: 0.55,
                           sentence: 'ㅁㄴㅇㄹ',
                         ),
                         ResultItem(
                           sentCategory: 1,
                           sentCategoryScore: 0.74,
-                          sentKeyword: '검',
+                          sentKeyword: '녹취',
                           keywordScore: 0.55,
                           sentence: '검사',
                         ),
                         ResultItem(
                           sentCategory: 1,
                           sentCategoryScore: 0.88,
-                          sentKeyword: '녹취',
+                          sentKeyword: '대포통장',
                           keywordScore: 0.55,
                           sentence: 'ㅁㄴㅇㄹ',
                         ),
@@ -317,6 +319,18 @@ class _MainScreenState extends State<MainScreen> {
                   );
 
                   if (data.isFinish == true) {
+                    var callLog = await CallLog.query(
+                      dateTimeFrom:
+                          DateTime.now().subtract(const Duration(days: 1)),
+                      dateTimeTo: DateTime.now(),
+                    );
+                    phoneNumber = callLog.first.formattedNumber ?? '010010101';
+                    SendMessageModel callInfo = SendMessageModel(
+                      state: 1,
+                      androidId: 'androidId',
+                      phoneNumber: phoneNumber,
+                    );
+                    FlutterOverlayWindow.shareData(callInfo);
                     await FlutterOverlayWindow.shareData(data);
                   } else if (data.result!.totalCategoryScore >= 0.5) {
                     await FlutterOverlayWindow.shareData(data);

@@ -61,6 +61,7 @@ dependencies:
   flutter_background_service_android: ^3.0.3
   loading_animation_widget: ^1.2.0+4
   provider: ^6.0.5
+  call_log: ^4.0.0
 
 dev_dependencies:
   flutter_test:

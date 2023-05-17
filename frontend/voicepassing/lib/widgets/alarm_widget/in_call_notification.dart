@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:voicepassing/models/receive_message_model.dart';
 import 'package:voicepassing/style/color_style.dart';
+import 'package:voicepassing/widgets/realtime_widget/realtime_circle_progress_bar.dart';
 
 class InCallNotification extends StatelessWidget {
   const InCallNotification({
@@ -54,8 +55,7 @@ class InCallNotification extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
-                height: 60,
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -71,18 +71,9 @@ class InCallNotification extends StatelessWidget {
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          '검사',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
                       ],
                     ),
                     Row(
-                      mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
@@ -100,37 +91,25 @@ class InCallNotification extends StatelessWidget {
                         const SizedBox(
                           width: 5,
                         ),
-                        Row(
-                          children: [
-                            if (resultData.result != null &&
-                                resultData.result!.results is List &&
-                                resultData.result!.results!.isNotEmpty)
-                              for (var item in getKeywords())
-                                Row(
-                                  children: [
-                                    Text(
-                                      item,
-                                      style: TextStyle(
-                                        color: resultData.result != null &&
-                                                resultData.result!
-                                                            .totalCategoryScore *
-                                                        100 >
-                                                    80
-                                            ? ColorStyles.subLightGray
-                                            : ColorStyles.textBlack,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                  ],
-                                ),
-                            const SizedBox(
-                              width: 5,
+                        Expanded(
+                          child: Text(
+                            resultData.result!.totalCategory == 1
+                                ? '기관사칭형 보이스피싱'
+                                : resultData.result!.totalCategory == 2
+                                    ? '대출빙자형 보이스피싱'
+                                    : '기타유형  보이스피싱',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: resultData.result != null &&
+                                      resultData.result!.totalCategoryScore *
+                                              100 >
+                                          80
+                                  ? ColorStyles.subLightGray
+                                  : ColorStyles.textBlack,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
                             ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
@@ -139,33 +118,9 @@ class InCallNotification extends StatelessWidget {
               ),
               SizedBox(
                 height: 60,
-                child: Column(
-                  children: [
-                    Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          width: 5,
-                          color: Colors.white,
-                        ),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        (resultData.result != null
-                                ? resultData.result!.totalCategoryScore * 100
-                                : 0)
-                            .round()
-                            .toString(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
-                  ],
+                child: RealtimeCircleProgressBar(
+                  textColor: Colors.white,
+                  score: resultData.result!.totalCategoryScore as double,
                 ),
               ),
             ],

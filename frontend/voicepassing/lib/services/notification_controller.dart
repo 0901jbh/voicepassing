@@ -69,7 +69,6 @@ class NotificationController {
       Navigator.pushNamed(
         App.navigatorKey.currentContext!,
         '/realtime',
-        // arguments: receivedAction,
       );
     }
   }
@@ -118,7 +117,7 @@ class NotificationController {
 
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
-        id: -1, // -1 is replaced by a random number
+        id: -1,
         channelKey: 'voicepassing',
         color: Colors.white,
         backgroundColor: resultData.result != null &&
@@ -131,29 +130,13 @@ class NotificationController {
             : "<span style='color: #FFC041;'>⚠️보이스피싱 위험도 : ${(resultData.result!.totalCategoryScore * 100).round()}</span>",
         body: resultData.result != null &&
                 resultData.result!.totalCategoryScore * 100 > 80
-            ? "<span style='color: #FF525E;'>${getKeywords().join(', ')}</span> 등의 단어가 감지되었습니다.<br> 이러한 단어가 사용되는 통화의 경우 보이스피싱의 가능성이 높으니 주의하세요."
-            : "<span style='color: #FFC041;'>${getKeywords().join(', ')}</span> 등의 단어가 감지되었습니다.<br> 이러한 단어가 사용되는 통화의 경우 보이스피싱의 가능성이 높으니 주의하세요.",
-        // largeIcon: 'voicepassing_logo.png',
-        //'asset://assets/images/balloons-in-sky.jpg',
+            ? "<span style='color: #FF525E;'>${getKeywords().join(', ')}</span> 등의 단어가 감지되었습니다.<br> 이러한 단어가 사용되는 통화의 경우 보이스피싱의 가능성이 높으니 주의하세요. 자세한 정보를 보시려면 알림을 터치하세요."
+            : "<span style='color: #FFC041;'>${getKeywords().join(', ')}</span> 등의 단어가 감지되었습니다.<br> 이러한 단어가 사용되는 통화의 경우 보이스피싱의 가능성이 높으니 주의하세요. 자세한 정보를 보시려면 알림을 터치하세요.",
         notificationLayout: NotificationLayout.BigText,
         payload: {'resultData': jsonEncode(resultData)},
         category: NotificationCategory.Service,
         actionType: ActionType.Default,
       ),
-      actionButtons: [
-        NotificationActionButton(
-            key: 'REDIRECT', label: 'Redirect', actionType: ActionType.Default),
-        //   NotificationActionButton(
-        //       key: 'REPLY',
-        //       label: 'Reply Message',
-        //       requireInputText: true,
-        //       actionType: ActionType.SilentAction),
-        //   NotificationActionButton(
-        //       key: 'DISMISS',
-        //       label: 'Dismiss',
-        //       actionType: ActionType.DismissAction,
-        //       isDangerousOption: true)
-      ],
     );
   }
 
