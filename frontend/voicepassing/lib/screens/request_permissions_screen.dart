@@ -2,11 +2,15 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:voicepassing/screens/main_screen.dart';
+import 'package:voicepassing/services/permissionChecker.dart';
 import 'package:voicepassing/services/set_stream.dart';
 import 'package:voicepassing/style/color_style.dart';
 
 class RequestPermissionsScreen extends StatefulWidget {
-  const RequestPermissionsScreen({super.key});
+  final bool? fromMain;
+
+  const RequestPermissionsScreen({super.key, this.fromMain});
 
   @override
   State<RequestPermissionsScreen> createState() =>
@@ -15,19 +19,34 @@ class RequestPermissionsScreen extends StatefulWidget {
 
 class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
   Future<void> requestPermissions() async {
-    if (await Permission.phone.isDenied) {
-      await Permission.phone.request();
+    var result = await PermissionChecker().isPermissioned();
+    if (result[0]) {
+      print(0);
+      await Permission.phone.request().then((value) => print(value));
     }
-    if (await Permission.storage.isDenied) {
-      await Permission.storage.request();
+    // if (result[1]) {
+    //   print(1);
+    //   await Permission.audio.request().then((value) => print('$value오디오'));
+    //   // await Permission.storage.request().then((value) => print('$value스토리지'));
+    // }
+    print(result);
+    if (true) {
+      print(2);
+      await Permission.manageExternalStorage
+          .request()
+          .then((value) => print('$value외부'));
     }
-    if (await Permission.manageExternalStorage.isDenied) {
-      await Permission.manageExternalStorage.request();
+    if (true) {
+      print(3);
+      await FlutterOverlayWindow.requestPermission()
+          .then((value) => print('$value오버레이'));
     }
-    if (!(await FlutterOverlayWindow.isPermissionGranted())) {
-      await FlutterOverlayWindow.requestPermission();
+    if (result[3]) {
+      print(4);
+      await AwesomeNotifications()
+          .requestPermissionToSendNotifications()
+          .then((value) => print('$value개쩌는'));
     }
-    await AwesomeNotifications().requestPermissionToSendNotifications();
     setStream();
   }
 
@@ -49,10 +68,10 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
           padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
           child: Column(
             children: [
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
-                children: const [
+                children: [
                   Text(
                     '약관 및 개인정보 처리 동의',
                     style: TextStyle(
@@ -67,9 +86,9 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
               ),
               Expanded(
                 child: Container(
-                  child: SingleChildScrollView(
+                  child: const SingleChildScrollView(
                     child: Column(
-                      children: const [
+                      children: [
                         Text.rich(
                           TextSpan(
                             style: TextStyle(
@@ -126,9 +145,16 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
               Column(
                 children: [
                   TextButton(
-                    onPressed: () {
-                      requestPermissions();
-                      Navigator.pop(context);
+                    onPressed: () async {
+                      await requestPermissions();
+                      if (widget.fromMain == null) {
+                        Navigator.pop(context);
+                      }
+                      final loadedData = await Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MainScreen()),
+                      );
                     },
                     style: ButtonStyle(
                       backgroundColor:
@@ -154,7 +180,8 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      await requestPermissions();
                       Navigator.pop(context);
                     },
                     style: ButtonStyle(
