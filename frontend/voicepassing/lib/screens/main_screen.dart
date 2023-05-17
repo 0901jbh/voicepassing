@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
+import 'package:provider/provider.dart';
 import 'package:styled_text/styled_text.dart';
 import 'package:voicepassing/services/notification_controller.dart';
 import 'package:voicepassing/services/set_stream.dart';
@@ -20,6 +21,8 @@ import 'package:unique_device_id/unique_device_id.dart';
 import 'package:voicepassing/models/receive_message_model.dart';
 import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/widgets/img_button.dart';
+
+import '../providers/realtime_provider.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -257,6 +260,7 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   isFinish: count == 1 ? true : false,
                 );
+                context.read<RealtimeProvider>().add(data);
                 NotificationController.cancelNotifications();
                 NotificationController.createNewNotification(data);
               },
