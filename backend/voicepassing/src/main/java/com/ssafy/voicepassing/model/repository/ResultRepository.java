@@ -17,4 +17,5 @@ public interface ResultRepository extends JpaRepository<Result,Integer> {
     @Query("SELECT COUNT(r), r.category FROM Result r WHERE r.createdTime >= :oneMonthAgo GROUP BY r.category")
     List<Object[]> countByCategoryAndCreatedTimeAfter(@Param("oneMonthAgo") LocalDateTime oneMonthAgo);
 
+    List<Result> findAllByAndroidIdOrderByCreatedTimeDesc(String androidId);
 }
