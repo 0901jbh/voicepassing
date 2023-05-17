@@ -7,11 +7,14 @@ import 'package:android_intent_plus/android_intent.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+import 'package:im_animations/im_animations.dart';
+import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
 import 'package:provider/provider.dart';
 import 'package:styled_text/styled_text.dart';
 import 'package:voicepassing/services/notification_controller.dart';
+import 'package:voicepassing/services/permissionChecker.dart';
 import 'package:voicepassing/services/set_stream.dart';
 import 'package:voicepassing/style/color_style.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -48,7 +51,10 @@ class _MainScreenState extends State<MainScreen> {
   static const String _kPortNameHome = 'UI';
   final _receivePort = ReceivePort();
   SendPort? homePort;
-
+  //
+  bool isGranted = false;
+  List grantedList = [];
+  //
   Future<bool> checkPermissions() async {
     debugPrint('${await Permission.phone.isGranted}');
     debugPrint('${await Permission.manageExternalStorage.isGranted}');
@@ -97,6 +103,9 @@ class _MainScreenState extends State<MainScreen> {
     _androidId = await UniqueDeviceId.instance.getUniqueId() ?? 'unknown';
 
     granted = await checkPermissions();
+    isGranted = await PermissionChecker().isGranted();
+    grantedList = await PermissionChecker().isPermissioned();
+    print(grantedList);
     setState(() {});
     debugPrint('$granted');
 
@@ -475,12 +484,69 @@ class _MainScreenState extends State<MainScreen> {
                           height: 70,
                         ),
                         // ignore: prefer_const_constructors
-                        SizedBox(
+                        GestureDetector(
+                          child: Container(
+                            width: 315,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: ColorStyles.themeLightBlue,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: isGranted
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 15),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text('실시간 감시중입니다',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 18)),
+                                        ColorSonar(
+                                            contentAreaRadius: 10.0,
+                                            waveMotion: WaveMotion.synced,
+                                            waveFall: 5.0,
+                                            innerWaveColor:
+                                                ColorStyles.themeLightBlue,
+                                            middleWaveColor:
+                                                const Color.fromARGB(
+                                                    255, 114, 157, 221),
+                                            outerWaveColor:
+                                                const Color.fromARGB(
+                                                    255, 170, 195, 233),
+                                            child: CircleAvatar(
+                                                radius: 20.0,
+                                                child: Lottie.asset(
+                                                    'assets/shield.json')))
+                                      ],
+                                    ),
+                                  )
+                                : const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text('권한을 설정해주세요',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 18)),
+                                  ),
+                          ),
+                          onTap: () => {
+                            if (!isGranted)
+                              {Navigator.of(context).pushNamed('/permission')}
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const SizedBox(
                           width: 315,
                           // ignore: prefer_const_constructors
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
+                            children: [
                               ImgButton(
                                 title: '검사 결과',
                                 imgName: 'ResultImg',

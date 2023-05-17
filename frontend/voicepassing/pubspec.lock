@@ -320,6 +320,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  im_animations:
+    dependency: "direct main"
+    description:
+      name: im_animations
+      sha256: f50d4c89b7a90deabfa1b685060c1ed846457f00394b854efefb75ca49598d54
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.2"
   image:
     dependency: transitive
     description:
@@ -368,6 +376,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0+4"
+  lottie:
+    dependency: "direct main"
+    description:
+      name: lottie
+      sha256: "23522951540d20a57a60202ed7022e6376bed206a4eee1c347a91f58bd57eb9f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.2"
   matcher:
     dependency: transitive
     description:
