@@ -73,11 +73,6 @@ class _AnimatedCountState extends State<DoubleValueTextWithCircle>
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              widget.txt!,
-              style: widget.style!
-                  .copyWith(fontSize: 13, fontWeight: FontWeight.w700),
-            ),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
