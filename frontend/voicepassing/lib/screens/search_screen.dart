@@ -14,7 +14,7 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: HeadBar(
-        navPage: MainScreen(),
+        navPage: const MainScreen(),
         title: const Text('검색'),
         appBar: AppBar(),
       ),
@@ -95,7 +95,7 @@ class SearchScreen extends StatelessWidget {
           );
         },
       ),
-      bottomNavigationBar: const Navbar(selectedIndex: 2),
+      bottomNavigationBar: const Navbar(selectedIndex: 3),
     );
   }
 }

@@ -82,7 +82,7 @@ class _ResultScreenState extends State<ResultScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HeadBar(
-        navPage: MainScreen(),
+        navPage: const MainScreen(),
         title: const Text('검사 결과'),
         appBar: AppBar(),
       ),
@@ -132,7 +132,7 @@ class _ResultScreenState extends State<ResultScreen> {
         },
       ),
 
-      bottomNavigationBar: const Navbar(selectedIndex: 3),
+      bottomNavigationBar: const Navbar(selectedIndex: 1),
       // bottomNavigationBar: const Navbar(),
     );
   }
@@ -151,7 +151,7 @@ class ResultTitle extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Flexible(
+            Flexible(
               flex: 5,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,7 +159,7 @@ class ResultTitle extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     textBaseline: TextBaseline.alphabetic,
-                    children: [
+                    children: const [
                       Text(
                         '지난 검사 결과',
                         style: TextStyle(
@@ -170,7 +170,7 @@ class ResultTitle extends StatelessWidget {
                       Text('를'),
                     ],
                   ),
-                  Text('확인해보세요')
+                  const Text('확인해보세요')
                 ],
               ),
             ),

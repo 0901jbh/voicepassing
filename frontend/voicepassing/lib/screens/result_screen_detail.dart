@@ -3,9 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:styled_text/styled_text.dart';
 import 'package:voicepassing/models/result_model.dart';
 import 'package:voicepassing/style/color_style.dart';
-import 'package:voicepassing/widgets/head_bar.dart';
+
 import 'package:voicepassing/widgets/nav_bar.dart';
 import 'package:voicepassing/widgets/result/result_detail.dart';
+
+import 'package:voicepassing/widgets/head_bar_no_rewind.dart';
+//import 'package:voicepassing/widgets/head_bar.dart';
 
 class ResultScreenDetail extends StatefulWidget {
   final ResultModel caseInfo;
@@ -149,7 +152,7 @@ class _ResultScreenDetailState extends State<ResultScreenDetail> {
           );
         },
       ),
-      bottomNavigationBar: const Navbar(selectedIndex: 3),
+      bottomNavigationBar: const Navbar(selectedIndex: 1),
     );
   }
 }

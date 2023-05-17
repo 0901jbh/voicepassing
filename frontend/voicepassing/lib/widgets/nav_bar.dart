@@ -29,16 +29,16 @@ class _NavbarState extends State<Navbar> {
             label: '메인',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.playlist_add_check),
+            label: '검사 결과',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.pie_chart_outline),
             label: '통계',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             label: '검색',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.playlist_add_check),
-            label: '검사 결과',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.upload_outlined),
@@ -51,7 +51,7 @@ class _NavbarState extends State<Navbar> {
         onTap: (int index) {
           switch (index) {
             case 0:
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => MainScreen(),
@@ -59,31 +59,31 @@ class _NavbarState extends State<Navbar> {
               );
               break;
             case 1:
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const StaticsScreen(),
-                ),
-              );
-              break;
-            case 2:
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SearchScreen(),
-                ),
-              );
-              break;
-            case 3:
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const ResultScreen(),
                 ),
               );
               break;
+            case 2:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const StaticsScreen(),
+                ),
+              );
+              break;
+            case 3:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SearchScreen(),
+                ),
+              );
+              break;
             case 4:
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const AnalyticsScreen(),

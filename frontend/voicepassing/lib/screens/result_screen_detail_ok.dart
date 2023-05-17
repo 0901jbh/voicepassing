@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
 import 'package:voicepassing/models/result_model.dart';
-import 'package:voicepassing/widgets/head_bar.dart';
+
 import 'package:voicepassing/widgets/nav_bar.dart';
 import 'package:voicepassing/widgets/result/result_detail.dart';
+
+import 'package:intl/intl.dart';
+//import 'package:voicepassing/widgets/head_bar.dart';
+
+import 'package:voicepassing/widgets/head_bar_no_rewind.dart';
 
 class ResultScreenDetailOK extends StatefulWidget {
   final ResultModel caseInfo;
@@ -68,7 +73,7 @@ class _ResultScreenDetailOKState extends State<ResultScreenDetailOK> {
           );
         },
       ),
-      bottomNavigationBar: const Navbar(selectedIndex: 3),
+      bottomNavigationBar: const Navbar(selectedIndex: 1),
     );
   }
 }

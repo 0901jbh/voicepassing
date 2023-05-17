@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:voicepassing/providers/selected_wearable.dart';
 import 'package:voicepassing/routes.dart';
 import 'package:voicepassing/screens/main_screen.dart';
-// import 'package:voicepassing/services/notification_controller.dart';
+import 'package:voicepassing/services/notification_controller.dart';
 
 import 'widgets/alarm_widget/alarm_widget.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -9,9 +11,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 void main() async {
   await dotenv.load(fileName: 'assets/config/.env');
   WidgetsFlutterBinding.ensureInitialized();
-  // await NotificationController.initializeLocalNotifications();
+  await NotificationController.initializeLocalNotifications();
   runApp(
-    const App(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => SelectedWearable()),
+      ],
+      child: const App(),
+    ),
   );
 }
 
@@ -20,7 +27,7 @@ void main() async {
 void overlayMain() async {
   await dotenv.load(fileName: 'assets/config/.env');
   WidgetsFlutterBinding.ensureInitialized();
-  // await NotificationController.initializeLocalNotifications();
+  await NotificationController.initializeLocalNotifications();
   runApp(
     const MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -41,7 +48,7 @@ class App extends StatelessWidget {
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.1),
             child: child!);
       },
-      home: Scaffold(
+      home: const Scaffold(
         body: MainScreen(),
         // body: Column(children: [children: ],)
       ),

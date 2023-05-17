@@ -60,6 +60,7 @@ class InCallNotification extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    // ignore: prefer_const_constructors
                     Row(
                       children: const [
                         Image(
@@ -81,6 +82,7 @@ class InCallNotification extends StatelessWidget {
                       ],
                     ),
                     Row(
+                      mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(

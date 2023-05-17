@@ -22,8 +22,7 @@ import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/widgets/img_button.dart';
 
 class MainScreen extends StatefulWidget {
-  MainScreen({super.key});
-  final Future caseNum = ApiService.getCaseNum();
+  const MainScreen({super.key});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -68,9 +67,9 @@ class _MainScreenState extends State<MainScreen> {
       setStream();
     } else {
       // 권한 동의 안 했을 시 페이지 리다이렉트
-      Future(() {
-        Navigator.of(context).pushNamed('/permission');
-      });
+      // Future(() {
+      //   Navigator.of(context).pushNamed('/permission');
+      // });
     }
 
     IsolateNameServer.registerPortWithName(
