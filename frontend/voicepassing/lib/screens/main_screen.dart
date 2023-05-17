@@ -507,12 +507,12 @@ class _MainScreenState extends State<MainScreen> {
                             ],
                           ),
                         ),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     Navigator.of(context).pushNamed("/setting");
-                        //   },
-                        //   child: const Text("/setting"),
-                        // )
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pushNamed("/realtime");
+                          },
+                          child: const Text("realtime"),
+                        )
                       ],
                     ),
                   ),
