@@ -28,9 +28,8 @@ public class PhishingsController {
     public ResponseEntity<?> searchPhoneNumber(@PathVariable String phoneNumber) {
         HttpStatus status;
         Map<String, Object> resultMap = new HashMap<>();
-        //phonenumber - 파싱
         phoneNumber = phoneNumber.replaceAll("[\\-_]", "");
-        System.out.println(phoneNumber);
+
         logger.trace("search phoneNumber by: {}", phoneNumber);
         List<ResultDTO.Result> resultList = resultService.searchByPhoneNumber(phoneNumber);
         if(resultList == null) return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);

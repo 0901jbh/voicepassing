@@ -22,83 +22,83 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class AnalysisServiceImpl implements AnalysisService {
+public class AnalysisServiceImpl implements AnalysisService{
 
-	@Value("${SPRING_RECORD_TEMP_DIR}") // C:\Users\SSAFY\Desktop\test
-	private String RECORD_PATH; // 확인완료
+    @Value("${SPRING_RECORD_TEMP_DIR}")//C:\Users\SSAFY\Desktop\test
+    private String RECORD_PATH; //확인완료
 
-	@Value("${AI_SERVER_URI}")
-	private String AI_SERVER_URI;
+    
+    @Value("${AI_SERVER_URI}")
+    private String AI_SERVER_URI;
+    
+    //@Value("${fastapi.url}")
+    private String fastApiUrl;
 
-	// @Value("${fastapi.url}")
-	private String fastApiUrl;
 
-	// Clova : file -> text
-	@Override
-	public String SpeechToText(String sessionId, String fileName) {
-		String clientId = "69z4ol7120"; // Application Client ID";
-		String clientSecret = "BgrF1fA39jXxMM2v9OLdzIQMl4JNbjMBg17uptzP"; // Application Client Secret";
 
-		try {
-			String imgFile = RECORD_PATH + "/" + sessionId + "/part/" + fileName;
-			File voiceFile = new File(imgFile);
+    //Clova : file -> text
+    @Override
+    public String SpeechToText(String sessionId,String fileName) {
+        String clientId = "69z4ol7120";             // Application Client ID";
+        String clientSecret = "BgrF1fA39jXxMM2v9OLdzIQMl4JNbjMBg17uptzP";     // Application Client Secret";
 
-			String language = "Kor"; // 언어 코드 ( Kor, Jpn, Eng, Chn )
-			String apiURL = "https://naveropenapi.apigw.ntruss.com/recog/v1/stt?lang=" + language;
-			URL url = new URL(apiURL);
 
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setUseCaches(false);
-			conn.setDoOutput(true);
-			conn.setDoInput(true);
-			conn.setRequestProperty("Content-Type", "application/octet-stream");
-			conn.setRequestProperty("X-NCP-APIGW-API-KEY-ID", clientId);
-			conn.setRequestProperty("X-NCP-APIGW-API-KEY", clientSecret);
+        try {
+            String imgFile = RECORD_PATH+"/"+sessionId+"/part/"+fileName;
+            File voiceFile = new File(imgFile);
 
-			OutputStream outputStream = conn.getOutputStream();
-			FileInputStream inputStream = new FileInputStream(voiceFile);
-			byte[] buffer = new byte[4096];
-			int bytesRead = -1;
-			while ((bytesRead = inputStream.read(buffer)) != -1) {
-				outputStream.write(buffer, 0, bytesRead);
-			}
-			outputStream.flush();
-			inputStream.close();
-			BufferedReader br = null;
-			int responseCode = conn.getResponseCode();
-			if (responseCode == 200) { // 정상 호출
-				br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			} else { // 오류 발생
-				System.out.println("error!!!!!!! responseCode= " + responseCode);
-				br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			}
-			String inputLine;
+            String language = "Kor";        // 언어 코드 ( Kor, Jpn, Eng, Chn )
+            String apiURL = "https://naveropenapi.apigw.ntruss.com/recog/v1/stt?lang=" + language;
+            URL url = new URL(apiURL);
 
-			if (br != null) {
-				StringBuffer response = new StringBuffer();
-				while ((inputLine = br.readLine()) != null) {
-					response.append(inputLine);
-				}
-				br.close();
-				String result = response.toString();
-				result = result.substring(9, result.length() - 2);
-				result = maskingData(result);
-				return result;
-			} else {
-				System.out.println("error !!!");
+            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+            conn.setUseCaches(false);
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setRequestProperty("Content-Type", "application/octet-stream");
+            conn.setRequestProperty("X-NCP-APIGW-API-KEY-ID", clientId);
+            conn.setRequestProperty("X-NCP-APIGW-API-KEY", clientSecret);
 
-			}
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-		return "error";
-	}
+            OutputStream outputStream = conn.getOutputStream();
+            FileInputStream inputStream = new FileInputStream(voiceFile);
+            byte[] buffer = new byte[4096];
+            int bytesRead = -1;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+            outputStream.flush();
+            inputStream.close();
+            BufferedReader br = null;
+            int responseCode = conn.getResponseCode();
+            if(responseCode == 200) { // 정상 호출
+                br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            } else {  // 오류 발생
+                br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            }
+            String inputLine;
 
-	// text -> result 받기
-	@Override
-	public Map<String, Object> analysis(AIResponseDTO.Request rb) {
-		Map<String, Object> resultMap = new HashMap<>();
-		RestTemplate restTemplate = new RestTemplate();
+            if(br != null) {
+                StringBuffer response = new StringBuffer();
+                while ((inputLine = br.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                br.close();
+                String result = response.toString();
+                result = result.substring(9,result.length()-2);
+                return result;
+            } else {
+
+            }
+        } catch (Exception e) {
+        }
+        return "error";
+    }
+
+    //text -> result 받기
+    @Override
+    public Map<String, Object> analysis(AIResponseDTO.Request rb) {
+        Map<String, Object> resultMap = new HashMap<>();
+        RestTemplate restTemplate = new RestTemplate();
 
 //    // 요청 Body 생성
 		Map<String, Object> requestBody = new HashMap<>();

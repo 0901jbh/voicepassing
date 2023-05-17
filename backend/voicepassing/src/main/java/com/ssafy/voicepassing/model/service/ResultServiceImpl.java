@@ -144,7 +144,6 @@ public class ResultServiceImpl implements ResultService {
             int category = (int) result[1];
             rc.getCategory().add(category);
             rc.getCount().add(count);
-            System.out.println(category + ": " + count);
         }
         return rc;
     }
