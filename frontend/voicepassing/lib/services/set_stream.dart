@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:call_log/call_log.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:phone_state/phone_state.dart';
@@ -14,7 +15,6 @@ import 'package:voicepassing/models/receive_message_model.dart';
 import 'package:voicepassing/models/send_message_model.dart';
 import 'package:voicepassing/providers/realtime_provider.dart';
 import 'package:voicepassing/services/notification_controller.dart';
-import 'package:voicepassing/services/platform_channel.dart';
 import 'package:voicepassing/services/recent_file.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -26,16 +26,9 @@ void setStream() async {
   late String androidId;
   const String recordDirectoryPath = "/storage/emulated/0/Recordings/Call";
   File? targetFile;
-  late ReceiveMessageModel lastMessage;
 
   recordDirectory = Directory(recordDirectoryPath);
   androidId = await UniqueDeviceId.instance.getUniqueId() ?? 'unknown';
-
-  PlatformChannel().callStream().listen((event) {
-    if (event is String) {
-      phoneNumber = event;
-    }
-  });
 
   PhoneState.phoneStateStream.listen((event) async {
     if (event != null) {
@@ -76,6 +69,11 @@ void setStream() async {
             var splittedBytes = entireBytes.sublist(offset, nextOffset);
             offset = nextOffset;
             ws.sink.add(splittedBytes);
+            var callLog = await CallLog.query(
+              dateTimeFrom: DateTime.now().subtract(const Duration(days: 1)),
+              dateTimeTo: DateTime.now(),
+            );
+            phoneNumber = callLog.first.formattedNumber ?? '01012345678';
 
             // state 1 보내기
             var endMessage = SendMessageModel(
@@ -102,8 +100,8 @@ void setStream() async {
             ws.sink.close();
             if (receivedResult.result != null &&
                 receivedResult.result!.results != null) {
-              if (receivedResult.result!.totalCategoryScore >= 0.6) {
-                lastMessage = receivedResult;
+              if (receivedResult.result!.totalCategoryScore >= 0.6 &&
+                  receivedResult.result!.totalCategory != 0) {
                 if (!await FlutterOverlayWindow.isActive()) {
                   await FlutterOverlayWindow.showOverlay(
                     enableDrag: false,
@@ -128,7 +126,8 @@ void setStream() async {
           } else {
             if (receivedResult.result != null &&
                 receivedResult.result!.results != null) {
-              if (receivedResult.result!.totalCategoryScore >= 0.6) {
+              if (receivedResult.result!.totalCategoryScore >= 0.6 &&
+                  receivedResult.result!.totalCategory != 0) {
                 App.navigatorKey.currentContext!
                     .read<RealtimeProvider>()
                     .add(receivedResult);

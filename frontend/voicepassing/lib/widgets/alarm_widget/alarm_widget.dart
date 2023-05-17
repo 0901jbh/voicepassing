@@ -49,14 +49,14 @@ class _AlarmWidgetState extends State<AlarmWidget> {
           phoneNumber = callInfoData.phoneNumber ?? '01012345678';
           androidId = callInfoData.androidId;
         });
-        phishingNumber = await ApiService.getPhoneNumber(phoneNumber);
+        phishingNumber = await ApiService.getPhoneNumber(phoneNumber) ?? '0';
       }
       if (msg is Map<String, dynamic> && msg['result'] != null) {
         setState(() {
           resultData = ReceiveMessageModel.fromJson(msg);
           Vibration.vibrate(pattern: [0, 500, 300, 500]);
           if (resultData.isFinish == true) {
-            FlutterOverlayWindow.resizeOverlay(336, 276);
+            FlutterOverlayWindow.resizeOverlay(336, 284);
           } else {
             FlutterOverlayWindow.resizeOverlay(320, 80);
           }
