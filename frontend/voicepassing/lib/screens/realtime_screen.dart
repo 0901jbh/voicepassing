@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:voicepassing/models/receive_message_model.dart';
-import 'package:voicepassing/providers/realtime_provider.dart';
 import 'package:voicepassing/screens/main_screen.dart';
-import 'package:voicepassing/services/notification_controller.dart';
 import 'package:voicepassing/widgets/head_bar.dart';
 import 'package:voicepassing/widgets/realtime_widget/realtime_body_widget.dart';
 import 'package:voicepassing/widgets/realtime_widget/realtime_head_widget.dart';
