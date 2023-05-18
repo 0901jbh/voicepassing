@@ -32,8 +32,6 @@ class HeadBar extends StatelessWidget implements PreferredSizeWidget {
           IconButton(
               onPressed: () {
                 Navigator.of(context).pushNamed("/setting");
-                // Navigator.of(context)
-                //     .push(_customRoute(const RequestPermissionsScreen()));
               },
               icon: const Icon(
                 Icons.settings,

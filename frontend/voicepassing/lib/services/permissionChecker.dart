@@ -7,7 +7,6 @@ class PermissionChecker {
     List<bool> result = [];
 
     result.add(await Permission.phone.isDenied);
-    // result.add(await Permission.audio.isDenied);
     result.add(await Permission.manageExternalStorage.isDenied);
     result.add(!(await FlutterOverlayWindow.isPermissionGranted()));
     result.add(!await AwesomeNotifications().isNotificationAllowed());

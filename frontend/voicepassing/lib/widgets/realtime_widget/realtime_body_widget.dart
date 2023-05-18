@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:voicepassing/models/receive_message_model.dart';
@@ -18,7 +16,6 @@ class _RealtimeBodyWidgetState extends State<RealtimeBodyWidget> {
   @override
   Widget build(BuildContext context) {
     var data = context.watch<RealtimeProvider>().realtimeDataList;
-    inspect(data);
     return SizedBox(
       width: double.infinity,
       child: Column(children: [

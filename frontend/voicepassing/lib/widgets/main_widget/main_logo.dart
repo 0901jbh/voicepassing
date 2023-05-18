@@ -73,7 +73,6 @@ class MainLogo extends StatelessWidget {
                   '잡았어요',
                   style: TextStyle(
                     fontSize: 18,
-                    // fontWeight: FontWeight.bold,
                   ),
                 )
               ],

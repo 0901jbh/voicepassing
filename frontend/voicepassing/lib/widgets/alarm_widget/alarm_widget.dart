@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:vibration/vibration.dart';
@@ -41,8 +39,6 @@ class _AlarmWidgetState extends State<AlarmWidget> {
   void initState() {
     super.initState();
     FlutterOverlayWindow.overlayListener.listen((msg) async {
-      inspect(msg);
-      debugPrint('${msg.runtimeType}');
       if (msg is Map<String, dynamic> && msg['phoneNumber'] != null) {
         setState(() {
           SendMessageModel callInfoData = SendMessageModel.fromJson(msg);
@@ -57,8 +53,6 @@ class _AlarmWidgetState extends State<AlarmWidget> {
           Vibration.vibrate(pattern: [0, 500, 300, 500]);
           if (resultData.isFinish == true) {
             FlutterOverlayWindow.resizeOverlay(336, 284);
-          } else {
-            FlutterOverlayWindow.resizeOverlay(320, 80);
           }
         });
       }

@@ -33,7 +33,6 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
   @override
   void initState() {
     super.initState();
-    // getCaseInfo();
     final res = IsolateNameServer.registerPortWithName(
       _receivePort.sendPort,
       _kPortNameOverlay,
@@ -93,19 +92,6 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     FlutterOverlayWindow.closeOverlay();
-                    //   },
-                    //   child: const Text(
-                    //     '닫기',
-                    //     style: TextStyle(
-                    //       color: ColorStyles.textBlack,
-                    //       fontSize: 12,
-                    //       fontWeight: FontWeight.w700,
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
@@ -177,16 +163,7 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
                           _kPortNameHome,
                         );
                         homePort?.send('navigate');
-                        //FlutterOverlayWindow.closeOverlay();
                         FlutterOverlayWindow.resizeOverlay(0, 0);
-
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) =>
-                        //         ResultScreenDetail(caseInfo: caseInfo),
-                        //   ),
-                        // );
                       },
                       style: ButtonStyle(
                         backgroundColor:
@@ -212,7 +189,6 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
                     ),
                     TextButton(
                       onPressed: () async {
-                        // 번호 차단 기능 연결
                         await FlutterOverlayWindow.closeOverlay();
                       },
                       style: ButtonStyle(

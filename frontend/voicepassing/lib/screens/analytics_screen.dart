@@ -60,7 +60,6 @@ class _ResultScreenState extends State<AnalyticsScreen> {
       'androidId': androidId,
     });
     final response = await Dio().post(
-      //'http://10.0.2.2:8080/api/analysis/file',
       'http://k8a607.p.ssafy.io:8080/api/analysis/file',
       data: formData,
     );
@@ -116,7 +115,6 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                   const SizedBox(
                     height: 40,
                   ),
-                  //const TopTitle(),
                   SizedBox(
                     width: 230,
                     child: Row(
@@ -184,7 +182,6 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                       height: 70,
                     ),
                   ),
-
                   Visibility(
                     visible: isSend,
                     child: const SizedBox(
@@ -202,7 +199,6 @@ class _ResultScreenState extends State<AnalyticsScreen> {
         },
       ),
       bottomNavigationBar: const Navbar(selectedIndex: 4),
-      // bottomNavigationBar: const Navbar(),
     );
   }
 }

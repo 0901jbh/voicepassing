@@ -16,7 +16,6 @@ class ResultScreen extends StatefulWidget {
   State<ResultScreen> createState() => _ResultScreenState();
 }
 
-// Todo: 임시로 넣어놓은 데이터, 삭제예정
 class _ResultScreenState extends State<ResultScreen> {
   late List<ResultModel> resultList;
   bool isLoading = false;
@@ -24,8 +23,6 @@ class _ResultScreenState extends State<ResultScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
-
     super.initState();
     initializer();
   }
@@ -37,46 +34,10 @@ class _ResultScreenState extends State<ResultScreen> {
       resultList = await ApiService.getRecentResult(androidId);
 
       setState(() {
-        print(value);
-        print(resultList.toString());
         isLoading = true;
       });
     });
-// Todo: 임시로 넣어놓은 기기명, androidId로 바꿀예정
   }
-
-  // final List<CaseModel> cases = [
-  //   CaseModel(
-  //     50,
-  //     DateTime(2023),
-  //     "사칭",
-  //     ['대포통장', '신용평점', '수사관'],
-  //     [
-  //       '서울중앙지검형사7부 김진태 수사관입니다',
-  //       '신용평점 이라는게 어떤 방법으로든 당일날 바로 상향시키는 건 정상적인 방법으로는 불가능 하거든요'
-  //     ],
-  //   ),
-  //   CaseModel(
-  //     70,
-  //     DateTime(2023),
-  //     "대출",
-  //     ['서울', '정상', '불가능'],
-  //     [
-  //       '서울중앙지검형사7부 김진태 수사관입니다',
-  //       '신용평점 이라는게 어떤 방법으로든 당일날 바로 상향시키는 건 정상적인 방법으로는 불가능 하거든요'
-  //     ],
-  //   ),
-  //   CaseModel(
-  //     90,
-  //     DateTime(2023),
-  //     "사칭",
-  //     ['형사', '당일날', '수사관'],
-  //     [
-  //       '서울중앙지검형사7부 김진태 수사관입니다',
-  //       '신용평점 이라는게 어떤 방법으로든 당일날 바로 상향시키는 건 정상적인 방법으로는 불가능 하거든요'
-  //     ],
-  //   )
-  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -118,22 +79,13 @@ class _ResultScreenState extends State<ResultScreen> {
                               ),
                             )
                       : const Text('...'),
-                  // for (var caseinfo in resultList)
-                  //   Padding(
-                  //     padding: const EdgeInsets.only(bottom: 20),
-                  //     child: ResultList(
-                  //       caseInfo: caseinfo,
-                  //     ),
-                  //   ),
                 ],
               ),
             ),
           );
         },
       ),
-
       bottomNavigationBar: const Navbar(selectedIndex: 1),
-      // bottomNavigationBar: const Navbar(),
     );
   }
 }
@@ -151,7 +103,7 @@ class ResultTitle extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Flexible(
+            const Flexible(
               flex: 5,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,7 +111,7 @@ class ResultTitle extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     textBaseline: TextBaseline.alphabetic,
-                    children: const [
+                    children: [
                       Text(
                         '지난 검사 결과',
                         style: TextStyle(
@@ -170,7 +122,7 @@ class ResultTitle extends StatelessWidget {
                       Text('를'),
                     ],
                   ),
-                  const Text('확인해보세요')
+                  Text('확인해보세요')
                 ],
               ),
             ),

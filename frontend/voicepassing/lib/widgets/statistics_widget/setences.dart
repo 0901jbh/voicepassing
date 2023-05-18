@@ -13,7 +13,6 @@ class _SentencesState extends State<Sentences> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         for (Map keyword in widget.keywordList) ...[
           HightlightSentence(keyword["sentence"], keyword["keyword"]),

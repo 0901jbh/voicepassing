@@ -20,7 +20,6 @@ class _SearchWidgetState extends State<SearchWidget> {
   String phoneNumber = '';
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     myFocusNode = FocusNode();
     myController.addListener(_printLatestValue);
@@ -31,7 +30,6 @@ class _SearchWidgetState extends State<SearchWidget> {
     // 텍스트에디팅컨트롤러를 제거하고, 등록된 리스너도 제거된다.
     myController.dispose();
     myFocusNode.dispose();
-    print('제거됨');
     super.dispose();
   }
 
@@ -99,13 +97,11 @@ class _SearchWidgetState extends State<SearchWidget> {
                                     phoneNumber = value;
                                     hasData = true;
                                   });
-                                  //Todo: 전화번호인지 확인하는 로직 나중에 추가할것
                                 },
                                 controller: myController,
                                 onChanged: (value) {
                                   setState(() {
                                     textValue = value;
-                                    print(value);
                                   });
                                 },
                                 autofocus: true,
@@ -157,7 +153,6 @@ class _SearchWidgetState extends State<SearchWidget> {
                   onTap: () async {
                     FlutterClipboard.paste().then((value) {
                       myController.text = value;
-                      print(value);
                       setState(() {});
                     });
                   },

@@ -67,10 +67,6 @@ class ResultList extends StatelessWidget {
                         style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w700),
                       ),
-                      // Text(
-                      //   caseInfo.date.toString(),
-                      //   style: const TextStyle(fontWeight: FontWeight.w900),
-                      // ),
                       Row(
                           crossAxisAlignment: CrossAxisAlignment.baseline,
                           textBaseline: TextBaseline.alphabetic,

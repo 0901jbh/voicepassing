@@ -10,33 +10,30 @@ class SettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: SettingHeadBar(
-          navPage: MainScreen(),
-          title: const Text('설정'),
-          appBar: AppBar(),
-        ),
-        body: Builder(builder: (BuildContext context) {
+      appBar: SettingHeadBar(
+        navPage: const MainScreen(),
+        title: const Text('설정'),
+        appBar: AppBar(),
+      ),
+      body: Builder(
+        builder: (BuildContext context) {
           return Container(
             padding: const EdgeInsets.fromLTRB(0, 5, 0, 24),
-            child: Column(children: [
-              SettingBtn(
-                icon: const Icon(
-                  Icons.check_box,
-                  color: ColorStyles.themeLightBlue,
+            child: Column(
+              children: [
+                SettingBtn(
+                  icon: const Icon(
+                    Icons.check_box,
+                    color: ColorStyles.themeLightBlue,
+                  ),
+                  content: "약관 및 개인정보 처리 동의",
+                  routeName: "/permission",
                 ),
-                content: "약관 및 개인정보 처리 동의",
-                routeName: "/permission",
-              ),
-              SettingBtn(
-                icon: const Icon(
-                  Icons.check_box,
-                  color: ColorStyles.themeLightBlue,
-                ),
-                content: "웨어러블 기기로 실시간 알림 받기",
-                routeName: "/wearable",
-              ),
-            ]),
+              ],
+            ),
           );
-        }));
+        },
+      ),
+    );
   }
 }

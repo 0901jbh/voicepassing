@@ -8,7 +8,6 @@ import 'package:voicepassing/widgets/nav_bar.dart';
 import 'package:voicepassing/widgets/result/result_detail.dart';
 
 import 'package:voicepassing/widgets/head_bar_no_rewind.dart';
-//import 'package:voicepassing/widgets/head_bar.dart';
 
 class ResultScreenDetail extends StatefulWidget {
   final ResultModel caseInfo;

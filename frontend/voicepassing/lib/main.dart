@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:voicepassing/providers/is_analyzing.dart';
 import 'package:voicepassing/providers/realtime_provider.dart';
-import 'package:voicepassing/providers/selected_wearable.dart';
 import 'package:voicepassing/routes.dart';
 import 'package:voicepassing/screens/main_screen.dart';
 import 'package:voicepassing/services/notification_controller.dart';
@@ -17,7 +16,6 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => SelectedWearable()),
         ChangeNotifierProvider(create: (_) => RealtimeProvider()),
         ChangeNotifierProvider(create: (_) => IsAnalyzing()),
       ],
@@ -68,14 +66,9 @@ class _AppState extends State<App> {
       },
       home: const Scaffold(
         body: MainScreen(),
-        // body: Column(children: [children: ],)
       ),
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
-        textTheme: const TextTheme(
-            // bodyText1: TextStyle(fontSize: 20),
-            // bodyText2: TextStyle(fontSize: 20),
-            ),
         fontFamily: 'NotoSansKR',
       ),
     );
