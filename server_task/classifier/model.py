@@ -231,9 +231,12 @@ class bayesianClassifierPipeLine():
 
         # print(f"dif_weighted : {dif_weighted}")
 
-        arg_idx = dif_weighted.argmin()
-
-        return final_tokens[noun_locs[arg_idx]], dif_weighted[arg_idx]
+        if len(dif_weighted):
+            arg_idx = dif_weighted.argmin()
+            return final_tokens[noun_locs[arg_idx]], dif_weighted[arg_idx]
+        
+        else:
+            return None, None
         
 
 model = VoicePassingModel()
