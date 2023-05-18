@@ -49,6 +49,12 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
   final MethodChannel platform =
       const MethodChannel('com.example.voicepassing/navigation');
 
+  @override
+  void dispose() {
+    FlutterOverlayWindow.closeOverlay();
+    super.dispose();
+  }
+
   void getCaseInfo() async {
     var resultList = await ApiService.getRecentResult(widget.androidId);
     if (resultList.isNotEmpty) {
@@ -173,23 +179,13 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
                   children: [
                     TextButton(
                       onPressed: () async {
-                        // 검사 결과 상세 페이지로 연결
-                        // const intent = AndroidIntent(
-                        //   action: 'action_view',
-                        //   category: 'android.intent.category.LAUNCHER',
-                        //   // data: 'package:com.example.voicepassing',
-                        //   package: 'package:com.example.voicepassing',
-                        //   // flags: [Intent.FLAG_ACTIVITY_NEW_TASK],
-                        // );
-                        // await intent.launch();
-                        // platform.invokeMethod('navigateToDetailPage');
-                        // FlutterOverlayWindow.shareData('navigate');
                         homePort = IsolateNameServer.lookupPortByName(
                           _kPortNameHome,
                         );
+                        await FlutterOverlayWindow.resizeOverlay(0, 0);
                         homePort?.send('navigate');
-                        FlutterOverlayWindow.closeOverlay();
-                        //asdfsa
+
+                        //FlutterOverlayWindow.closeOverlay();
 
                         // Navigator.push(
                         //   context,

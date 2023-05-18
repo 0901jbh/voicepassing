@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:android_intent_plus/android_intent.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
@@ -20,6 +19,9 @@ import 'package:unique_device_id/unique_device_id.dart';
 import 'package:voicepassing/models/receive_message_model.dart';
 import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/widgets/img_button.dart';
+
+import 'package:android_intent_plus/android_intent.dart';
+//import 'package:url_launcher/url_launcher.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -45,7 +47,7 @@ class _MainScreenState extends State<MainScreen> {
   static const String _kPortNameHome = 'UI';
   final _receivePort = ReceivePort();
   SendPort? homePort;
-
+  final windowManagerLock = Object();
   Future<bool> checkPermissions() async {
     debugPrint('${await Permission.phone.isGranted}');
     debugPrint('${await Permission.manageExternalStorage.isGranted}');
@@ -76,12 +78,19 @@ class _MainScreenState extends State<MainScreen> {
       _receivePort.sendPort,
       _kPortNameHome,
     );
+
     _receivePort.listen((event) async {
       debugPrint('received');
+      print("receivePort");
+      print(_receivePort);
+      print("event");
+      print(event);
+
       const intent = AndroidIntent(
-        action: 'android.intent.action.MAIN',
+        action: 'android.intent.action.MAIN', //앱의 실행 명령
         category: 'android.intent.category.LAUNCHER',
         package: 'com.example.voicepassing',
+        componentName: 'com.example.voicepassing.MainActivity',
       );
       intent.launch();
       Navigator.pushNamed(context, '/result');
