@@ -1,27 +1,20 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:im_animations/im_animations.dart';
 import 'package:lottie/lottie.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:phone_state/phone_state.dart';
 import 'package:styled_text/styled_text.dart';
 import 'package:voicepassing/services/permissionChecker.dart';
 import 'package:voicepassing/services/set_stream.dart';
 import 'package:voicepassing/style/color_style.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:unique_device_id/unique_device_id.dart';
 
 import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/widgets/img_button.dart';
 
 import 'package:android_intent_plus/android_intent.dart';
-//import 'package:url_launcher/url_launcher.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -32,17 +25,6 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final Future caseNum = ApiService.getCaseNum();
-  final count = 283;
-  // 통화 상태 감지 및 오버레이 위젯 띄우기 위한 임시 변수
-  PhoneStateStatus phoneStatus = PhoneStateStatus.NOTHING;
-  bool granted = false;
-  final String _recordDirectoryPath = "/storage/emulated/0/Recordings/Call";
-  late Directory recordDirectory;
-  late File? targetFile;
-  late WebSocketChannel _ws;
-  late String _androidId;
-  late String phoneNumber = '';
-  bool isWidgetOn = false;
   static const String _kPortNameOverlay = 'OVERLAY';
   static const String _kPortNameHome = 'UI';
   final _receivePort = ReceivePort();
@@ -53,24 +35,11 @@ class _MainScreenState extends State<MainScreen> {
   bool isGranted = false;
   List grantedList = [];
 
-  Future<bool> checkPermissions() async {
-    debugPrint('${await Permission.phone.isGranted}');
-    debugPrint('${await Permission.manageExternalStorage.isGranted}');
-    debugPrint('${await AwesomeNotifications().isNotificationAllowed()}');
-    if (await Permission.phone.isGranted &&
-        await Permission.manageExternalStorage.isGranted &&
-        await AwesomeNotifications().isNotificationAllowed()) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   @override
   void initState() {
     super.initState();
     initializer();
-    if (granted) {
+    if (isGranted) {
       setStream();
     }
 
@@ -94,10 +63,6 @@ class _MainScreenState extends State<MainScreen> {
 
   void initializer() async {
     await initializeDateFormatting();
-    recordDirectory = Directory(_recordDirectoryPath);
-    _androidId = await UniqueDeviceId.instance.getUniqueId() ?? 'unknown';
-
-    granted = await checkPermissions();
     isGranted = await PermissionChecker().isGranted();
     grantedList = await PermissionChecker().isPermissioned();
     setState(() {});
