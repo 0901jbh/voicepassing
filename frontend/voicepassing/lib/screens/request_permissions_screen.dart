@@ -21,31 +21,16 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
   Future<void> requestPermissions() async {
     var result = await PermissionChecker().isPermissioned();
     if (result[0]) {
-      print(0);
-      await Permission.phone.request().then((value) => print(value));
-    }
-    // if (result[1]) {
-    //   print(1);
-    //   await Permission.audio.request().then((value) => print('$value오디오'));
-    //   // await Permission.storage.request().then((value) => print('$value스토리지'));
-    // }
-    print(result);
-    if (true) {
-      print(2);
-      await Permission.manageExternalStorage
-          .request()
-          .then((value) => print('$value외부'));
+      await Permission.phone.request();
     }
     if (true) {
-      print(3);
-      await FlutterOverlayWindow.requestPermission()
-          .then((value) => print('$value오버레이'));
+      await Permission.manageExternalStorage.request();
+    }
+    if (true) {
+      await FlutterOverlayWindow.requestPermission();
     }
     if (result[3]) {
-      print(4);
-      await AwesomeNotifications()
-          .requestPermissionToSendNotifications()
-          .then((value) => print('$value개쩌는'));
+      await AwesomeNotifications().requestPermissionToSendNotifications();
     }
     setStream();
   }

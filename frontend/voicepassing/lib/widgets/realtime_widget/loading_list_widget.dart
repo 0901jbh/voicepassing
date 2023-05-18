@@ -38,18 +38,23 @@ class _LoadingListWidgetState extends State<LoadingListWidget> {
                 ),
               ],
             )
-          : const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "통화가 종료되었습니다",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
+          : InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/result');
+              },
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "통화가 종료되었습니다.\n버튼을 눌러 상세 정보를 확인해보세요.",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
     );
   }

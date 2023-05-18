@@ -47,10 +47,8 @@ class ApiService {
       final List<dynamic> resultInstances =
           jsonDecode(utf8.decode(response.bodyBytes))['results'];
       for (var result in resultInstances) {
-        // debugPrint(result.toString());
         final instance = ResultModel.toJson(result);
         resultList.add(instance);
-        // debugPrint(instance.toString());
       }
       return resultList;
     }

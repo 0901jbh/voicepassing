@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:phone_state/phone_state.dart';
@@ -45,18 +43,16 @@ void setStream() async {
     }
     // 통화 연결
     if (phoneStatus == PhoneStateStatus.CALL_STARTED) {
-      // 웹소켓 연결
+      // 웹소켓 연결 시작
       ws = WebSocketChannel.connect(
         Uri.parse('ws://k8a607.p.ssafy.io:8080/record'),
       );
-      debugPrint('😊😊😊소켓 연결');
-      // 시작 메세지로 기기 식별 번호(SSAID) 전달
+
       var startMessage = SendMessageModel(
         state: 0,
         androidId: androidId,
       );
       ws?.sink.add(jsonEncode(startMessage));
-      debugPrint('😊😊😊시작 메시지 전달');
 
       App.navigatorKey.currentContext!.read<IsAnalyzing>().on();
 
@@ -71,40 +67,8 @@ void setStream() async {
           var splittedBytes = entireBytes.sublist(offset, nextOffset);
           offset = nextOffset;
           ws?.sink.add(splittedBytes);
-          debugPrint('😊😊😊바이트 전송');
         });
-
-        //통화 종료
-        // if (phoneStatus == PhoneStateStatus.CALL_ENDED) {
-        // debugPrint('😊😊😊통화 종료');
-        // // 타이머 종료
-        // timer.cancel();
-        // // 덜 전달된 마지막 오프셋까지 보내기
-        // Uint8List entireBytes = targetFile!.readAsBytesSync();
-        // var nextOffset = entireBytes.length;
-        // var splittedBytes = entireBytes.sublist(offset, nextOffset);
-        // offset = nextOffset;
-        // ws.sink.add(splittedBytes);
-
-        // // var callLog = await CallLog.query(
-        // //   dateTimeFrom: DateTime.now().subtract(const Duration(days: 1)),
-        // //   dateTimeTo: DateTime.now(),
-        // // );
-        // // phoneNumber = callLog.first.formattedNumber ?? '010-1234-5678';
-        // debugPrint('😊😊😊전화 번호 : $phoneNumber');
-
-        // // state 1 보내기
-        // var endMessage = SendMessageModel(
-        //   state: 1,
-        //   androidId: androidId,
-        //   phoneNumber: phoneNumber,
-        // );
-        // ws.sink.add(jsonEncode(endMessage));
-        // debugPrint('😊😊😊종료 메시지');
-        // }
       } else {
-        // 에러(파일 없음)
-        // debugPrint('파일 없음');
         ws?.sink.close();
       }
 
@@ -113,7 +77,8 @@ void setStream() async {
         if (msg != null) {
           ReceiveMessageModel receivedResult =
               ReceiveMessageModel.fromJson(jsonDecode(msg));
-          inspect(receivedResult);
+
+          // 최종 결과 수신
           if (receivedResult.isFinish == true) {
             ws?.sink.close();
 
@@ -140,7 +105,6 @@ void setStream() async {
                   );
                   FlutterOverlayWindow.shareData(callInfo);
                 }
-                // 알림 위젯으로 데이터 전달
                 FlutterOverlayWindow.shareData(receivedResult);
               }
             }
@@ -153,10 +117,6 @@ void setStream() async {
                     .read<RealtimeProvider>()
                     .add(receivedResult);
                 // 푸시 알림 전송
-                // Vibration.vibrate(
-                //   intensities: [1, 255],
-                //   pattern: [300, 300, 500, 300],
-                // );
                 NotificationController.cancelNotifications();
                 NotificationController.createNewNotification(receivedResult);
               }
@@ -165,8 +125,7 @@ void setStream() async {
         }
       });
     } else if (phoneStatus == PhoneStateStatus.CALL_ENDED) {
-      debugPrint('😊😊😊통화 종료');
-      // 타이머 종료
+      // 통화 종료
       timer?.cancel();
       // 덜 전달된 마지막 오프셋까지 보내기
       Uint8List entireBytes = targetFile!.readAsBytesSync();
@@ -175,21 +134,12 @@ void setStream() async {
       offset = nextOffset;
       ws?.sink.add(splittedBytes);
 
-      // var callLog = await CallLog.query(
-      //   dateTimeFrom: DateTime.now().subtract(const Duration(days: 1)),
-      //   dateTimeTo: DateTime.now(),
-      // );
-      // phoneNumber = callLog.first.formattedNumber ?? '010-1234-5678';
-      debugPrint('😊😊😊전화 번호 : $phoneNumber');
-
-      // state 1 보내기
       var endMessage = SendMessageModel(
         state: 1,
         androidId: androidId,
         phoneNumber: phoneNumber,
       );
       ws?.sink.add(jsonEncode(endMessage));
-      debugPrint('😊😊😊종료 메시지');
     }
   });
 }

@@ -14,11 +14,6 @@ class _SearchScreenResultState extends State<SearchScreenResult> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // appBar: AppBar(
-      //   backgroundColor: Colors.transparent,
-      //   foregroundColor: Colors.black,
-      //   elevation: 0,
-      // ),
       body: Builder(
         builder: (BuildContext context) {
           return const Padding(

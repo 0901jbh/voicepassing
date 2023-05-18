@@ -14,13 +14,12 @@ class StaticsScreen extends StatefulWidget {
   State<StaticsScreen> createState() => _ResultScreenState();
 }
 
-// Todo: 임시로 넣어놓은 데이터, 삭제예정
 class _ResultScreenState extends State<StaticsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HeadBar(
-        navPage: MainScreen(),
+        navPage: const MainScreen(),
         title: const Text('통계 및 사례'),
         appBar: AppBar(),
       ),
@@ -43,7 +42,6 @@ class _ResultScreenState extends State<StaticsScreen> {
         },
       ),
       bottomNavigationBar: const Navbar(selectedIndex: 2),
-      // bottomNavigationBar: const Navbar(),
     );
   }
 }

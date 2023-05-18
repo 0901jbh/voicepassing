@@ -6,7 +6,6 @@ import 'package:voicepassing/widgets/nav_bar.dart';
 import 'package:voicepassing/widgets/result/result_detail.dart';
 
 import 'package:intl/intl.dart';
-//import 'package:voicepassing/widgets/head_bar.dart';
 
 import 'package:voicepassing/widgets/head_bar_no_rewind.dart';
 
