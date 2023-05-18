@@ -24,7 +24,7 @@ prob_store = dict() # 문장의 분류 결과 (float[4])를 저장.
 T = 14
 BERT_WEIGHT = 0.55
 NB_WEIGHT = 0.45
-THRESHOLD = 0.3
+THRESHOLD = 0.6
 
 @router.post("", response_model = PhoneCallModel, status_code = 200)
 async def classify_sentence(input_model : ReferenceInputModel, response : Response):
@@ -44,7 +44,7 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
 
         phone_call_model = {
             "totalCategory" : call_label,
-            "totalCategoryScore" : threshold_scaling(weighted_probs[call_label].item()),
+            "totalCategoryScore" : weighted_probs[call_label].item(),
             "results" : sentence_store.get(session_id, [])
         }
 
@@ -127,7 +127,7 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
         if word is not None:
             sentence_model = SentenceModel(
                 sentCategory = cur_label,
-                sentCategoryScore = threshold_scaling(label_probs[idx][cur_label].item()),
+                sentCategoryScore = label_probs[idx][cur_label].item(),
                 sentKeyword = word,
                 keywordScore = abs(prob),
                 sentence = text_splited[idx]
@@ -154,7 +154,7 @@ async def classify_sentence(input_model : ReferenceInputModel, response : Respon
 
         phone_call_model = {
             "totalCategory" : call_label,
-            "totalCategoryScore" : threshold_scaling(weighted_probs[call_label].item()),
+            "totalCategoryScore" : weighted_probs[call_label].item(),
             "results" : temp_sentence_store
         }
 
