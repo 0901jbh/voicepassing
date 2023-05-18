@@ -1,0 +1,87 @@
+
+
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.8'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+
+}
+
+group = 'com.ssafy'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// spring boot
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// jpa
+	implementation  'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// socket
+	implementation 'org.springframework.boot:spring-boot-starter-websocket:2.6.2'
+	
+	//commons-io
+	implementation 'commons-io:commons-io:2.11.0'
+	// lombok
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// mysql
+	runtimeOnly 'mysql:mysql-connector-java:8.0.27'
+
+	// jwt
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+
+	// com.sun.xml.bind
+	implementation 'com.sun.xml.bind:jaxb-impl:4.0.1'
+	implementation 'com.sun.xml.bind:jaxb-core:4.0.1'
+
+	// javax.xml.bind
+	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+
+	// https://mvnrepository.com/artifact/org/jaudiotagger
+	implementation 'org:jaudiotagger:2.0.3'
+
+
+	// swagger
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.9'
+
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+
+	// Apache HttpClient
+	implementation 'org.apache.httpcomponents:httpclient:4.5.12'
+	implementation 'org.apache.httpcomponents:httpmime:4.3.1'
+
+	// Gson
+	implementation 'com.google.code.gson:gson:2.8.5'
+
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+
+}
+
+tasks {
+	processResources {
+		duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
+	}
+}
