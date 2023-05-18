@@ -26,12 +26,10 @@ import 'package:voicepassing/models/receive_message_model.dart';
 import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/widgets/img_button.dart';
 
-<<<<<<< HEAD
 import 'package:android_intent_plus/android_intent.dart';
 //import 'package:url_launcher/url_launcher.dart';
-=======
+
 import '../providers/realtime_provider.dart';
->>>>>>> affdd1de002983924d0f14add5974601a887630a
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -57,14 +55,12 @@ class _MainScreenState extends State<MainScreen> {
   static const String _kPortNameHome = 'UI';
   final _receivePort = ReceivePort();
   SendPort? homePort;
-<<<<<<< HEAD
+
   final windowManagerLock = Object();
-=======
-  //
+
   bool isGranted = false;
   List grantedList = [];
-  //
->>>>>>> affdd1de002983924d0f14add5974601a887630a
+
   Future<bool> checkPermissions() async {
     debugPrint('${await Permission.phone.isGranted}');
     debugPrint('${await Permission.manageExternalStorage.isGranted}');
@@ -98,10 +94,6 @@ class _MainScreenState extends State<MainScreen> {
 
     _receivePort.listen((event) async {
       debugPrint('received');
-      print("receivePort");
-      print(_receivePort);
-      print("event");
-      print(event);
 
       const intent = AndroidIntent(
         action: 'android.intent.action.MAIN', //앱의 실행 명령
