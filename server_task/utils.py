@@ -12,8 +12,8 @@ def classify_phonecall(results : List | None):
         weighted_probs = torch.sum((label_probs.T*weights).T, axis = 0)/torch.sum(weights)
         label = torch.argmax(weighted_probs).item()
 
-        # 0.6을 넘지 않으면, 그냥 문제 없다고 판단
-        if weighted_probs[label] < 0.6:
+        # 0.3을 넘지 않으면, 그냥 문제 없다고 판단
+        if weighted_probs[label] < 0.3:
             label = 0
 
     else:
@@ -21,3 +21,8 @@ def classify_phonecall(results : List | None):
         label = 0
 
     return weighted_probs, label
+
+def threshold_scaling(value : float):
+    return value * ((1.5 * value - 1.5)**2 + 1)
+
+    
