@@ -3,6 +3,7 @@ import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:vibration/vibration.dart';
 
 import 'package:voicepassing/models/receive_message_model.dart';
+import 'package:voicepassing/models/result_model.dart';
 import 'package:voicepassing/models/send_message_model.dart';
 import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/widgets/alarm_widget/after_call_notification.dart';
@@ -22,30 +23,37 @@ class _AlarmWidgetState extends State<AlarmWidget> {
       totalCategoryScore: 0.5,
       results: [
         ResultItem(
-            sentCategory: 1,
-            sentCategoryScore: 0.5,
-            sentKeyword: '',
-            keywordScore: 0.5,
-            sentence: ''),
+          sentCategory: 1,
+          sentCategoryScore: 0.5,
+          sentKeyword: '',
+          keywordScore: 0.5,
+          sentence: '',
+        ),
       ],
     ),
     isFinish: false,
   );
   String androidId = 'unknown';
   String phoneNumber = '01012345678';
-  String phishingNumber = '0';
+  int phishingNumber = 0;
 
   @override
   void initState() {
     super.initState();
     FlutterOverlayWindow.overlayListener.listen((msg) async {
       if (msg is Map<String, dynamic> && msg['phoneNumber'] != null) {
+        SendMessageModel callInfoData = SendMessageModel.fromJson(msg);
         setState(() {
-          SendMessageModel callInfoData = SendMessageModel.fromJson(msg);
           phoneNumber = callInfoData.phoneNumber ?? '01012345678';
           androidId = callInfoData.androidId;
         });
-        phishingNumber = await ApiService.getPhoneNumber(phoneNumber) ?? '0';
+        await ApiService.getPhoneNumber(phoneNumber).then((value) {
+          if (value is List<ResultModel>) {
+            setState(() {
+              phishingNumber = value.length;
+            });
+          }
+        });
       }
       if (msg is Map<String, dynamic> && msg['result'] != null) {
         setState(() {
@@ -65,8 +73,8 @@ class _AlarmWidgetState extends State<AlarmWidget> {
         ? AfterCallNotification(
             resultData: resultData,
             phoneNumber: phoneNumber,
-            phishingNumber: phishingNumber,
             androidId: androidId,
+            phishingNumber: phishingNumber,
           )
         : InCallNotification(resultData: resultData);
   }

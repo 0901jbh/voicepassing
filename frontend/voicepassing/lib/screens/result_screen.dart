@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:styled_text/styled_text.dart';
 import 'package:unique_device_id/unique_device_id.dart';
 import 'package:voicepassing/models/result_model.dart';
@@ -78,7 +79,17 @@ class _ResultScreenState extends State<ResultScreen> {
                                 ),
                               ),
                             )
-                      : const Text('...'),
+                      : Column(
+                          children: [
+                            const SizedBox(
+                              height: 150,
+                            ),
+                            Center(
+                              child: LoadingAnimationWidget.staggeredDotsWave(
+                                  color: ColorStyles.themeLightBlue, size: 30),
+                            ),
+                          ],
+                        ),
                 ],
               ),
             ),
