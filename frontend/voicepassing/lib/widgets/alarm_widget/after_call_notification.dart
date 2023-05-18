@@ -93,12 +93,25 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     FlutterOverlayWindow.closeOverlay();
+                    //   },
+                    //   child: const Text(
+                    //     '닫기',
+                    //     style: TextStyle(
+                    //       color: ColorStyles.textBlack,
+                    //       fontSize: 12,
+                    //       fontWeight: FontWeight.w700,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
               const SizedBox(height: 6),
               InCallNotification(resultData: widget.resultData),
-              const SizedBox(height: 10),
+              const SizedBox(height: 6),
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -151,96 +164,80 @@ class _AfterCallNotificationState extends State<AfterCallNotification> {
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 6),
               SizedBox(
                 width: 320,
                 height: 40,
-                child: Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () async {
-                            // 검사 결과 상세 페이지로 연결
-                            // const intent = AndroidIntent(
-                            //   action: 'action_view',
-                            //   category: 'android.intent.category.LAUNCHER',
-                            //   // data: 'package:com.example.voicepassing',
-                            //   package: 'package:com.example.voicepassing',
-                            //   // flags: [Intent.FLAG_ACTIVITY_NEW_TASK],
-                            // );
-                            // await intent.launch();
-                            // platform.invokeMethod('navigateToDetailPage');
-                            // FlutterOverlayWindow.shareData('navigate');
-                            homePort = IsolateNameServer.lookupPortByName(
-                              _kPortNameHome,
-                            );
-                            homePort?.send('navigate');
-                            FlutterOverlayWindow.closeOverlay();
-                            //asdfsa
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () async {
+                        homePort = IsolateNameServer.lookupPortByName(
+                          _kPortNameHome,
+                        );
+                        homePort?.send('navigate');
+                        //FlutterOverlayWindow.closeOverlay();
+                        FlutterOverlayWindow.resizeOverlay(0, 0);
 
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) =>
-                            //         ResultScreenDetail(caseInfo: caseInfo),
-                            //   ),
-                            // );
-                          },
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.white),
-                              overlayColor: MaterialStateProperty.all(
-                                  ColorStyles.subLightGray),
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              minimumSize: MaterialStateProperty.all(
-                                  const Size(double.infinity, 40))),
-                          child: const Text(
-                            '상세보기',
-                            style: TextStyle(
-                              color: ColorStyles.textBlack,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                            ),
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) =>
+                        //         ResultScreenDetail(caseInfo: caseInfo),
+                        //   ),
+                        // );
+                      },
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.white),
+                        overlayColor:
+                            MaterialStateProperty.all(ColorStyles.subLightGray),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
                           ),
                         ),
+                        fixedSize:
+                            MaterialStateProperty.all(const Size(153, 40)),
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () async {
-                            // 번호 차단 기능 연결
-                            await FlutterOverlayWindow.closeOverlay();
-                          },
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.white),
-                            overlayColor: MaterialStateProperty.all(
-                                ColorStyles.subLightGray),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            minimumSize: MaterialStateProperty.all(
-                                const Size(double.infinity, 40)),
-                          ),
-                          child: const Text(
-                            '닫기',
-                            style: TextStyle(
-                              color: ColorStyles.textBlack,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
+                      child: const Text(
+                        '상세보기',
+                        style: TextStyle(
+                          color: ColorStyles.textBlack,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        // 번호 차단 기능 연결
+                        await FlutterOverlayWindow.closeOverlay();
+                      },
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.white),
+                        overlayColor:
+                            MaterialStateProperty.all(ColorStyles.subLightGray),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        fixedSize:
+                            MaterialStateProperty.all(const Size(153, 40)),
+                      ),
+                      child: const Text(
+                        '닫기',
+                        style: TextStyle(
+                          color: ColorStyles.textBlack,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
