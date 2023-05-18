@@ -2,11 +2,15 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:voicepassing/screens/main_screen.dart';
+import 'package:voicepassing/services/permissionChecker.dart';
 import 'package:voicepassing/services/set_stream.dart';
 import 'package:voicepassing/style/color_style.dart';
 
 class RequestPermissionsScreen extends StatefulWidget {
-  const RequestPermissionsScreen({super.key});
+  final bool? fromMain;
+
+  const RequestPermissionsScreen({super.key, this.fromMain});
 
   @override
   State<RequestPermissionsScreen> createState() =>
@@ -15,11 +19,34 @@ class RequestPermissionsScreen extends StatefulWidget {
 
 class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
   Future<void> requestPermissions() async {
-    await Permission.phone.request();
-    await Permission.storage.request();
-    await Permission.manageExternalStorage.request();
-    await FlutterOverlayWindow.requestPermission();
-    await AwesomeNotifications().requestPermissionToSendNotifications();
+    var result = await PermissionChecker().isPermissioned();
+    if (result[0]) {
+      print(0);
+      await Permission.phone.request().then((value) => print(value));
+    }
+    // if (result[1]) {
+    //   print(1);
+    //   await Permission.audio.request().then((value) => print('$value오디오'));
+    //   // await Permission.storage.request().then((value) => print('$value스토리지'));
+    // }
+    print(result);
+    if (true) {
+      print(2);
+      await Permission.manageExternalStorage
+          .request()
+          .then((value) => print('$value외부'));
+    }
+    if (true) {
+      print(3);
+      await FlutterOverlayWindow.requestPermission()
+          .then((value) => print('$value오버레이'));
+    }
+    if (result[3]) {
+      print(4);
+      await AwesomeNotifications()
+          .requestPermissionToSendNotifications()
+          .then((value) => print('$value개쩌는'));
+    }
     setStream();
   }
 
@@ -118,9 +145,16 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
               Column(
                 children: [
                   TextButton(
-                    onPressed: () {
-                      requestPermissions();
-                      Navigator.pop(context);
+                    onPressed: () async {
+                      await requestPermissions();
+                      if (widget.fromMain == null) {
+                        Navigator.pop(context);
+                      }
+                      final loadedData = await Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MainScreen()),
+                      );
                     },
                     style: ButtonStyle(
                       backgroundColor:
@@ -146,8 +180,16 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
+                    onPressed: () async {
+                      await requestPermissions();
+                      if (widget.fromMain == null) {
+                        Navigator.pop(context);
+                      }
+                      final loadedData = await Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MainScreen()),
+                      );
                     },
                     style: ButtonStyle(
                       backgroundColor:

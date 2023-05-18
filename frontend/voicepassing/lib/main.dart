@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:voicepassing/providers/is_analyzing.dart';
+import 'package:voicepassing/providers/realtime_provider.dart';
 import 'package:voicepassing/providers/selected_wearable.dart';
 import 'package:voicepassing/routes.dart';
 import 'package:voicepassing/screens/main_screen.dart';
@@ -16,6 +18,8 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => SelectedWearable()),
+        ChangeNotifierProvider(create: (_) => RealtimeProvider()),
+        ChangeNotifierProvider(create: (_) => IsAnalyzing()),
       ],
       child: const App(),
     ),
@@ -36,20 +40,35 @@ void overlayMain() async {
   );
 }
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({super.key});
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
+
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  @override
+  void initState() {
+    super.initState();
+    NotificationController.startListeningNotificationEvents();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: App.navigatorKey,
       routes: Routes.routes,
       builder: (context, child) {
         return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.1),
             child: child!);
       },
-      home: Scaffold(
+      home: const Scaffold(
         body: MainScreen(),
+        // body: Column(children: [children: ],)
       ),
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,

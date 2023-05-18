@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:voicepassing/screens/analytics_screen.dart';
 import 'package:voicepassing/screens/connect_wearable_screen.dart';
 import 'package:voicepassing/screens/main_screen.dart';
+import 'package:voicepassing/screens/realtime_screen.dart';
 import 'package:voicepassing/screens/request_permissions_screen.dart';
 import 'package:voicepassing/screens/result_screen.dart';
 import 'package:voicepassing/screens/search_screen.dart';
@@ -18,16 +19,18 @@ class Routes {
   static const String analytics = '/analytics';
   static const String setting = '/setting';
   static const String permission = '/permission';
+  static const String realtime = '/realtime';
   static const String wearable = '/wearable';
 
   static final routes = <String, WidgetBuilder>{
-    '/main': (context) => MainScreen(),
+    '/main': (context) => const MainScreen(),
     '/result': (context) => const ResultScreen(),
     '/search': (context) => const SearchScreen(),
     '/statistics': (constext) => const StaticsScreen(),
     '/analytics': (context) => const AnalyticsScreen(),
     '/setting': (context) => const SettingScreen(),
     '/permission': (context) => const RequestPermissionsScreen(),
+    '/realtime': (context) => const RealtimeScreen(),
     '/wearable': (context) => const ConnectWearableScreen(),
   };
 }

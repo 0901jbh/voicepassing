@@ -4,12 +4,18 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:call_log/call_log.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+import 'package:im_animations/im_animations.dart';
+import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_state/phone_state.dart';
+import 'package:provider/provider.dart';
 import 'package:styled_text/styled_text.dart';
+import 'package:voicepassing/models/send_message_model.dart';
 import 'package:voicepassing/services/notification_controller.dart';
+import 'package:voicepassing/services/permissionChecker.dart';
 import 'package:voicepassing/services/set_stream.dart';
 import 'package:voicepassing/style/color_style.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -20,8 +26,12 @@ import 'package:voicepassing/models/receive_message_model.dart';
 import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/widgets/img_button.dart';
 
+<<<<<<< HEAD
 import 'package:android_intent_plus/android_intent.dart';
 //import 'package:url_launcher/url_launcher.dart';
+=======
+import '../providers/realtime_provider.dart';
+>>>>>>> affdd1de002983924d0f14add5974601a887630a
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -47,7 +57,14 @@ class _MainScreenState extends State<MainScreen> {
   static const String _kPortNameHome = 'UI';
   final _receivePort = ReceivePort();
   SendPort? homePort;
+<<<<<<< HEAD
   final windowManagerLock = Object();
+=======
+  //
+  bool isGranted = false;
+  List grantedList = [];
+  //
+>>>>>>> affdd1de002983924d0f14add5974601a887630a
   Future<bool> checkPermissions() async {
     debugPrint('${await Permission.phone.isGranted}');
     debugPrint('${await Permission.manageExternalStorage.isGranted}');
@@ -103,6 +120,9 @@ class _MainScreenState extends State<MainScreen> {
     _androidId = await UniqueDeviceId.instance.getUniqueId() ?? 'unknown';
 
     granted = await checkPermissions();
+    isGranted = await PermissionChecker().isGranted();
+    grantedList = await PermissionChecker().isPermissioned();
+    print(grantedList);
     setState(() {});
     debugPrint('$granted');
 
@@ -266,11 +286,17 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   isFinish: count == 1 ? true : false,
                 );
+                context.read<RealtimeProvider>().add(data);
                 NotificationController.cancelNotifications();
                 NotificationController.createNewNotification(data);
               },
               child: const Text('푸시알림테스트'),
             ),
+            TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/realtime');
+                },
+                child: const Text('fds')),
             // 위젯 데이터 갱신 테스트용 버튼
             TextButton(
               onPressed: () {
@@ -284,21 +310,21 @@ class _MainScreenState extends State<MainScreen> {
                         ResultItem(
                           sentCategory: 2,
                           sentCategoryScore: 0.82,
-                          sentKeyword: '안녕',
+                          sentKeyword: '서울중앙지방검찰청',
                           keywordScore: 0.55,
                           sentence: 'ㅁㄴㅇㄹ',
                         ),
                         ResultItem(
                           sentCategory: 1,
                           sentCategoryScore: 0.74,
-                          sentKeyword: '검',
+                          sentKeyword: '녹취',
                           keywordScore: 0.55,
                           sentence: '검사',
                         ),
                         ResultItem(
                           sentCategory: 1,
                           sentCategoryScore: 0.88,
-                          sentKeyword: '녹취',
+                          sentKeyword: '대포통장',
                           keywordScore: 0.55,
                           sentence: 'ㅁㄴㅇㄹ',
                         ),
@@ -308,6 +334,18 @@ class _MainScreenState extends State<MainScreen> {
                   );
 
                   if (data.isFinish == true) {
+                    var callLog = await CallLog.query(
+                      dateTimeFrom:
+                          DateTime.now().subtract(const Duration(days: 1)),
+                      dateTimeTo: DateTime.now(),
+                    );
+                    phoneNumber = callLog.first.formattedNumber ?? '010010101';
+                    SendMessageModel callInfo = SendMessageModel(
+                      state: 1,
+                      androidId: 'androidId',
+                      phoneNumber: phoneNumber,
+                    );
+                    FlutterOverlayWindow.shareData(callInfo);
                     await FlutterOverlayWindow.shareData(data);
                   } else if (data.result!.totalCategoryScore >= 0.5) {
                     await FlutterOverlayWindow.shareData(data);
@@ -428,8 +466,9 @@ class _MainScreenState extends State<MainScreen> {
                                     StyledText(
                                       style: const TextStyle(
                                         fontSize: 18,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      text: '<b>보이스패싱</b>은',
+                                      text: '<b>보이스피싱</b>',
                                       tags: {
                                         'b': StyledTextTag(
                                             style: const TextStyle(
@@ -440,9 +479,12 @@ class _MainScreenState extends State<MainScreen> {
                                       },
                                     ),
                                     StyledText(
-                                      style: const TextStyle(fontSize: 18),
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                       text:
-                                          '<b>모두 ${snapshot.data['resultNum']}건</b>을',
+                                          '<b>${snapshot.data['resultNum']}건</b>을',
                                       tags: {
                                         'b': StyledTextTag(
                                             style: const TextStyle(
@@ -453,10 +495,10 @@ class _MainScreenState extends State<MainScreen> {
                                     ),
                                     const SizedBox(height: 5),
                                     const Text(
-                                      '잡았어요',
+                                      '찾았어요',
                                       style: TextStyle(
                                         fontSize: 18,
-                                        // fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     )
                                   ],
@@ -472,22 +514,95 @@ class _MainScreenState extends State<MainScreen> {
                           ],
                         ),
                         const SizedBox(
-                          height: 70,
+                          height: 50,
                         ),
                         // ignore: prefer_const_constructors
-                        SizedBox(
+                        GestureDetector(
+                          child: Container(
+                            width: 315,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              color: isGranted
+                                  ? ColorStyles.themeLightBlue
+                                  : ColorStyles.textDarkGray,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: isGranted
+                                ? Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        18, 12, 20, 12),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text('실시간으로 통화를 분석합니다',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 15)),
+                                        ColorSonar(
+                                            contentAreaRadius: 10.0,
+                                            waveMotion: WaveMotion.synced,
+                                            waveFall: 5.0,
+                                            innerWaveColor:
+                                                ColorStyles.themeLightBlue,
+                                            middleWaveColor:
+                                                const Color.fromARGB(
+                                                    255, 114, 157, 221),
+                                            outerWaveColor:
+                                                const Color.fromARGB(
+                                                    255, 170, 195, 233),
+                                            child: CircleAvatar(
+                                                radius: 20.0,
+                                                child: Lottie.asset(
+                                                    'assets/shield.json')))
+                                      ],
+                                    ),
+                                  )
+                                : const Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '실시간 통화 서비스를 위한 기기 권한이 없습니다',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 12),
+                                      ),
+                                      SizedBox(height: 5),
+                                      Text(
+                                        '기기 권한 설정을 위해 이곳을 눌러주세요',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 12),
+                                      ),
+                                    ],
+                                  ),
+                          ),
+                          onTap: () => {
+                            if (!isGranted)
+                              {Navigator.of(context).pushNamed('/permission')}
+                          },
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        const SizedBox(
                           width: 315,
                           // ignore: prefer_const_constructors
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
+                            children: [
                               ImgButton(
-                                title: '검사 결과',
+                                title: '검사 이력',
                                 imgName: 'ResultImg',
                                 routeName: '/result',
                               ),
                               ImgButton(
-                                  title: '통계 내용',
+                                  title: '최근 범죄 통계',
                                   imgName: 'StaticsImg',
                                   routeName: '/statistics'),
                             ],
@@ -504,7 +619,7 @@ class _MainScreenState extends State<MainScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: const [
                               ImgButton(
-                                title: '검색',
+                                title: '전화번호 검색',
                                 imgName: 'SearchImg',
                                 routeName: '/search',
                               ),
@@ -515,12 +630,6 @@ class _MainScreenState extends State<MainScreen> {
                             ],
                           ),
                         ),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     Navigator.of(context).pushNamed("/setting");
-                        //   },
-                        //   child: const Text("/setting"),
-                        // )
                       ],
                     ),
                   ),
