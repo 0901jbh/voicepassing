@@ -99,7 +99,8 @@
 - 파일 전송 후, 결과를 String으로 받고 목적에 맞게 파싱
 
 ### BERT 기반 AI 텍스트 분석
-- <범찬>
+- DistilBERT 모델과 Naive Bayesian 분류기를 weighted voting하여 문장 분류
+- 각 토큰이 결과에 미치는 영향을 분석하여, 문장 내 주요 단어 추출
 
 ### 분석 결과에 따른 유저 알림
 - AI 서버의 분석 결과를 spring boot를 통해 받음
