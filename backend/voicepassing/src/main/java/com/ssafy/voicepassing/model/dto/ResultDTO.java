@@ -64,6 +64,8 @@ public class ResultDTO{
 
         private List<String> keyword;
         private List<String> sentence;
+        private List<Float> scores;
+        
 
     }
 

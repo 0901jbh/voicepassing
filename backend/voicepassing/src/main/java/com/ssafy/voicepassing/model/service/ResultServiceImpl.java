@@ -109,11 +109,13 @@ public class ResultServiceImpl implements ResultService {
         for (Result result: resultsEntity) {
             ResultDTO.Result resultDto = buildResult(result);
             List<String> sentences = resultDetailRepository.findAllByResultId(resultDto.getResultId()).stream().map(ResultDetail::getSentence).collect(Collectors.toList());
+            List<Float> scores = new ArrayList<>();
             List<String> words = new ArrayList<>();
             for (String sentence: sentences) {
                 //String word = keywordSentenceRepository.findBySentenceStartsWith(sentence).getKeyword();
-                String word = keywordSentenceRepository.findById(sentence).get().getKeyword();
-                words.add(word);
+                KeywordSentence keyword = keywordSentenceRepository.findById(sentence).get();
+                words.add(keyword.getKeyword());
+                scores.add(keyword.getScore());
             }
             resultList.add(
                     ResultDTO.ResultWithWords.builder()
@@ -123,6 +125,7 @@ public class ResultServiceImpl implements ResultService {
                             .category(result.getCategory())
                             .phoneNumber(result.getPhoneNumber())
                             .createdTime(result.getCreatedTime())
+                            .scores(scores)
                             .build()
             );
         }

@@ -252,7 +252,7 @@ public class AudioWebSocketHandler extends AbstractWebSocketHandler {
         	
             KeywordSentenceDTO.KeywordSentence ksDTO = KeywordSentenceDTO.KeywordSentence
                     .builder()
-                    .score(r.getKeywordScore())
+                    .score(r.getSentCategoryScore())
                     .keyword(k.getKeyword())
                     .sentence(r.getSentence())
                     .category(k.getCategory())
