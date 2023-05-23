@@ -54,6 +54,7 @@ void setStream() async {
       );
       ws?.sink.add(jsonEncode(startMessage));
 
+      App.navigatorKey.currentContext!.read<RealtimeProvider>().reset();
       App.navigatorKey.currentContext!.read<IsAnalyzing>().on();
 
       // 통화 녹음 데이터 전송

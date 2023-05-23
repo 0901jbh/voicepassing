@@ -52,7 +52,7 @@ class _ResultScreenDetailState extends State<ResultScreenDetail> {
                       height: 29,
                     ),
                     const Text(
-                      '  범죄 유형',
+                      '  🚨 범죄 유형',
                       style:
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                     ),
@@ -60,10 +60,10 @@ class _ResultScreenDetailState extends State<ResultScreenDetail> {
                       caseInfo: widget.caseInfo,
                     ),
                     const SizedBox(
-                      height: 24,
+                      height: 30,
                     ),
                     const Text(
-                      '  의심되는 주요 단어',
+                      '  💬 의심되는 주요 단어',
                       style:
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                     ),
@@ -94,10 +94,10 @@ class _ResultScreenDetailState extends State<ResultScreenDetail> {
                       ],
                     ),
                     const SizedBox(
-                      height: 24,
+                      height: 35,
                     ),
                     const Text(
-                      '  주요 단어를 사용한 문장',
+                      '  💬 주요 단어를 사용한 문장',
                       style:
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                     ),
