@@ -102,48 +102,44 @@ class _ResultScreenDetailState extends State<ResultScreenDetail> {
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                     ),
                     const SizedBox(height: 3),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Card(
-                            shape: roundedRectangleBorder,
-                            elevation: 0,
-                            color: ColorStyles.background,
+                    for (int i = 0; i < widget.caseInfo.scores!.length; i++)
+                      Row(
+                        children: [
+                          Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: SizedBox(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    for (var sentence
-                                        in widget.caseInfo.sentences!)
-                                      Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 30),
-                                          child: StyledText(
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.w700,
-                                                color: ColorStyles.textDarkGray,
-                                                fontSize: 15),
-                                            text: sentence.toString(),
-                                            tags: {
-                                              'b': StyledTextTag(
-                                                  style: const TextStyle(
-                                                      color: ColorStyles
-                                                          .themeLightBlue,
-                                                      fontSize: 24,
-                                                      fontWeight:
-                                                          FontWeight.w700))
-                                            },
-                                          )),
-                                  ],
-                                ),
+                              padding: const EdgeInsets.only(bottom: 7),
+                              child: Card(
+                                shape: roundedRectangleBorder,
+                                elevation: 0,
+                                color: widget.caseInfo.scores![i] > 0.8
+                                    ? ColorStyles.backgroundRed
+                                    : ColorStyles.backgroundYellow,
+                                child: Padding(
+                                    padding: const EdgeInsets.all(17),
+                                    child: StyledText(
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          color: ColorStyles.textDarkGray,
+                                          fontSize: 15),
+                                      text: widget.caseInfo.sentences![i]
+                                          .toString(),
+                                      tags: {
+                                        'b': StyledTextTag(
+                                            style: TextStyle(
+                                                color:
+                                                    widget.caseInfo.scores![i] >
+                                                            0.8
+                                                        ? ColorStyles.themeRed
+                                                        : Colors.orange,
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w700))
+                                      },
+                                    )),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
                   ],
                 ),
               ),
