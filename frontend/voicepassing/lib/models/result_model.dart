@@ -40,5 +40,9 @@ class ResultModel {
             : ['단어를 포함한 문장'],
         androidId = json['androidId'] ?? '',
         phoneNumber = json['phoneNumber'] ?? '',
-        scores = json['scores'] ?? [0];
+        scores = json['result']?['results'] != null &&
+                json['result']?['results'].isNotEmpty
+            ? List<double>.from(json['result']['results']
+                .map((result) => result['sentCategoryScore']))
+            : [0.0];
 }
