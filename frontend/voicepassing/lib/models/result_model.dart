@@ -6,6 +6,7 @@ class ResultModel {
   final List<String>? words, sentences;
   final String? androidId;
   final String? phoneNumber;
+  final List<double>? scores;
 
   ResultModel.toJson(Map<String, dynamic> json)
       : score = json['risk'] ?? 75.0,
@@ -18,7 +19,10 @@ class ResultModel {
             ? List<String>.from(json['sentence'])
             : ['단어를 포함한 문장'],
         androidId = json['androidId'] ?? '',
-        phoneNumber = json['phoneNumber'] ?? '';
+        phoneNumber = json['phoneNumber'] ?? '',
+        scores = json['scores'] != null
+            ? List<double>.from(json['scores'])
+            : List.filled(List<String>.from(json['sentence']).length, 0.7);
 
   ResultModel.fromJson(Map<String, dynamic> json)
       : score = json['result']?['totalCategoryScore'] ?? 75.0,
@@ -35,5 +39,6 @@ class ResultModel {
                 json['result']['results'].map((result) => result['sentence']))
             : ['단어를 포함한 문장'],
         androidId = json['androidId'] ?? '',
-        phoneNumber = json['phoneNumber'] ?? '';
+        phoneNumber = json['phoneNumber'] ?? '',
+        scores = json['scores'] ?? [0];
 }
