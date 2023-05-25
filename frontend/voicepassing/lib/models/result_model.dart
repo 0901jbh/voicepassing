@@ -22,7 +22,8 @@ class ResultModel {
         phoneNumber = json['phoneNumber'] ?? '',
         scores = json['scores'] != null
             ? List<double>.from(json['scores'])
-            : List.filled(List<String>.from(json['sentence']).length, 0.7);
+            : List.filled(
+                List<String>.from(json['sentence'] ?? ['']).length, 0.7);
 
   ResultModel.fromJson(Map<String, dynamic> json)
       : score = json['result']?['totalCategoryScore'] ?? 75.0,
