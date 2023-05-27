@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart' as ggg;
 import 'package:styled_text/styled_text.dart';
 import 'package:voicepassing/screens/main_screen.dart';
-import 'package:voicepassing/widgets/head_bar.dart';
 import 'package:voicepassing/widgets/nav_bar.dart';
 
 import 'package:file_picker/file_picker.dart';
@@ -14,6 +13,7 @@ import 'dart:convert';
 import 'package:voicepassing/screens/result_screen_detail.dart';
 import 'package:voicepassing/style/color_style.dart';
 import 'package:unique_device_id/unique_device_id.dart';
+import 'package:voicepassing/widgets/new_head_bar.dart';
 
 class AnalyticsScreen extends StatefulWidget {
   const AnalyticsScreen({super.key});
@@ -92,16 +92,9 @@ class _ResultScreenState extends State<AnalyticsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HeadBar(
-        navPage: const MainScreen(),
-        title: const Text(
-          '녹음 파일 검사',
-          style: TextStyle(
-            fontSize: 18.0,
-            color: ColorStyles.textBlack,
-          ),
-        ),
-        appBar: AppBar(),
+      appBar: const NewHeadBar(
+        navPage: MainScreen(),
+        name: 'analytics',
       ),
       body: Builder(
         builder: (BuildContext context) {

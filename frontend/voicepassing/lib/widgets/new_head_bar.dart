@@ -27,7 +27,7 @@ class NewHeadBar extends StatelessWidget implements PreferredSizeWidget {
       case 'analytics':
         title = '녹음 파일 검사';
         subtitle = '음성 파일을 검사할 수 있습니다';
-        backgroundIcon = MdiIcons.fileUploadOutline;
+        backgroundIcon = MdiIcons.folderUploadOutline;
         break;
       default:
         title = 'TITLE';

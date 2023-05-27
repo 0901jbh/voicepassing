@@ -7,6 +7,8 @@ import 'package:voicepassing/widgets/nav_bar.dart';
 import 'package:voicepassing/widgets/statistics_widget/chart_box.dart';
 import 'package:voicepassing/widgets/statistics_widget/keyword_box.dart';
 
+import '../widgets/new_head_bar.dart';
+
 class StaticsScreen extends StatefulWidget {
   const StaticsScreen({super.key});
 
@@ -18,10 +20,9 @@ class _ResultScreenState extends State<StaticsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HeadBar(
-        navPage: const MainScreen(),
-        title: const Text('통계 및 사례'),
-        appBar: AppBar(),
+      appBar: const NewHeadBar(
+        navPage: MainScreen(),
+        name: 'statistics',
       ),
       body: Builder(
         builder: (BuildContext context) {
