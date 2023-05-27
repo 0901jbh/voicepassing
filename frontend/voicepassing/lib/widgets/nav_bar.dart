@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:voicepassing/screens/analytics_screen.dart';
 import 'package:voicepassing/screens/main_screen.dart';
 import 'package:voicepassing/screens/result_screen.dart';
@@ -52,44 +53,21 @@ class _NavbarState extends State<Navbar> {
         onTap: (int index) {
           switch (index) {
             case 0:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const MainScreen(),
-                ),
-              );
+              Get.to(() => const MainScreen(), transition: Transition.fade);
               break;
             case 1:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ResultScreen(),
-                ),
-              );
+              Get.to(() => const ResultScreen(), transition: Transition.fade);
+
               break;
             case 2:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const StaticsScreen(),
-                ),
-              );
+              Get.to(() => const StaticsScreen(), transition: Transition.fade);
               break;
             case 3:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SearchScreen(),
-                ),
-              );
+              Get.to(() => const SearchScreen(), transition: Transition.fade);
               break;
             case 4:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AnalyticsScreen(),
-                ),
-              );
+              Get.to(() => const AnalyticsScreen(),
+                  transition: Transition.fade);
               break;
           }
         },

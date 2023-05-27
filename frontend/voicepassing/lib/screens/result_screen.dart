@@ -33,7 +33,7 @@ class _ResultScreenState extends State<ResultScreen> {
     androidId = await UniqueDeviceId.instance.getUniqueId() ?? 'unknown';
     await UniqueDeviceId.instance.getUniqueId().then((value) async {
       androidId = value!;
-      resultList = await ApiService.getRecentResult('f6ebc130a8a9709d');
+      resultList = await ApiService.getRecentResult(androidId);
 
       setState(() {
         isLoading = true;
