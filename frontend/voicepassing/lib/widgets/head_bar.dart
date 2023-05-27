@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:voicepassing/screens/main_screen.dart';
 
 class HeadBar extends StatelessWidget implements PreferredSizeWidget {
   final Text title;
@@ -14,19 +16,31 @@ class HeadBar extends StatelessWidget implements PreferredSizeWidget {
       tag: 'headBar',
       child: AppBar(
         leading: Builder(builder: (BuildContext context) {
-          return IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              navPage == null
-                  ? Navigator.pop(context)
-                  : Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => navPage!,
-                      ),
-                    );
-            },
-          );
+          return GestureDetector(
+              onTap: navPage == null
+                  ? () => Navigator.pop(context)
+                  : () => Get.to(() => const MainScreen(),
+                      transition: Transition.fade),
+              child: const Icon(Icons.arrow_back_ios));
+          // IconButton(
+          //   icon: const Icon(Icons.arrow_back_ios),
+          //   onPressed: () {
+          //     Get.to(() {
+          //             return navPage;
+          //           }, transition: Transition.fade)
+          // navPage == null
+          //     ? Navigator.pop(context)
+          //     : Get.to(() {
+          //         return navPage;
+          //       }, transition: Transition.fade);
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => navPage!,
+          //     ),
+          //   );
+          //   },
+          // );
         }),
         actions: [
           IconButton(
