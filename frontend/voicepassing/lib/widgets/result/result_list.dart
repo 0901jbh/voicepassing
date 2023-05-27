@@ -1,5 +1,6 @@
 import 'package:circle_progress_bar/circle_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:voicepassing/models/result_model.dart';
 import 'package:voicepassing/screens/result_screen_detail.dart';
@@ -35,14 +36,19 @@ class ResultList extends StatelessWidget {
     }
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ResultScreenDetail(
-              caseInfo: caseInfo,
-            ),
-          ),
-        );
+        Get.to(
+            () => ResultScreenDetail(
+                  resultInfo: caseInfo,
+                ),
+            transition: Transition.fade);
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => ResultScreenDetail(
+        //       resultInfo: caseInfo,
+        //     ),
+        //   ),
+        // );
       },
       child: Card(
         shape: roundedRectangleBorder,
