@@ -6,9 +6,10 @@ import 'package:voicepassing/models/result_model.dart';
 import 'package:voicepassing/screens/main_screen.dart';
 import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/style/color_style.dart';
-import 'package:voicepassing/widgets/head_bar.dart';
 import 'package:voicepassing/widgets/nav_bar.dart';
 import 'package:voicepassing/widgets/result/result_list.dart';
+
+import '../widgets/new_head_bar.dart';
 
 class ResultScreen extends StatefulWidget {
   const ResultScreen({super.key});
@@ -32,7 +33,7 @@ class _ResultScreenState extends State<ResultScreen> {
     androidId = await UniqueDeviceId.instance.getUniqueId() ?? 'unknown';
     await UniqueDeviceId.instance.getUniqueId().then((value) async {
       androidId = value!;
-      resultList = await ApiService.getRecentResult('993140c6209a825f');
+      resultList = await ApiService.getRecentResult('f6ebc130a8a9709d');
 
       setState(() {
         isLoading = true;
@@ -43,25 +44,19 @@ class _ResultScreenState extends State<ResultScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HeadBar(
-        navPage: const MainScreen(),
-        title: const Text('검사 결과'),
-        appBar: AppBar(),
+      backgroundColor: ColorStyles.background,
+      appBar: const NewHeadBar(
+        navPage: MainScreen(),
+        title: '검사 결과',
+        subtitle: '보이스피싱 검사 내역을 확인하세요',
       ),
       body: Builder(
         builder: (BuildContext context) {
           return Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: Column(
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const ResultTitle(),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                children: [              
                   isLoading
                       ? resultList.isEmpty
                           ? const EmptyContent1()
@@ -69,12 +64,14 @@ class _ResultScreenState extends State<ResultScreen> {
                               child: SingleChildScrollView(
                                 child: Column(
                                   children: [
+                                    const SizedBox(height: 15),
                                     for (var result in resultList)
                                       Padding(
                                         padding:
-                                            const EdgeInsets.only(bottom: 15),
+                                            const EdgeInsets.fromLTRB(14, 10, 14, 10),
                                         child: ResultList(caseInfo: result),
                                       ),
+                                    const SizedBox(height: 15),
                                   ],
                                 ),
                               ),
