@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:voicepassing/providers/is_analyzing.dart';
 import 'package:voicepassing/providers/realtime_provider.dart';
@@ -56,7 +57,7 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       navigatorKey: App.navigatorKey,
       routes: Routes.routes,
       builder: (context, child) {

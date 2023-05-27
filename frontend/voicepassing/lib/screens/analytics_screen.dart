@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart' as ggg;
 import 'package:styled_text/styled_text.dart';
 import 'package:voicepassing/screens/main_screen.dart';
 import 'package:voicepassing/widgets/head_bar.dart';
@@ -11,7 +12,6 @@ import 'package:dio/dio.dart';
 import 'package:voicepassing/models/result_model.dart';
 import 'dart:convert';
 import 'package:voicepassing/screens/result_screen_detail.dart';
-import 'package:voicepassing/screens/result_screen_detail_ok.dart';
 import 'package:voicepassing/style/color_style.dart';
 import 'package:unique_device_id/unique_device_id.dart';
 
@@ -67,24 +67,22 @@ class _ResultScreenState extends State<AnalyticsScreen> {
     final json = jsonDecode(jsonString);
     final resultModel = ResultModel.fromJson(json);
     //isSend = false;
-    if (response.statusCode == 200) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ResultScreenDetail(
-                  caseInfo: resultModel,
-                )),
-      );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      ggg.Get.to(
+          () => ResultScreenDetail(
+                resultInfo: resultModel,
+              ),
+          transition: ggg.Transition.fade);
     }
-    if (response.statusCode == 201) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ResultScreenDetailOK(
-                  caseInfo: resultModel,
-                )),
-      );
-    }
+    // if (response.statusCode == 201) {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) => ResultScreenDetailOK(
+    //               caseInfo: resultModel,
+    //             )),
+    //   );
+    // }
 
     setState(() {
       result = response.toString();

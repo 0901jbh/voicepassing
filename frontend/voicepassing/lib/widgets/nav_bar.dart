@@ -4,6 +4,7 @@ import 'package:voicepassing/screens/main_screen.dart';
 import 'package:voicepassing/screens/result_screen.dart';
 import 'package:voicepassing/screens/search_screen.dart';
 import 'package:voicepassing/screens/statics_screen.dart';
+import 'package:voicepassing/style/color_style.dart';
 
 class Navbar extends StatefulWidget {
   final int selectedIndex;
@@ -46,7 +47,7 @@ class _NavbarState extends State<Navbar> {
           )
         ],
         currentIndex: widget.selectedIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: ColorStyles.newBlue,
         unselectedItemColor: const Color(0xffB1B8C0),
         onTap: (int index) {
           switch (index) {
@@ -54,7 +55,7 @@ class _NavbarState extends State<Navbar> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MainScreen(),
+                  builder: (context) => const MainScreen(),
                 ),
               );
               break;
