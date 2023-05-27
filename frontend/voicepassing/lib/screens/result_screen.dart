@@ -47,8 +47,7 @@ class _ResultScreenState extends State<ResultScreen> {
       backgroundColor: ColorStyles.background,
       appBar: const NewHeadBar(
         navPage: MainScreen(),
-        title: '검사 결과',
-        subtitle: '보이스피싱 검사 내역을 확인하세요',
+        name: 'result',
       ),
       body: Builder(
         builder: (BuildContext context) {

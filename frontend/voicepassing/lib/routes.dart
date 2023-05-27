@@ -13,7 +13,7 @@ class Routes {
 
   static const String main = '/main';
   static const String result = '/result';
-  static const String search = '/seasrch';
+  static const String search = '/search';
   static const String statistics = '/statistics';
   static const String analytics = '/analytics';
   static const String setting = '/setting';
