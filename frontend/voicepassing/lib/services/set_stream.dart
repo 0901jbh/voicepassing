@@ -7,6 +7,7 @@ import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:phone_state/phone_state.dart';
 import 'package:provider/provider.dart';
 import 'package:unique_device_id/unique_device_id.dart';
+import 'package:vibration/vibration.dart';
 import 'package:voicepassing/main.dart';
 import 'package:voicepassing/models/receive_message_model.dart';
 import 'package:voicepassing/models/send_message_model.dart';
@@ -48,6 +49,12 @@ void setStream() async {
         Uri.parse('ws://k8a607.p.ssafy.io:8080/record'),
       );
 
+      ws?.ready.then((_) {
+        Vibration.vibrate();
+        NotificationController.cancelNotifications();
+        NotificationController.createStartNotification();
+      });
+
       var startMessage = SendMessageModel(
         state: 0,
         androidId: androidId,
@@ -82,6 +89,8 @@ void setStream() async {
           // 최종 결과 수신
           if (receivedResult.isFinish == true) {
             ws?.sink.close();
+            NotificationController.cancelNotifications();
+            NotificationController.createEndNotification();
 
             App.navigatorKey.currentContext!.read<IsAnalyzing>().off();
 
@@ -118,6 +127,10 @@ void setStream() async {
                     .read<RealtimeProvider>()
                     .add(receivedResult);
                 // 푸시 알림 전송
+                Vibration.vibrate(
+                  duration: 1000,
+                  amplitude: 255,
+                );
                 NotificationController.cancelNotifications();
                 NotificationController.createNewNotification(receivedResult);
               }

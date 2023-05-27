@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +32,7 @@ class NotificationController {
             defaultPrivacy: NotificationPrivacy.Private,
             defaultColor: ColorStyles.themeLightBlue,
             ledColor: ColorStyles.themeLightBlue,
-            enableVibration: true,
-            vibrationPattern: highVibrationPattern,
+            enableVibration: false,
           ),
         ],
         debug: true);
@@ -134,9 +132,38 @@ class NotificationController {
             ? "<span style='color: #FF525E;'>${getKeywords().join(', ')}</span> 등의 단어가 감지되었습니다.<br> 이러한 단어가 사용되는 통화의 경우 보이스피싱의 가능성이 높으니 주의하세요. 자세한 정보를 보시려면 알림을 터치하세요."
             : "<span style='color: #FFC041;'>${getKeywords().join(', ')}</span> 등의 단어가 감지되었습니다.<br> 이러한 단어가 사용되는 통화의 경우 보이스피싱의 가능성이 높으니 주의하세요. 자세한 정보를 보시려면 알림을 터치하세요.",
         notificationLayout: NotificationLayout.BigText,
-        payload: {'resultData': jsonEncode(resultData)},
         category: NotificationCategory.Service,
         actionType: ActionType.Default,
+      ),
+    );
+  }
+
+  static Future<void> createStartNotification() async {
+    bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
+    if (!isAllowed) return;
+
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: -1,
+        channelKey: 'voicepassing',
+        color: Colors.white,
+        title: '실시간 통화 분석 시작',
+        body: '실시간으로 통화를 분석 중입니다. 분석 내용을 보시려면 알림을 터치하세요.',
+      ),
+    );
+  }
+
+  static Future<void> createEndNotification() async {
+    bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
+    if (!isAllowed) return;
+
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: -1,
+        channelKey: 'voicepassing',
+        color: Colors.white,
+        title: '실시간 통화 분석 완료',
+        body: '통화 분석이 완료되었습니다. 분석 내용을 보시려면 알림을 터치하세요.',
       ),
     );
   }
