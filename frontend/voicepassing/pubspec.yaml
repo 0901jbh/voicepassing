@@ -67,6 +67,7 @@ dependencies:
   call_log: ^4.0.0
   timelines: ^0.1.0
   get: ^4.6.5
+  indexed: ^0.0.8
 
 dev_dependencies:
   flutter_test:
