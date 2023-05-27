@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:voicepassing/screens/analytics_screen.dart';
 import 'package:voicepassing/screens/main_screen.dart';
 import 'package:voicepassing/screens/result_screen.dart';
 import 'package:voicepassing/screens/search_screen.dart';
 import 'package:voicepassing/screens/statics_screen.dart';
+import 'package:voicepassing/style/color_style.dart';
 
 class Navbar extends StatefulWidget {
   final int selectedIndex;
@@ -46,49 +48,26 @@ class _NavbarState extends State<Navbar> {
           )
         ],
         currentIndex: widget.selectedIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: ColorStyles.newBlue,
         unselectedItemColor: const Color(0xffB1B8C0),
         onTap: (int index) {
           switch (index) {
             case 0:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MainScreen(),
-                ),
-              );
+              Get.to(() => const MainScreen(), transition: Transition.fade);
               break;
             case 1:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ResultScreen(),
-                ),
-              );
+              Get.to(() => const ResultScreen(), transition: Transition.fade);
+
               break;
             case 2:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const StaticsScreen(),
-                ),
-              );
+              Get.to(() => const StaticsScreen(), transition: Transition.fade);
               break;
             case 3:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SearchScreen(),
-                ),
-              );
+              Get.to(() => const SearchScreen(), transition: Transition.fade);
               break;
             case 4:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AnalyticsScreen(),
-                ),
-              );
+              Get.to(() => const AnalyticsScreen(),
+                  transition: Transition.fade);
               break;
           }
         },
