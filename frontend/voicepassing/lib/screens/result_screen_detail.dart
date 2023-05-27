@@ -61,8 +61,7 @@ class HomePage extends StatelessWidget {
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 25, right: 25, top: 20, bottom: 30),
+                padding: const EdgeInsets.only(left: 25, right: 25, bottom: 30),
                 child: FixedTimeline.tileBuilder(
                   theme: TimelineTheme.of(context).copyWith(
                     nodePosition: 0,
