@@ -145,6 +145,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.2"
+  draggable_home:
+    dependency: "direct main"
+    description:
+      name: draggable_home
+      sha256: "4fa3c71f7784bb9a0ab722bb6245e071c261dcf2a3e1e004ee681bda60cfbbbb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   enum_to_string:
     dependency: transitive
     description:
@@ -312,6 +320,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  get:
+    dependency: "direct main"
+    description:
+      name: get
+      sha256: "2ba20a47c8f1f233bed775ba2dd0d3ac97b4cf32fc17731b3dfc672b06b0e92a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.6.5"
   http:
     dependency: "direct main"
     description:
@@ -408,6 +424,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.0"
+  material_design_icons_flutter:
+    dependency: "direct main"
+    description:
+      name: material_design_icons_flutter
+      sha256: "8ef8562d16e747b2d93e5da5c2508931588939c5c00ebc8e2768e803db7dfd3c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.7096"
   meta:
     dependency: transitive
     description:
@@ -552,6 +576,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.5"
+  rxdart:
+    dependency: transitive
+    description:
+      name: rxdart
+      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.27.7"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -669,6 +701,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
+  timelines:
+    dependency: "direct main"
+    description:
+      name: timelines
+      sha256: "40214f5ab772ff45459cb8c15e5f60505a6828af0c0eb1eec6f29ed911a4c1c5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   typed_data:
     dependency: transitive
     description:
