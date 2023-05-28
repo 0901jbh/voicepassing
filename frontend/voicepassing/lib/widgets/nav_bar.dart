@@ -32,7 +32,11 @@ class _NavbarState extends State<Navbar> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.playlist_add_check),
-            label: '검사 결과',
+            label: '검사 내역',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.upload_outlined),
+            label: '파일 검사',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.pie_chart_outline),
@@ -42,10 +46,6 @@ class _NavbarState extends State<Navbar> {
             icon: Icon(Icons.search),
             label: '검색',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.upload_outlined),
-            label: '파일 검사',
-          )
         ],
         currentIndex: widget.selectedIndex,
         selectedItemColor: ColorStyles.newBlue,
@@ -57,17 +57,16 @@ class _NavbarState extends State<Navbar> {
               break;
             case 1:
               Get.to(() => const ResultScreen(), transition: Transition.fade);
-
               break;
             case 2:
-              Get.to(() => const StaticsScreen(), transition: Transition.fade);
-              break;
-            case 3:
-              Get.to(() => const SearchScreenResult(),
+              Get.to(() => const AnalyticsScreen(),
                   transition: Transition.fade);
               break;
+            case 3:
+              Get.to(() => const StaticsScreen(), transition: Transition.fade);
+              break;
             case 4:
-              Get.to(() => const AnalyticsScreen(),
+              Get.to(() => const SearchScreenResult(),
                   transition: Transition.fade);
               break;
           }

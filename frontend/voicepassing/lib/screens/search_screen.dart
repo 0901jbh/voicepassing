@@ -94,7 +94,7 @@ class SearchScreen extends StatelessWidget {
           );
         },
       ),
-      bottomNavigationBar: const Navbar(selectedIndex: 3),
+      bottomNavigationBar: const Navbar(selectedIndex: 4),
     );
   }
 }

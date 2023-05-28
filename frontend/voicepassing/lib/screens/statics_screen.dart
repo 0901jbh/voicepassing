@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:voicepassing/screens/main_screen.dart';
-import 'package:voicepassing/widgets/head_bar.dart';
 import 'package:voicepassing/widgets/nav_bar.dart';
 import 'package:voicepassing/widgets/statistics_widget/chart_box.dart';
 import 'package:voicepassing/widgets/statistics_widget/keyword_box.dart';
@@ -39,7 +38,7 @@ class _ResultScreenState extends State<StaticsScreen> {
           );
         },
       ),
-      bottomNavigationBar: const Navbar(selectedIndex: 2),
+      bottomNavigationBar: const Navbar(selectedIndex: 3),
     );
   }
 }

@@ -240,8 +240,8 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                       ),
                       child: Image.asset(
                         'images/FileButton.png',
-                        height: 200,
-                        width: 200, //200 , 200
+                        height: 50,
+                        width: 50, //200 , 200
                       ),
                     ),
                   ),
@@ -253,11 +253,22 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                   ),
                   Visibility(
                     visible: isSend,
-                    child: const SizedBox(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 18,
-                        backgroundColor: Colors.black,
-                        color: ColorStyles.themeLightBlue,
+                    child: SizedBox(
+                      child: Image.asset(
+                        'images/waiting.gif',
+                        height: 50,
+                        width: 50,
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: isSend,
+                    child: StyledText(
+                      text: 'AI 분석중',
+                      style: const TextStyle(
+                        color: ColorStyles.textDarkGray,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -271,8 +282,8 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                       ),
                       child: Image.asset(
                         'images/FileButton.png',
-                        height: 200,
-                        width: 200,
+                        height: 50,
+                        width: 50,
                       ),
                     ),
                   ),
@@ -282,7 +293,7 @@ class _ResultScreenState extends State<AnalyticsScreen> {
           );
         },
       ),
-      bottomNavigationBar: const Navbar(selectedIndex: 4),
+      bottomNavigationBar: const Navbar(selectedIndex: 2),
     );
   }
 }
