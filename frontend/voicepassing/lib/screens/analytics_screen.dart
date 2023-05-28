@@ -84,12 +84,15 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                     ),
                   ),
                 ),
-                StyledText(
-                  text: '녹음한 통화 파일을 검사할 수 있습니다',
-                  style: const TextStyle(
-                    color: ColorStyles.textDarkGray,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: StyledText(
+                    text: '녹음한 통화 파일을 검사할 수 있습니다',
+                    style: const TextStyle(
+                      color: ColorStyles.textDarkGray,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
               ],
@@ -100,6 +103,13 @@ class _ResultScreenState extends State<AnalyticsScreen> {
               child: ListView.builder(
                 itemCount: files.length,
                 itemBuilder: (context, index) {
+                  files.sort((a, b) {
+                    List<String> aParts = path.basename(a.path).split('_');
+                    List<String> bParts = path.basename(b.path).split('_');
+                    int sizeA = int.parse(aParts[1]);
+                    int sizeB = int.parse(bParts[1]);
+                    return sizeB.compareTo(sizeA);
+                  });
                   FileSystemEntity file = files[index];
                   return ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -122,15 +132,18 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                           height: 24,
                         ),
                         const SizedBox(width: 8),
-                        StyledText(
-                          text: path
-                              .basename(file.path)
-                              .replaceAll("통화 녹음", "")
-                              .trim(),
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: Text(
+                            path
+                                .basename(file.path)
+                                .replaceAll("통화 녹음", "")
+                                .trim(),
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
@@ -147,7 +160,7 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                   border: Border(
                     bottom: BorderSide(
                       color: Colors.black,
-                      width: 2,
+                      width: 1,
                       style: BorderStyle.solid,
                     ),
                   ),
