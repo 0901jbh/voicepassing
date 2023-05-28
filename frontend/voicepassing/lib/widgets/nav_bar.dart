@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:voicepassing/screens/analytics_screen.dart';
 import 'package:voicepassing/screens/main_screen.dart';
 import 'package:voicepassing/screens/result_screen.dart';
@@ -31,21 +32,21 @@ class _NavbarState extends State<Navbar> {
             label: '메인',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.playlist_add_check),
-            label: '검사 결과',
+            icon: Icon(MdiIcons.newspaperVariantMultiple),
+            label: '검사 내역',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.pie_chart_outline),
+            icon: Icon(MdiIcons.folderUploadOutline),
+            label: '파일 검사',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(MdiIcons.finance),
             label: '통계',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
+            icon: Icon(MdiIcons.clipboardTextSearch),
             label: '검색',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.upload_outlined),
-            label: '파일 검사',
-          )
         ],
         currentIndex: widget.selectedIndex,
         selectedItemColor: ColorStyles.newBlue,
@@ -60,14 +61,16 @@ class _NavbarState extends State<Navbar> {
 
               break;
             case 2:
-              Get.to(() => const StaticsScreen(), transition: Transition.fade);
-              break;
-            case 3:
-              Get.to(() => const SearchScreenResult(),
+              Get.to(() => const AnalyticsScreen(),
                   transition: Transition.fade);
               break;
+
+            case 3:
+              Get.to(() => const StaticsScreen(), transition: Transition.fade);
+              break;
+
             case 4:
-              Get.to(() => const AnalyticsScreen(),
+              Get.to(() => const SearchScreenResult(),
                   transition: Transition.fade);
               break;
           }

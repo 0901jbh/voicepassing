@@ -282,7 +282,7 @@ class _ResultScreenState extends State<AnalyticsScreen> {
           );
         },
       ),
-      bottomNavigationBar: const Navbar(selectedIndex: 4),
+      bottomNavigationBar: const Navbar(selectedIndex: 2),
     );
   }
 }
