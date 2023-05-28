@@ -1,15 +1,21 @@
 import 'dart:async';
 import 'dart:isolate';
+import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as ggg;
 import 'package:indexed/indexed.dart';
 import 'package:lottie/lottie.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:voicepassing/main.dart';
+import 'package:voicepassing/models/receive_message_model.dart';
+import 'package:voicepassing/providers/is_analyzing.dart';
 import 'package:voicepassing/screens/analytics_screen.dart';
 import 'package:voicepassing/screens/result_screen.dart';
 import 'package:voicepassing/screens/search_screen_result.dart';
 import 'package:voicepassing/screens/statics_screen.dart';
+import 'package:voicepassing/services/notification_controller.dart';
 
 import 'package:voicepassing/style/color_style.dart';
 import 'package:voicepassing/services/permissionChecker.dart';
@@ -19,6 +25,8 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:voicepassing/services/api_service.dart';
 
 import 'package:android_intent_plus/android_intent.dart';
+
+import '../providers/realtime_provider.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -70,6 +78,53 @@ class _MainScreenState extends State<MainScreen> {
     isGranted = await PermissionChecker().isGranted();
     grantedList = await PermissionChecker().isPermissioned();
     setState(() {});
+  }
+
+  void testFn() {
+    int count = 10;
+    Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (count == 10) {
+        NotificationController.cancelNotifications();
+        NotificationController.createStartNotification();
+        App.navigatorKey.currentContext!.read<RealtimeProvider>().reset();
+        App.navigatorKey.currentContext!.read<IsAnalyzing>().on();
+      } else if (count == 1) {
+        NotificationController.cancelNotifications();
+        NotificationController.createEndNotification();
+        App.navigatorKey.currentContext!.read<IsAnalyzing>().off();
+        timer.cancel();
+      } else {
+        ReceiveMessageModel dummyData = ReceiveMessageModel(
+          result: TotalResult(
+            totalCategory: 1,
+            totalCategoryScore: (Random().nextInt(40) + 60) / 100,
+            results: [
+              ResultItem(
+                sentCategory: 1,
+                sentCategoryScore: (Random().nextInt(40) + 60) / 100,
+                sentKeyword: '키워드1',
+                keywordScore: (Random().nextInt(40) + 60) / 100,
+                sentence: 'ㅇㄴㄻㅇㄻㄴㅇ',
+              ),
+              ResultItem(
+                sentCategory: 1,
+                sentCategoryScore: (Random().nextInt(40) + 60) / 100,
+                sentKeyword: '키워드2',
+                keywordScore: (Random().nextInt(40) + 60) / 100,
+                sentence: 'ㅇㄴㄻㅇㄻㄴㅇ',
+              ),
+            ],
+          ),
+          isFinish: false,
+        );
+        NotificationController.cancelNotifications();
+        NotificationController.createNewNotification(dummyData);
+        App.navigatorKey.currentContext!
+            .read<RealtimeProvider>()
+            .add(dummyData);
+      }
+      count--;
+    });
   }
 
   @override
@@ -316,6 +371,7 @@ class _MainScreenState extends State<MainScreen> {
             backgroundColor: Colors.white.withOpacity(1),
             appBar: AppBar(
               actions: [
+                TextButton(onPressed: testFn, child: const Text('TEST')),
                 IconButton(
                   onPressed: () {
                     Navigator.of(context).pushNamed("/setting");
