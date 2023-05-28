@@ -217,7 +217,7 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                           icon: Icons.mic,
                           headText: '통화 파일 검사',
                           subText: '녹음한 통화 파일을 검사할 수 있습니다',
-                          action: _openFilePicker,
+                          action: _pickDirectory,
                           type: 1,
                         )
                         // 모든파일검사
@@ -229,7 +229,7 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                           icon: MdiIcons.folderOpenOutline,
                           headText: '기기 파일 검사',
                           subText: '기기 전체에서 파일을 찾을 수 있습니다',
-                          action: _pickDirectory,
+                          action: _openFilePicker,
                           type: 2,
                         ),
                         // ElevatedButton(
