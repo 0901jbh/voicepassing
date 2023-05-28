@@ -171,6 +171,7 @@ class _ResultScreenState extends State<AnalyticsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xffFAFBFC),
       appBar: const NewHeadBar(
         navPage: MainScreen(),
         name: 'analytics',
