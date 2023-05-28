@@ -4,6 +4,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:voicepassing/models/result_model.dart';
 import 'package:voicepassing/services/classify.dart';
 import 'package:voicepassing/style/color_style.dart';
+import 'package:voicepassing/style/shadow_style.dart';
 import 'package:voicepassing/widgets/pie_chart.dart';
 
 class SearchDetail extends StatelessWidget {
@@ -51,14 +52,7 @@ class SearchDetail extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
               color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                  offset: const Offset(0, 0.1),
-                ),
-              ],
+              boxShadow: [ShadowStyle.wideShadow],
             ),
             child: Column(
               children: [
@@ -113,14 +107,7 @@ class EmptyContent extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                  offset: const Offset(0, 0.1),
-                ),
-              ],
+              boxShadow: [ShadowStyle.wideShadow],
               borderRadius: BorderRadius.circular(6),
             ),
             child: Padding(
@@ -185,14 +172,7 @@ class listInstances extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              spreadRadius: 1,
-              blurRadius: 2,
-              offset: const Offset(0.1, 0.1),
-            ),
-          ],
+          boxShadow: [ShadowStyle.wideShadow],
           borderRadius: BorderRadius.circular(6),
         ),
         child: Padding(

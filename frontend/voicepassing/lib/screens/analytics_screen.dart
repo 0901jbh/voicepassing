@@ -3,6 +3,7 @@ import 'package:get/get.dart' as ggg;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:styled_text/styled_text.dart';
 import 'package:voicepassing/screens/main_screen.dart';
+import 'package:voicepassing/style/shadow_style.dart';
 import 'package:voicepassing/widgets/nav_bar.dart';
 
 import 'package:file_picker/file_picker.dart';
@@ -382,14 +383,7 @@ class BigButton2 extends StatelessWidget {
         decoration: BoxDecoration(
             color: bgcolor,
             borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                spreadRadius: 1,
-                blurRadius: 5,
-                offset: const Offset(0, 0.1),
-              ),
-            ]),
+            boxShadow: [ShadowStyle.wideShadow]),
         child: Center(
             child: Padding(
           padding: const EdgeInsets.all(15.0),
