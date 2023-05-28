@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:voicepassing/models/keyword_model.dart';
 import 'package:voicepassing/services/api_service.dart';
-import 'package:voicepassing/style/color_style.dart';
 import 'package:voicepassing/widgets/statistics_widget/category_button.dart';
-import 'package:voicepassing/widgets/statistics_widget/keywords.dart';
 import 'package:voicepassing/widgets/statistics_widget/setences.dart';
 
 class KeywordBox extends StatefulWidget {
@@ -49,9 +47,9 @@ class _KeywordBoxState extends State<KeywordBox> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            "주로 등장하는 키워드와 문장",
+            "유형별 핵심 문장",
             textAlign: TextAlign.start,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
           const SizedBox(
             height: 5,
@@ -69,27 +67,20 @@ class _KeywordBoxState extends State<KeywordBox> {
               const SizedBox(
                 height: 6,
               ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: ColorStyles.backgroundBlue,
-                ),
-                child: Keywords(result[(selected + 1).toString()]),
-              ),
+              // Container(
+              //   padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
+              //   width: MediaQuery.of(context).size.width,
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(12),
+              //     color: Colors.white,
+              //   ),
+              //   child: Keywords(result[(selected + 1).toString()]),
+              // ),
               const SizedBox(
                 height: 12,
               ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(20, 30, 20, 6),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: ColorStyles.backgroundBlue,
-                ),
-                child: Sentences(result[(selected + 1).toString()]),
-              ),
+              // Sentences(result[(selected + 1).toString()])
+              Sentences(result[(selected + 1).toString()]),
             ],
           )
         ],

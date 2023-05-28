@@ -4,7 +4,7 @@ import 'package:voicepassing/screens/main_screen.dart';
 import 'package:voicepassing/screens/realtime_screen.dart';
 import 'package:voicepassing/screens/request_permissions_screen.dart';
 import 'package:voicepassing/screens/result_screen.dart';
-import 'package:voicepassing/screens/search_screen.dart';
+import 'package:voicepassing/screens/search_screen_result.dart';
 import 'package:voicepassing/screens/setting_screen.dart';
 import 'package:voicepassing/screens/statics_screen.dart';
 
@@ -23,7 +23,7 @@ class Routes {
   static final routes = <String, WidgetBuilder>{
     '/main': (context) => const MainScreen(),
     '/result': (context) => const ResultScreen(),
-    '/search': (context) => const SearchScreen(),
+    '/search': (context) => const SearchScreenResult(),
     '/statistics': (constext) => const StaticsScreen(),
     '/analytics': (context) => const AnalyticsScreen(),
     '/setting': (context) => const SettingScreen(),

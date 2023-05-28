@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:voicepassing/screens/analytics_screen.dart';
 import 'package:voicepassing/screens/main_screen.dart';
 import 'package:voicepassing/screens/result_screen.dart';
-import 'package:voicepassing/screens/search_screen.dart';
+import 'package:voicepassing/screens/search_screen_result.dart';
 import 'package:voicepassing/screens/statics_screen.dart';
 import 'package:voicepassing/style/color_style.dart';
 
@@ -63,7 +63,8 @@ class _NavbarState extends State<Navbar> {
               Get.to(() => const StaticsScreen(), transition: Transition.fade);
               break;
             case 3:
-              Get.to(() => const SearchScreen(), transition: Transition.fade);
+              Get.to(() => const SearchScreenResult(),
+                  transition: Transition.fade);
               break;
             case 4:
               Get.to(() => const AnalyticsScreen(),

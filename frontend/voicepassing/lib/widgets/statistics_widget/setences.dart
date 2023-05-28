@@ -15,7 +15,23 @@ class _SentencesState extends State<Sentences> {
     return Column(
       children: [
         for (Map keyword in widget.keywordList) ...[
-          HightlightSentence(keyword["sentence"], keyword["keyword"]),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 18),
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  spreadRadius: 1,
+                  blurRadius: 5,
+                  offset: const Offset(0, 0.1),
+                ),
+              ],
+              borderRadius: BorderRadius.circular(6),
+              color: Colors.white,
+            ),
+            child: HightlightSentence(keyword["sentence"], keyword["keyword"]),
+          ),
           const SizedBox(
             height: 24,
           )

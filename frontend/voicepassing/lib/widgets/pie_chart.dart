@@ -23,33 +23,36 @@ class _PieChart2State extends State<PieChartSample2> {
       child: Row(
         children: <Widget>[
           const SizedBox(
-            height: 18,
+            height: 13,
           ),
           Expanded(
             child: AspectRatio(
               aspectRatio: 1,
-              child: PieChart(
-                PieChartData(
-                  pieTouchData: PieTouchData(
-                    touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                      setState(() {
-                        if (!event.isInterestedForInteractions ||
-                            pieTouchResponse == null ||
-                            pieTouchResponse.touchedSection == null) {
-                          touchedIndex = -1;
-                          return;
-                        }
-                        touchedIndex = pieTouchResponse
-                            .touchedSection!.touchedSectionIndex;
-                      });
-                    },
+              child: Transform.scale(
+                scale: 0.95,
+                child: PieChart(
+                  PieChartData(
+                    pieTouchData: PieTouchData(
+                      touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                        setState(() {
+                          if (!event.isInterestedForInteractions ||
+                              pieTouchResponse == null ||
+                              pieTouchResponse.touchedSection == null) {
+                            touchedIndex = -1;
+                            return;
+                          }
+                          touchedIndex = pieTouchResponse
+                              .touchedSection!.touchedSectionIndex;
+                        });
+                      },
+                    ),
+                    borderData: FlBorderData(
+                      show: false,
+                    ),
+                    sectionsSpace: 2,
+                    centerSpaceRadius: 30,
+                    sections: showingSections(widget.data),
                   ),
-                  borderData: FlBorderData(
-                    show: false,
-                  ),
-                  sectionsSpace: 2,
-                  centerSpaceRadius: 30,
-                  sections: showingSections(widget.data),
                 ),
               ),
             ),
@@ -57,24 +60,24 @@ class _PieChart2State extends State<PieChartSample2> {
           const SizedBox(
             width: 10,
           ),
-          Column(
+          const Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const <Widget>[
+            children: <Widget>[
               Indicator(
                 color: ColorStyles.themeRed,
                 text: '기관 사칭형',
                 isSquare: true,
-                size: 12,
+                size: 14,
               ),
               SizedBox(
                 height: 10,
               ),
               Indicator(
-                color: ColorStyles.themeLightBlue,
+                color: ColorStyles.newBlue,
                 text: '대출 빙자형',
                 isSquare: true,
-                size: 12,
+                size: 14,
               ),
               SizedBox(
                 height: 10,
@@ -83,7 +86,7 @@ class _PieChart2State extends State<PieChartSample2> {
                 color: ColorStyles.subDarkGray,
                 text: '기타 형태',
                 isSquare: true,
-                size: 12,
+                size: 14,
               ),
             ],
           ),

@@ -64,8 +64,8 @@ class _SearchWidgetState extends State<SearchWidget> {
                   child: Container(
                       height: 34,
                       decoration: BoxDecoration(
-                        color: ColorStyles.themeLightBlue,
-                        borderRadius: BorderRadius.circular(13),
+                        color: ColorStyles.newBlue,
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -87,28 +87,37 @@ class _SearchWidgetState extends State<SearchWidget> {
                               width: 5,
                             ),
                             Expanded(
-                              child: TextField(
-                                focusNode: myFocusNode,
-                                textInputAction: TextInputAction.go,
-                                onSubmitted: (value) async {
-                                  caseInfo =
-                                      await ApiService.getPhoneNumber(value);
-                                  setState(() {
-                                    phoneNumber = value;
-                                    hasData = true;
-                                  });
-                                },
-                                controller: myController,
-                                onChanged: (value) {
-                                  setState(() {
-                                    textValue = value;
-                                  });
-                                },
-                                autofocus: true,
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 12),
+                              child: Transform.translate(
+                                offset: const Offset(0, 5),
+                                child: TextField(
+                                  decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      hintText: '전화번호를 입력하세요',
+                                      hintStyle:
+                                          TextStyle(color: Colors.white)),
+                                  focusNode: myFocusNode,
+                                  textInputAction: TextInputAction.go,
+                                  onSubmitted: (value) async {
+                                    caseInfo =
+                                        await ApiService.getPhoneNumber(value);
+                                    setState(() {
+                                      phoneNumber = value;
+                                      hasData = true;
+                                    });
+                                  },
+                                  controller: myController,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      textValue = value;
+                                    });
+                                  },
+                                  autofocus: true,
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 12),
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -146,8 +155,8 @@ class _SearchWidgetState extends State<SearchWidget> {
               height: 34,
               width: 34,
               decoration: BoxDecoration(
-                color: ColorStyles.themeLightBlue,
-                borderRadius: BorderRadius.circular(12),
+                color: ColorStyles.newBlue,
+                borderRadius: BorderRadius.circular(10),
               ),
               child: GestureDetector(
                   onTap: () async {
@@ -166,9 +175,27 @@ class _SearchWidgetState extends State<SearchWidget> {
         ),
         phoneNumber.isNotEmpty
             ? Expanded(
-                child: SearchDetail(
-                  phoneNumber: phoneNumber,
-                  resultList: caseInfo,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const Text(
+                          '검색결과',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 24),
+                        ),
+                        SearchDetail(
+                          phoneNumber: phoneNumber,
+                          resultList: caseInfo,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               )
             : const Text('')

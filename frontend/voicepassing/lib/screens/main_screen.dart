@@ -8,7 +8,7 @@ import 'package:lottie/lottie.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:voicepassing/screens/analytics_screen.dart';
 import 'package:voicepassing/screens/result_screen.dart';
-import 'package:voicepassing/screens/search_screen.dart';
+import 'package:voicepassing/screens/search_screen_result.dart';
 import 'package:voicepassing/screens/statics_screen.dart';
 
 import 'package:voicepassing/style/color_style.dart';
@@ -323,6 +323,7 @@ class _MainScreenState extends State<MainScreen> {
                   icon: const Icon(
                     Icons.settings,
                     size: 24,
+                    color: Colors.white,
                   ),
                 ),
               ],
@@ -431,7 +432,8 @@ class _MainScreenState extends State<MainScreen> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () => ggg.Get.to(() => const SearchScreen(),
+                            onTap: () => ggg.Get.to(
+                                () => const SearchScreenResult(),
                                 transition: ggg.Transition.fade),
                             child: Container(
                               clipBehavior: Clip.hardEdge,
