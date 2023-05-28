@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:voicepassing/models/receive_message_model.dart';
 import 'package:voicepassing/style/color_style.dart';
-import 'package:voicepassing/widgets/realtime_widget/realtime_circle_progress_bar.dart';
 
 class ListItemWidget extends StatelessWidget {
   const ListItemWidget({super.key, required this.jsonData});
@@ -31,30 +30,39 @@ class ListItemWidget extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+      padding: const EdgeInsets.fromLTRB(12, 5, 12, 5),
       width: MediaQuery.of(context).size.width,
-      height: 90,
+      height: 63,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(9),
+          borderRadius: BorderRadius.circular(8),
           color: jsonData.result!.totalCategoryScore >= 0.8
               ? ColorStyles.themeRed
-              : ColorStyles.themeYellow),
+              : ColorStyles.themeYellow,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.15),
+              spreadRadius: 0,
+              blurRadius: 6,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "주의해야할 단어",
+                "의심 단어",
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 13,
+                  fontSize: 12,
                 ),
               ),
-              const SizedBox(height: 5),
               SizedBox(
                 width: (MediaQuery.of(context).size.width - 150),
                 child: Text(
@@ -69,13 +77,16 @@ class ListItemWidget extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
-            width: 70,
-            child: RealtimeCircleProgressBar(
-              textColor: Colors.white,
-              score: jsonData.result!.totalCategoryScore as double,
+          Text(
+            (jsonData.result!.totalCategoryScore * 100).round().toString(), 
+            style: const TextStyle(
+              color: Colors.white, 
+              fontSize: 36, 
+              fontWeight: FontWeight.w700,
+              height: 1.2,
             ),
-          )
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

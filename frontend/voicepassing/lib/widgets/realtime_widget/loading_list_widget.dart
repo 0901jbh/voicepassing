@@ -18,24 +18,25 @@ class _LoadingListWidgetState extends State<LoadingListWidget> {
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(9),
-          color: ColorStyles.themeLightBlue),
+          borderRadius: BorderRadius.circular(8),
+          color: isAnalyzing ? ColorStyles.newLightBlue : ColorStyles.themeLightBlue,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.15),
+              spreadRadius: 0,
+              blurRadius: 6,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
       width: double.infinity,
-      height: 70,
+      height: 56,
       child: isAnalyzing
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 LoadingAnimationWidget.staggeredDotsWave(
                     color: Colors.white, size: 30),
-                const Text(
-                  "분석 중",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
               ],
             )
           : InkWell(
@@ -52,6 +53,7 @@ class _LoadingListWidgetState extends State<LoadingListWidget> {
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),

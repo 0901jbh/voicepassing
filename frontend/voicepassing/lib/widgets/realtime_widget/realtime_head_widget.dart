@@ -6,26 +6,21 @@ class RealtimeHeadwidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Column(
-          children: [
-            Text("통화 중 분석",
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: ColorStyles.themeLightBlue)),
-            SizedBox(height: 20),
-            Text("통화 중 발생하는 실시간",
-                style: TextStyle(fontSize: 15, color: ColorStyles.textBlack)),
-            SizedBox(height: 3),
-            Text("알람을 확인해보세요",
-                style: TextStyle(fontSize: 15, color: ColorStyles.textBlack)),
-          ],
-        ),
-        SizedBox(height: 150, child: Image.asset('images/Realtime.png'))
-      ],
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset('images/ai_running.gif', width: 250,),
+          const Text(
+            '실시간 AI 분석 중', 
+            style: TextStyle(
+              fontSize: 18, 
+              fontWeight: FontWeight.w700, 
+              color: ColorStyles.themeLightBlue,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
