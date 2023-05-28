@@ -49,9 +49,9 @@ class _ResultScreenState extends State<AnalyticsScreen> {
   }
 
   Future<void> _pickDirectory() async {
-    //Directory directory = Directory("/storage/emulated/0/Recordings/Call");
+    Directory directory = Directory("/storage/emulated/0/Recordings/Call");
 
-    Directory directory = Directory("/data/data/com.example.voicepassing");
+    //Directory directory = Directory("/data/data/com.example.voicepassing");
 
     List<FileSystemEntity> files = directory.listSync();
 
