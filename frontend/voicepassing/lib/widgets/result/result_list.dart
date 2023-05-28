@@ -13,26 +13,13 @@ class ResultList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const roundedRectangleBorder = RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(
-        Radius.circular(15),
-      ),
-    );
     Color textColor;
-    Color backgroundColor;
-    String state;
     if (caseInfo.score! >= 0.8 && caseInfo.type! >= 1) {
       textColor = ColorStyles.themeRed;
-      backgroundColor = ColorStyles.backgroundRed;
-      state = '위험 ';
     } else if (caseInfo.score! >= 0.6 && caseInfo.type! >= 1) {
-      textColor = ColorStyles.themeYellow;
-      backgroundColor = ColorStyles.backgroundYellow;
-      state = '경고 ';
+      textColor = ColorStyles.newYellow;
     } else {
-      textColor = ColorStyles.themeLightBlue;
-      backgroundColor = ColorStyles.backgroundBlue;
-      state = '정상 ';
+      textColor = ColorStyles.newBlue;
     }
     return GestureDetector(
       onTap: () {
@@ -41,24 +28,29 @@ class ResultList extends StatelessWidget {
                   resultInfo: caseInfo,
                 ),
             transition: Transition.fade);
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => ResultScreenDetail(
-        //       resultInfo: caseInfo,
-        //     ),
-        //   ),
-        // );
       },
-      child: Card(
-        shape: roundedRectangleBorder,
-        elevation: 0,
-        color: backgroundColor,
-        child: SizedBox(
-          height: 90,
+      child: Container(
+          height: 99,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(50),
+              bottomLeft: Radius.circular(8),
+              bottomRight: Radius.circular(50),
+            ),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.15),
+                spreadRadius: 3,
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
           child: Padding(
             padding:
-                const EdgeInsets.only(left: 20, top: 12, bottom: 12, right: 10),
+                const EdgeInsets.all(16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -68,29 +60,24 @@ class ResultList extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        DateFormat('yy.M.d')
+                        DateFormat('yyyy/MM/dd')
                             .format(DateTime.parse(caseInfo.date.toString())),
                         style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w700),
+                            fontSize: 15, fontWeight: FontWeight.w400),
                       ),
                       Row(
                           crossAxisAlignment: CrossAxisAlignment.baseline,
                           textBaseline: TextBaseline.alphabetic,
                           children: [
-                            Text(
-                              state,
-                              style: const TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.w700),
-                            ),
                             Expanded(
                               child: Text(
                                 caseInfo.words != null
-                                    ? caseInfo.words!.join(',')
+                                    ? caseInfo.words!.join('  ')
                                     : '',
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
-                                    color: ColorStyles.subDarkGray,
-                                    fontSize: 14,
+                                    color: ColorStyles.textBlack,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.w700),
                               ),
                             ),
@@ -98,10 +85,9 @@ class ResultList extends StatelessWidget {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: SizedBox(
-                    width: 60,
+                const SizedBox(width: 15),
+                SizedBox(
+                    width: 67,
                     child: CircleProgressBar(
                       foregroundColor: textColor,
                       backgroundColor: Colors.transparent,
@@ -121,12 +107,10 @@ class ResultList extends StatelessWidget {
                       ),
                     ),
                   ),
-                ),
               ],
             ),
           ),
         ),
-      ),
     );
   }
 }

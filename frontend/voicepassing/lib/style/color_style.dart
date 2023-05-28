@@ -17,5 +17,6 @@ class ColorStyles {
   static const Color backgroundBlue = Color(0xffE9F3FD);
   static const Color newYellow = Color(0xffffa800);
   static const Color newBlue = Color(0xff1D3AA1);
+  static const Color newLightBlue = Color(0xff3852AD);
   static const Color shadow = Color(0xff000000);
 }

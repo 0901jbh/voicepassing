@@ -6,9 +6,10 @@ import 'package:voicepassing/models/result_model.dart';
 import 'package:voicepassing/screens/main_screen.dart';
 import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/style/color_style.dart';
-import 'package:voicepassing/widgets/head_bar.dart';
 import 'package:voicepassing/widgets/nav_bar.dart';
 import 'package:voicepassing/widgets/result/result_list.dart';
+
+import '../widgets/new_head_bar.dart';
 
 class ResultScreen extends StatefulWidget {
   const ResultScreen({super.key});
@@ -43,25 +44,18 @@ class _ResultScreenState extends State<ResultScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HeadBar(
-        navPage: const MainScreen(),
-        title: const Text('검사 결과'),
-        appBar: AppBar(),
+      backgroundColor: ColorStyles.background,
+      appBar: const NewHeadBar(
+        navPage: MainScreen(),
+        name: 'result',
       ),
       body: Builder(
         builder: (BuildContext context) {
           return Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: Column(
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const ResultTitle(),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                children: [              
                   isLoading
                       ? resultList.isEmpty
                           ? const EmptyContent1()
@@ -69,12 +63,14 @@ class _ResultScreenState extends State<ResultScreen> {
                               child: SingleChildScrollView(
                                 child: Column(
                                   children: [
+                                    const SizedBox(height: 15),
                                     for (var result in resultList)
                                       Padding(
                                         padding:
-                                            const EdgeInsets.only(bottom: 15),
+                                            const EdgeInsets.fromLTRB(14, 10, 14, 10),
                                         child: ResultList(caseInfo: result),
                                       ),
+                                    const SizedBox(height: 15),
                                   ],
                                 ),
                               ),
