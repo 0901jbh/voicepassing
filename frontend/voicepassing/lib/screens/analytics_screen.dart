@@ -15,6 +15,10 @@ import 'package:voicepassing/style/color_style.dart';
 import 'package:unique_device_id/unique_device_id.dart';
 import 'package:voicepassing/widgets/new_head_bar.dart';
 
+//import 'package:easy_folder_picker/FolderPicker.dart';
+//import 'package:permission_handler/permission_handler.dart';
+import 'package:path/path.dart' as path;
+
 class AnalyticsScreen extends StatefulWidget {
   const AnalyticsScreen({super.key});
 
@@ -29,7 +33,8 @@ class _ResultScreenState extends State<AnalyticsScreen> {
   int counter = 0;
   bool isSend = false;
   late String androidId;
-
+  Directory selectedDirectory = Directory.current;
+  String myText = 'empty';
   @override
   void initState() {
     super.initState();
@@ -39,16 +44,85 @@ class _ResultScreenState extends State<AnalyticsScreen> {
   void initializer() async {
     androidId = await UniqueDeviceId.instance.getUniqueId() ?? '';
     isSend = false;
+    _filePath = "path";
+  }
+
+  Future<void> _pickDirectory() async {
+    Directory directory = Directory("/storage/emulated/0/Recordings/Call");
+
+    //Directory directory = Directory("/data/data/com.example.voicepassing");
+
+    List<FileSystemEntity> files = directory.listSync();
+
+    flutterDialog(files);
+    //callDio();
+  }
+
+  void flutterDialog(List<FileSystemEntity> files) {
+    showDialog(
+        context: context,
+        //barrierDismissible - Dialog를 제외한 다른 화면 터치 x
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            // RoundedRectangleBorder - Dialog 화면 모서리 둥글게 조절
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            //Dialog Main Title
+            title: const Column(
+              children: <Widget>[
+                Text("통화 녹음 목록"),
+              ],
+            ),
+            content: SizedBox(
+              width: double.maxFinite,
+              height: 400.0, // 원하는 높이로 조정
+              child: ListView.builder(
+                itemCount: files.length,
+                itemBuilder: (context, index) {
+                  FileSystemEntity file = files[index];
+                  return ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _filePath = file.path;
+                        counter = counter + 1;
+                        isSend = true;
+                        _Dio();
+                        Navigator.pop(context);
+                      });
+                    },
+                    child: Text(path
+                        .basename(file.path)
+                        .replaceAll("통화 녹음", "")
+                        .trim()),
+                  );
+                },
+              ),
+            ),
+
+            actions: <Widget>[
+              TextButton(
+                child: const Text("확인"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
   }
 
   Future<void> _openFilePicker() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom, allowedExtensions: ['xlsx', 'm4a', 'mp3']);
     if (result != null) {
       setState(() {
         _filePath = result.files.single.path;
         counter = counter + 1;
         isSend = true;
       });
+      print("print path");
+      print(_filePath);
     }
     _Dio();
   }
@@ -87,6 +161,10 @@ class _ResultScreenState extends State<AnalyticsScreen> {
     setState(() {
       result = response.toString();
     });
+  }
+
+  void callDio() {
+    _Dio();
   }
 
   @override
@@ -163,7 +241,7 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                       child: Image.asset(
                         'images/FileButton.png',
                         height: 200,
-                        width: 200,
+                        width: 200, //200 , 200
                       ),
                     ),
                   ),
@@ -180,6 +258,21 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                         strokeWidth: 18,
                         backgroundColor: Colors.black,
                         color: ColorStyles.themeLightBlue,
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: !isSend,
+                    child: ElevatedButton(
+                      onPressed: _pickDirectory,
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                            const EdgeInsets.all(0)),
+                      ),
+                      child: Image.asset(
+                        'images/FileButton.png',
+                        height: 200,
+                        width: 200,
                       ),
                     ),
                   ),
