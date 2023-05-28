@@ -133,24 +133,21 @@ class EmptyContent extends StatelessWidget {
                     size: 95,
                     color: ColorStyles.newBlue,
                   ),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Text(
-                          phoneNumber,
-                          style: const TextStyle(
+                  Column(
+                    children: [
+                      Text(
+                        phoneNumber,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: ColorStyles.newBlue),
+                      ),
+                      const Text('검색결과 없음',
+                          style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: ColorStyles.newBlue),
-                          overflow: TextOverflow.fade,
-                        ),
-                        const Text('검색결과 없음',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 1,
-                                color: Colors.black))
-                      ],
-                    ),
+                              fontSize: 16,
+                              color: Colors.black)),
+                    ],
                   ),
                 ],
               ),
