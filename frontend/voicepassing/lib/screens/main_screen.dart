@@ -381,7 +381,7 @@ class _MainScreenState extends State<MainScreen> {
                       padding: EdgeInsets.all(20.0),
                       child: BigButton(
                         icon: MdiIcons.newspaperVariantMultiple,
-                        headText: '검사내역',
+                        headText: '검사 내역',
                         subText: '보이스피싱 검사 결과를 살펴보세요',
                         page: ResultScreen(),
                       ),
@@ -390,8 +390,8 @@ class _MainScreenState extends State<MainScreen> {
                       padding: EdgeInsets.all(20.0),
                       child: BigButton(
                         icon: MdiIcons.folderUploadOutline,
-                        headText: '녹음파일 검사',
-                        subText: '녹음파일을 검사해 보세요',
+                        headText: '녹음 파일 검사',
+                        subText: '녹음 파일을 검사해 보세요',
                         page: AnalyticsScreen(),
                       ),
                     ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:voicepassing/screens/main_screen.dart';
 import 'package:voicepassing/style/color_style.dart';
 
 class NewHeadBar extends StatelessWidget implements PreferredSizeWidget {
@@ -62,12 +64,14 @@ class NewHeadBar extends StatelessWidget implements PreferredSizeWidget {
               onPressed: () {
                 navPage == null
                     ? Navigator.pop(context)
-                    : Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => navPage!,
-                        ),
-                      );
+                    : Get.to(() => const MainScreen(),
+                        transition: Transition.fade);
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => navPage!,
+                //     ),
+                //   );
               },
             ),
             elevation: 0.0,
