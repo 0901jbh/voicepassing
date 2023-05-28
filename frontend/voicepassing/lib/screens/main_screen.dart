@@ -1,21 +1,15 @@
 import 'dart:async';
 import 'dart:isolate';
-import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as ggg;
 import 'package:indexed/indexed.dart';
 import 'package:lottie/lottie.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:voicepassing/main.dart';
-import 'package:voicepassing/models/receive_message_model.dart';
-import 'package:voicepassing/providers/is_analyzing.dart';
 import 'package:voicepassing/screens/analytics_screen.dart';
 import 'package:voicepassing/screens/result_screen.dart';
 import 'package:voicepassing/screens/search_screen_result.dart';
 import 'package:voicepassing/screens/statics_screen.dart';
-import 'package:voicepassing/services/notification_controller.dart';
 
 import 'package:voicepassing/style/color_style.dart';
 import 'package:voicepassing/services/permissionChecker.dart';
@@ -26,7 +20,6 @@ import 'package:voicepassing/services/api_service.dart';
 
 import 'package:android_intent_plus/android_intent.dart';
 
-import '../providers/realtime_provider.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -80,298 +73,16 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {});
   }
 
-  void testFn() {
-    int count = 10;
-    Timer.periodic(const Duration(seconds: 3), (timer) {
-      if (count == 10) {
-        NotificationController.cancelNotifications();
-        NotificationController.createStartNotification();
-        App.navigatorKey.currentContext!.read<RealtimeProvider>().reset();
-        App.navigatorKey.currentContext!.read<IsAnalyzing>().on();
-      } else if (count == 1) {
-        NotificationController.cancelNotifications();
-        NotificationController.createEndNotification();
-        App.navigatorKey.currentContext!.read<IsAnalyzing>().off();
-        timer.cancel();
-      } else {
-        ReceiveMessageModel dummyData = ReceiveMessageModel(
-          result: TotalResult(
-            totalCategory: 1,
-            totalCategoryScore: (Random().nextInt(40) + 60) / 100,
-            results: [
-              ResultItem(
-                sentCategory: 1,
-                sentCategoryScore: (Random().nextInt(40) + 60) / 100,
-                sentKeyword: '키워드1',
-                keywordScore: (Random().nextInt(40) + 60) / 100,
-                sentence: 'ㅇㄴㄻㅇㄻㄴㅇ',
-              ),
-              ResultItem(
-                sentCategory: 1,
-                sentCategoryScore: (Random().nextInt(40) + 60) / 100,
-                sentKeyword: '키워드2',
-                keywordScore: (Random().nextInt(40) + 60) / 100,
-                sentence: 'ㅇㄴㄻㅇㄻㄴㅇ',
-              ),
-            ],
-          ),
-          isFinish: false,
-        );
-        NotificationController.cancelNotifications();
-        NotificationController.createNewNotification(dummyData);
-        App.navigatorKey.currentContext!
-            .read<RealtimeProvider>()
-            .add(dummyData);
-      }
-      count--;
-    });
-  }
-
   @override
   Widget build(
     BuildContext context,
   ) {
     return
-        // Scaffold(
-        //     backgroundColor: Colors.white.withOpacity(1),
-        //     appBar: AppBar(
-        //       actions: [
-        //         IconButton(
-        //           onPressed: () {
-        //             Navigator.of(context).pushNamed("/setting");
-        //           },
-        //           icon: const Icon(
-        //             Icons.settings,
-        //             size: 24,
-        //           ),
-        //         ),
-        //       ],
-        //       leadingWidth: 120,
-        //       leading: Builder(builder: (BuildContext context) {
-        //         return SizedBox(
-        //           width: 70,
-        //           child: Padding(
-        //             padding: const EdgeInsets.only(left: 10),
-        //             child: Image.asset(
-        //               'images/VoiceLogo.png',
-        //               height: 30,
-        //             ),
-        //           ),
-        //         );
-        //       }),
-        //       backgroundColor: Colors.transparent,
-        //       foregroundColor: Colors.black,
-        //       elevation: 0,
-        //     ),
-        //     body: FutureBuilder(
-        //         future: caseNum,
-        //         builder: (BuildContext context, AsyncSnapshot snapshot) {
-        //           if (snapshot.hasData) {
-        //             return SingleChildScrollView(
-        //               child: Center(
-        //                 child: Column(
-        //                   children: [
-        //                     const SizedBox(
-        //                       height: 50,
-        //                     ),
-        //                     Row(
-        //                       mainAxisAlignment: MainAxisAlignment.center,
-        //                       crossAxisAlignment: CrossAxisAlignment.center,
-        //                       children: [
-        //                         Flexible(
-        //                           flex: 5,
-        //                           child: Container(
-        //                               child: SizedBox(
-        //                             child: Column(
-        //                               crossAxisAlignment: CrossAxisAlignment.start,
-        //                               children: [
-        //                                 StyledText(
-        //                                   style: const TextStyle(
-        //                                     fontSize: 18,
-        //                                     fontWeight: FontWeight.bold,
-        //                                   ),
-        //                                   text: '<b>보이스피싱</b>',
-        //                                   tags: {
-        //                                     'b': StyledTextTag(
-        //                                         style: const TextStyle(
-        //                                             fontSize: 24,
-        //                                             fontWeight: FontWeight.bold,
-        //                                             color:
-        //                                                 ColorStyles.themeLightBlue))
-        //                                   },
-        //                                 ),
-        //                                 StyledText(
-        //                                   style: const TextStyle(
-        //                                     fontSize: 18,
-        //                                     fontWeight: FontWeight.bold,
-        //                                   ),
-        //                                   text:
-        //                                       '<b>${snapshot.data['resultNum']}건</b>을',
-        //                                   tags: {
-        //                                     'b': StyledTextTag(
-        //                                         style: const TextStyle(
-        //                                             color: ColorStyles.themeBlue,
-        //                                             fontWeight: FontWeight.w800,
-        //                                             fontSize: 24))
-        //                                   },
-        //                                 ),
-        //                                 const SizedBox(height: 5),
-        //                                 const Text(
-        //                                   '찾았어요',
-        //                                   style: TextStyle(
-        //                                     fontSize: 18,
-        //                                     fontWeight: FontWeight.bold,
-        //                                   ),
-        //                                 )
-        //                               ],
-        //                             ),
-        //                           )),
-        //                         ),
-        //                         Flexible(
-        //                           flex: 3,
-        //                           child: Image.asset(
-        //                             'images/MainImg.png',
-        //                           ),
-        //                         )
-        //                       ],
-        //                     ),
-        //                     const SizedBox(
-        //                       height: 50,
-        //                     ),
-        //                     // ignore: prefer_const_constructors
-        //                     GestureDetector(
-        //                       child: Container(
-        //                         width: 315,
-        //                         height: 80,
-        //                         decoration: BoxDecoration(
-        //                           color: isGranted
-        //                               ? ColorStyles.themeLightBlue
-        //                               : ColorStyles.textDarkGray,
-        //                           borderRadius: BorderRadius.circular(12),
-        //                         ),
-        //                         child: isGranted
-        //                             ? Padding(
-        //                                 padding: const EdgeInsets.fromLTRB(
-        //                                     18, 12, 20, 12),
-        //                                 child: Row(
-        //                                   mainAxisAlignment:
-        //                                       MainAxisAlignment.spaceBetween,
-        //                                   children: [
-        //                                     const Text('실시간으로 통화를 분석합니다',
-        //                                         style: TextStyle(
-        //                                             color: Colors.white,
-        //                                             fontWeight: FontWeight.w700,
-        //                                             fontSize: 15)),
-        //                                     ColorSonar(
-        //                                         contentAreaRadius: 10.0,
-        //                                         waveMotion: WaveMotion.synced,
-        //                                         waveFall: 5.0,
-        //                                         innerWaveColor:
-        //                                             ColorStyles.themeLightBlue,
-        //                                         middleWaveColor:
-        //                                             const Color.fromARGB(
-        //                                                 255, 114, 157, 221),
-        //                                         outerWaveColor:
-        //                                             const Color.fromARGB(
-        //                                                 255, 170, 195, 233),
-        //                                         child: CircleAvatar(
-        //                                             radius: 20.0,
-        //                                             child: Lottie.asset(
-        //                                                 'assets/shield.json')))
-        //                                   ],
-        //                                 ),
-        //                               )
-        //                             : const Column(
-        //                                 mainAxisAlignment: MainAxisAlignment.center,
-        //                                 crossAxisAlignment:
-        //                                     CrossAxisAlignment.center,
-        //                                 children: [
-        //                                   Text(
-        //                                     '실시간 통화 서비스를 위한 기기 권한이 없습니다',
-        //                                     style: TextStyle(
-        //                                         color: Colors.white,
-        //                                         fontWeight: FontWeight.w700,
-        //                                         fontSize: 12),
-        //                                   ),
-        //                                   SizedBox(height: 5),
-        //                                   Text(
-        //                                     '기기 권한 설정을 위해 이곳을 눌러주세요',
-        //                                     style: TextStyle(
-        //                                         color: Colors.white,
-        //                                         fontWeight: FontWeight.w700,
-        //                                         fontSize: 12),
-        //                                   ),
-        //                                 ],
-        //                               ),
-        //                       ),
-        //                       onTap: () => {
-        //                         if (!isGranted)
-        //                           {Navigator.of(context).pushNamed('/permission')}
-        //                       },
-        //                     ),
-        //                     const SizedBox(
-        //                       height: 12,
-        //                     ),
-        //                     const SizedBox(
-        //                       width: 315,
-        //                       // ignore: prefer_const_constructors
-        //                       child: Row(
-        //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //                         children: [
-        //                           ImgButton(
-        //                             title: '검사 이력',
-        //                             imgName: 'ResultImg',
-        //                             routeName: '/result',
-        //                           ),
-        //                           ImgButton(
-        //                               title: '최근 범죄 통계',
-        //                               imgName: 'StaticsImg',
-        //                               routeName: '/statistics'),
-        //                         ],
-        //                       ),
-        //                     ),
-        //                     const SizedBox(
-        //                       height: 10,
-        //                     ),
-        //                     // ignore: prefer_const_constructors
-        //                     SizedBox(
-        //                       width: 315,
-        //                       // ignore: prefer_const_constructors
-        //                       child: Row(
-        //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //                         children: const [
-        //                           ImgButton(
-        //                             title: '전화번호 검색',
-        //                             imgName: 'SearchImg',
-        //                             routeName: '/search',
-        //                           ),
-        //                           ImgButton(
-        //                               title: '녹음 파일 검사',
-        //                               imgName: 'AnalyticsImg',
-        //                               routeName: '/analytics'),
-        //                         ],
-        //                       ),
-        //                     ),
-        //                     GestureDetector(
-        //                       child: const Text('테스트페이지'),
-        //                       onTap: () => Navigator.push(
-        //                           context,
-        //                           MaterialPageRoute(
-        //                               builder: (context) => const titleScreen())),
-        //                     )
-        //                   ],
-        //                 ),
-        //               ),
-        //             );
-        //           }
-        //           return const Text('');
-        //         }));
         Scaffold(
             extendBodyBehindAppBar: true,
             backgroundColor: Colors.white.withOpacity(1),
             appBar: AppBar(
               actions: [
-                TextButton(onPressed: testFn, child: const Text('TEST')),
                 IconButton(
                   onPressed: () {
                     Navigator.of(context).pushNamed("/setting");
