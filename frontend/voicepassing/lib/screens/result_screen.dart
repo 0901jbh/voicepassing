@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:styled_text/styled_text.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:unique_device_id/unique_device_id.dart';
 import 'package:voicepassing/models/result_model.dart';
 import 'package:voicepassing/screens/main_screen.dart';
@@ -55,7 +55,7 @@ class _ResultScreenState extends State<ResultScreen> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: Column(
-                children: [              
+                children: [
                   isLoading
                       ? resultList.isEmpty
                           ? const EmptyContent1()
@@ -66,8 +66,8 @@ class _ResultScreenState extends State<ResultScreen> {
                                     const SizedBox(height: 15),
                                     for (var result in resultList)
                                       Padding(
-                                        padding:
-                                            const EdgeInsets.fromLTRB(14, 10, 14, 10),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            14, 10, 14, 10),
                                         child: ResultList(caseInfo: result),
                                       ),
                                     const SizedBox(height: 15),
@@ -156,30 +156,42 @@ class EmptyContent1 extends StatelessWidget {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(50.0),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Image.asset(
-                'images/empty.png',
-                height: 180,
-              ),
+        child: Container(
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 55),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Icon(
+                      MdiIcons.clipboardTextSearch,
+                      size: 150,
+                      color: ColorStyles.newBlue,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text(
+                      '결과 없음',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                          color: ColorStyles.newBlue),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text('지난 검사 내역이 없습니다',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black)),
+                  ],
+                ),
+              ],
             ),
-            StyledText(
-              text: '<b>정보없음</b>',
-              tags: {
-                'b': StyledTextTag(
-                    style: const TextStyle(
-                        color: ColorStyles.themeLightBlue,
-                        fontSize: 27,
-                        fontWeight: FontWeight.w700))
-              },
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text('지난 검사 결과가 없습니다')
-          ],
+          ),
         ),
       ),
     );
