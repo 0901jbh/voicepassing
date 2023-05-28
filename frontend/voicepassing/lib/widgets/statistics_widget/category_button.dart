@@ -23,13 +23,14 @@ class _CategoryButtonState extends State<CategoryButton> {
         widget.changeNum(widget.productNum);
       },
       style: ButtonStyle(
+          elevation: MaterialStateProperty.all(3),
           backgroundColor: widget.productNum == widget.selectedNum
-              ? MaterialStateProperty.all(ColorStyles.themeLightBlue)
-              : MaterialStateProperty.all(ColorStyles.backgroundBlue),
+              ? MaterialStateProperty.all(ColorStyles.newBlue)
+              : MaterialStateProperty.all(Colors.white),
           overlayColor: MaterialStateProperty.all(ColorStyles.themeSkyBlue),
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(4),
             ),
           ),
           fixedSize: MaterialStateProperty.all(Size.fromWidth(
@@ -41,7 +42,7 @@ class _CategoryButtonState extends State<CategoryButton> {
             fontWeight: FontWeight.bold,
             color: widget.productNum == widget.selectedNum
                 ? Colors.white
-                : ColorStyles.themeLightBlue),
+                : Colors.black),
       ),
     );
   }

@@ -17,7 +17,7 @@ class _SearchScreenResultState extends State<SearchScreenResult> {
       body: Builder(
         builder: (BuildContext context) {
           return const Padding(
-            padding: EdgeInsets.all(30.0),
+            padding: EdgeInsets.all(20.0),
             child: SearchWidget(),
           );
         },

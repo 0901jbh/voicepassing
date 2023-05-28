@@ -14,13 +14,15 @@ class HightlightSentence extends StatelessWidget {
       text: newSentence,
       style: const TextStyle(
         color: ColorStyles.textBlack,
-        fontSize: 15,
-        fontWeight: FontWeight.bold,
+        fontSize: 18,
+        fontWeight: FontWeight.w400,
       ),
       tags: {
         'b': StyledTextTag(
             style: const TextStyle(
-                color: ColorStyles.themeLightBlue, fontSize: 20))
+                color: ColorStyles.themeRed,
+                fontSize: 18,
+                fontWeight: FontWeight.w700))
       },
     );
   }
