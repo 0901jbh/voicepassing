@@ -362,114 +362,110 @@ class _MainScreenState extends State<MainScreen> {
               ),
               Indexed(
                 index: 2,
-                child: Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(
-                        height: 90,
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: isGranted
-                              ? const GrantedBox()
-                              : const UngrantedBox()
-
-                          // UngrantedBox(),
-                          ),
-                      const Padding(
-                        padding: EdgeInsets.all(20.0),
-                        child: BigButton(
-                          icon: MdiIcons.newspaperVariantMultiple,
-                          headText: '검사내역',
-                          subText: '보이스피싱 검사 결과를 살펴보세요',
-                          page: ResultScreen(),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(20.0),
-                        child: BigButton(
-                          icon: MdiIcons.folderUploadOutline,
-                          headText: '녹음파일 검사',
-                          subText: '녹음파일을 검사해 보세요',
-                          page: AnalyticsScreen(),
-                        ),
-                      ),
-                      Padding(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      height: 90,
+                    ),
+                    Padding(
                         padding: const EdgeInsets.all(20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              onTap: () => ggg.Get.to(
-                                  () => const StaticsScreen(),
-                                  transition: ggg.Transition.fade),
-                              child: Container(
-                                clipBehavior: Clip.hardEdge,
-                                height: 100,
-                                width: 150,
-                                decoration: BoxDecoration(
-                                  color: ColorStyles.newBlue,
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Row(children: [
-                                  Transform.translate(
-                                    offset: const Offset(20, 10),
-                                    child: Transform.scale(
-                                      scale: 3.5,
-                                      child: const Icon(
-                                        MdiIcons.finance,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                  Transform.translate(
-                                    offset: const Offset(40, -20),
-                                    child: const Text('통계',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 36)),
-                                  )
-                                ]),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () => ggg.Get.to(
-                                  () => const SearchScreen(),
-                                  transition: ggg.Transition.fade),
-                              child: Container(
-                                clipBehavior: Clip.hardEdge,
-                                height: 100,
-                                width: 150,
-                                decoration: BoxDecoration(
-                                  color: ColorStyles.newBlue,
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Row(children: [
-                                  Transform.scale(
-                                    scale: 4,
-                                    child: Transform.translate(
-                                        offset: const Offset(3, 3.5),
-                                        child: const Icon(
-                                          MdiIcons.clipboardTextSearch,
-                                          color: Colors.white,
-                                        )),
-                                  ),
-                                  Transform.translate(
-                                    offset: const Offset(42, 15),
-                                    child: const Text(
-                                      '검색',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 36),
-                                    ),
-                                  )
-                                ]),
-                              ),
-                            )
-                          ],
+                        child: isGranted
+                            ? const GrantedBox()
+                            : const UngrantedBox()
+
+                        // UngrantedBox(),
                         ),
-                      )
-                    ],
-                  ),
+                    const Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: BigButton(
+                        icon: MdiIcons.newspaperVariantMultiple,
+                        headText: '검사내역',
+                        subText: '보이스피싱 검사 결과를 살펴보세요',
+                        page: ResultScreen(),
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: BigButton(
+                        icon: MdiIcons.folderUploadOutline,
+                        headText: '녹음파일 검사',
+                        subText: '녹음파일을 검사해 보세요',
+                        page: AnalyticsScreen(),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () => ggg.Get.to(() => const StaticsScreen(),
+                                transition: ggg.Transition.fade),
+                            child: Container(
+                              clipBehavior: Clip.hardEdge,
+                              height: 100,
+                              width: 150,
+                              decoration: BoxDecoration(
+                                color: ColorStyles.newBlue,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Row(children: [
+                                Transform.translate(
+                                  offset: const Offset(20, 10),
+                                  child: Transform.scale(
+                                    scale: 3.5,
+                                    child: const Icon(
+                                      MdiIcons.finance,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                Transform.translate(
+                                  offset: const Offset(40, -20),
+                                  child: const Text('통계',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 36)),
+                                )
+                              ]),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () => ggg.Get.to(() => const SearchScreen(),
+                                transition: ggg.Transition.fade),
+                            child: Container(
+                              clipBehavior: Clip.hardEdge,
+                              height: 100,
+                              width: 150,
+                              decoration: BoxDecoration(
+                                color: ColorStyles.newBlue,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Row(children: [
+                                Transform.scale(
+                                  scale: 4,
+                                  child: Transform.translate(
+                                      offset: const Offset(3, 3.5),
+                                      child: const Icon(
+                                        MdiIcons.clipboardTextSearch,
+                                        color: Colors.white,
+                                      )),
+                                ),
+                                Transform.translate(
+                                  offset: const Offset(42, 15),
+                                  child: const Text(
+                                    '검색',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 36),
+                                  ),
+                                )
+                              ]),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
                 ),
               )
             ]));
