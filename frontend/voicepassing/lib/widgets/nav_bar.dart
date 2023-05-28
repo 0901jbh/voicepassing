@@ -58,7 +58,6 @@ class _NavbarState extends State<Navbar> {
               break;
             case 1:
               Get.to(() => const ResultScreen(), transition: Transition.fade);
-
               break;
             case 2:
               Get.to(() => const AnalyticsScreen(),

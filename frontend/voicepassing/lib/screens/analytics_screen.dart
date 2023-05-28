@@ -70,9 +70,27 @@ class _ResultScreenState extends State<AnalyticsScreen> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
             //Dialog Main Title
-            title: const Column(
+            title: Column(
               children: <Widget>[
-                Text("통화 녹음 목록"),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: StyledText(
+                    text: '통화 파일 선택',
+                    style: const TextStyle(
+                      color: ColorStyles.newBlue,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                StyledText(
+                  text: '녹음한 통화 파일을 검사할 수 있습니다',
+                  style: const TextStyle(
+                    color: ColorStyles.textDarkGray,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
             content: SizedBox(
@@ -83,6 +101,9 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                 itemBuilder: (context, index) {
                   FileSystemEntity file = files[index];
                   return ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white, // 버튼의 뒷 배경 색을 흰색으로 설정
+                    ),
                     onPressed: () {
                       setState(() {
                         _filePath = file.path;
@@ -92,21 +113,60 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                         Navigator.pop(context);
                       });
                     },
-                    child: Text(path
-                        .basename(file.path)
-                        .replaceAll("통화 녹음", "")
-                        .trim()),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'images/phone.png',
+                          width: 24,
+                          height: 24,
+                        ),
+                        const SizedBox(width: 8),
+                        StyledText(
+                          text: path
+                              .basename(file.path)
+                              .replaceAll("통화 녹음", "")
+                              .trim(),
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 },
               ),
             ),
 
             actions: <Widget>[
-              TextButton(
-                child: const Text("확인"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+              Container(
+                height: 2,
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.black,
+                      width: 2,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: TextButton(
+                  child: StyledText(
+                    text: '확인',
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ),
             ],
           );
@@ -171,7 +231,9 @@ class _ResultScreenState extends State<AnalyticsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffFAFBFC),
+      backgroundColor: isSend
+          ? const Color.fromARGB(255, 255, 255, 255)
+          : const Color(0xffFAFBFC),
       appBar: const NewHeadBar(
         navPage: MainScreen(),
         name: 'analytics',
@@ -252,10 +314,27 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                   Visibility(
                     visible: isSend,
                     child: const SizedBox(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 18,
-                        backgroundColor: Colors.black,
+                      height: 50,
+                    ),
+                  ),
+                  Visibility(
+                    visible: isSend,
+                    child: SizedBox(
+                      child: Image.asset(
+                        'images/waiting.gif',
+                        height: 330,
+                        width: 330,
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: isSend,
+                    child: StyledText(
+                      text: 'AI 분석중',
+                      style: const TextStyle(
                         color: ColorStyles.themeLightBlue,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
