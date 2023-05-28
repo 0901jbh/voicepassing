@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as ggg;
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:styled_text/styled_text.dart';
 import 'package:voicepassing/screens/main_screen.dart';
 import 'package:voicepassing/widgets/nav_bar.dart';
@@ -181,76 +182,72 @@ class _ResultScreenState extends State<AnalyticsScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
                 children: [
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  SizedBox(
-                    width: 230,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // 1. 파일선택화면 !issend
+                  Visibility(
+                    visible: !isSend,
+                    child: Column(
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            StyledText(
-                              text: '<b>통화 음성 파일</b>을',
-                              tags: {
-                                'b': StyledTextTag(
-                                    style: const TextStyle(
-                                        color: ColorStyles.themeLightBlue,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w700))
-                              },
-                              style: const TextStyle(
-                                color: ColorStyles.textDarkGray,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            StyledText(
-                                text: isSend ? '분석 중 입니다' : '검사할 수 있습니다',
-                                style: const TextStyle(
-                                  color: ColorStyles.textDarkGray,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                          ],
+                        const SizedBox(
+                          height: 40,
                         ),
-                        const SizedBox(width: 12),
+
                         Image.asset(
-                          !isSend
-                              ? 'images/AnalyticstitleImg.png'
-                              : 'images/AnalyticsImg.png',
-                          height: 101,
-                          width: 79,
+                          'images/analytics.gif',
+                          fit: BoxFit.fitWidth,
+                        ),
+                        StyledText(
+                          text: '실시간 통화 분석과 동일한\n <b>AI서비스를</b> 제공합니다',
+                          style: const TextStyle(
+                            color: ColorStyles.textBlack,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          tags: {
+                            'b': StyledTextTag(
+                                style: const TextStyle(
+                                    color: ColorStyles.newBlue,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700))
+                          },
+                        ),
+                        const SizedBox(
+                          height: 18,
+                        ),
+                        BigButton2(
+                          icon: Icons.mic,
+                          headText: '통화 파일 검사',
+                          subText: '녹음한 통화 파일을 검사할 수 있습니다',
+                          action: _pickDirectory,
+                          type: 1,
                         )
+                        // 모든파일검사
+                        ,
+                        const SizedBox(
+                          height: 28,
+                        ),
+                        BigButton2(
+                          icon: MdiIcons.folderOpenOutline,
+                          headText: '기기 파일 검사',
+                          subText: '기기 전체에서 파일을 찾을 수 있습니다',
+                          action: _openFilePicker,
+                          type: 2,
+                        ),
+                        // ElevatedButton(
+                        //   onPressed: _pickDirectory,
+                        //   style: ButtonStyle(
+                        //     padding: MaterialStateProperty.all<EdgeInsets>(
+                        //         const EdgeInsets.all(0)),
+                        //   ),
+                        //   child: Image.asset(
+                        //     'images/FileButton.png',
+                        //     height: 200,
+                        //     width: 200,
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 70,
-                  ),
-                  Visibility(
-                    visible: !isSend,
-                    child: ElevatedButton(
-                      onPressed: _openFilePicker,
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                            const EdgeInsets.all(0)),
-                      ),
-                      child: Image.asset(
-                        'images/FileButton.png',
-                        height: 200,
-                        width: 200, //200 , 200
-                      ),
-                    ),
-                  ),
-                  Visibility(
-                    visible: isSend,
-                    child: const SizedBox(
-                      height: 70,
-                    ),
-                  ),
+                  // 2. 로딩화면 issend
                   Visibility(
                     visible: isSend,
                     child: const SizedBox(
@@ -261,21 +258,6 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                       ),
                     ),
                   ),
-                  Visibility(
-                    visible: !isSend,
-                    child: ElevatedButton(
-                      onPressed: _pickDirectory,
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                            const EdgeInsets.all(0)),
-                      ),
-                      child: Image.asset(
-                        'images/FileButton.png',
-                        height: 200,
-                        width: 200,
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -283,6 +265,89 @@ class _ResultScreenState extends State<AnalyticsScreen> {
         },
       ),
       bottomNavigationBar: const Navbar(selectedIndex: 2),
+    );
+  }
+}
+
+class BigButton2 extends StatelessWidget {
+  final IconData icon;
+  final String headText;
+  final String subText;
+  final VoidCallback? action;
+  final int type;
+
+  const BigButton2(
+      {super.key,
+      required this.icon,
+      required this.headText,
+      required this.subText,
+      this.action,
+      required this.type});
+
+  @override
+  Widget build(BuildContext context) {
+    Color bgcolor;
+    Color ctcolor;
+    if (type == 1) {
+      bgcolor = ColorStyles.newBlue;
+      ctcolor = Colors.white;
+    } else {
+      bgcolor = Colors.white;
+      ctcolor = ColorStyles.newBlue;
+    }
+    return GestureDetector(
+      onTap: action,
+      child: Container(
+        height: 110,
+        decoration: BoxDecoration(
+            color: bgcolor,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 5,
+                offset: const Offset(0, 0.1),
+              ),
+            ]),
+        child: Center(
+            child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(
+                icon,
+                size: 60,
+                color: ctcolor,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    headText,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: ctcolor,
+                        fontSize: 30),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Text(
+                    subText,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: ctcolor,
+                        fontSize: 12),
+                  )
+                ],
+              )
+            ],
+          ),
+        )),
+      ),
     );
   }
 }
