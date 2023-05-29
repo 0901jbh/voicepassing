@@ -58,7 +58,7 @@ class _PieChart2State extends State<PieChartSample2> {
             ),
           ),
           const SizedBox(
-            width: 10,
+            width: 18,
           ),
           const Column(
             mainAxisAlignment: MainAxisAlignment.center,

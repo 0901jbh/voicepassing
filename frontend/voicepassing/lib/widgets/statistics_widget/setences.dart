@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:voicepassing/style/shadow_style.dart';
 import 'package:voicepassing/widgets/statistics_widget/highlight_sentence.dart';
 
 class Sentences extends StatefulWidget {
@@ -19,14 +20,7 @@ class _SentencesState extends State<Sentences> {
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 18),
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                  offset: const Offset(0, 0.1),
-                ),
-              ],
+              boxShadow: [ShadowStyle.wideShadow],
               borderRadius: BorderRadius.circular(6),
               color: Colors.white,
             ),

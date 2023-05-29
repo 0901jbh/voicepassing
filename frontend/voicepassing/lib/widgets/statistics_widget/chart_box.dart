@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:voicepassing/services/api_service.dart';
+import 'package:voicepassing/style/shadow_style.dart';
 import 'package:voicepassing/widgets/pie_chart.dart';
 
 class ChartBox extends StatelessWidget {
@@ -21,14 +22,7 @@ class ChartBox extends StatelessWidget {
             decoration: BoxDecoration(
               // borderRadius: BorderRadius.circular(12),
               color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                  offset: const Offset(0, 0.1),
-                ),
-              ],
+              boxShadow: [ShadowStyle.wideShadow],
             ),
             child: FutureBuilder(
               builder: (context, snapshot) {
@@ -46,7 +40,7 @@ class ChartBox extends StatelessWidget {
                               child: const Text(
                                 '최근 범죄 유형',
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18),
+                                    fontWeight: FontWeight.bold, fontSize: 17),
                               ))),
                     ]),
                   );
