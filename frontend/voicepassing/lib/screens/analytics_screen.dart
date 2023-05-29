@@ -108,16 +108,42 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                     List<String> bParts = path.basename(b.path).split('_');
                     int sizeA = int.parse(aParts[1]);
                     int sizeB = int.parse(bParts[1]);
-                    return sizeB.compareTo(sizeA);
+
+                    if (sizeA == sizeB) {
+                      String timeA =
+                          aParts[2].substring(0, aParts[2].length - 4);
+                      String timeB =
+                          bParts[2].substring(0, bParts[2].length - 4);
+                      return timeB.compareTo(timeA);
+                    } else {
+                      return sizeB.compareTo(sizeA);
+                    }
                   });
-                  files.sort((a, b) {
-                    List<String> aParts = path.basename(a.path).split('_');
-                    List<String> bParts = path.basename(b.path).split('_');
-                    int sizeA = int.parse(aParts[2]);
-                    int sizeB = int.parse(bParts[2]);
-                    return sizeB.compareTo(sizeA);
-                  });
+
                   FileSystemEntity file = files[index];
+                  List<String> list = path
+                      .basename(file.path)
+                      .replaceAll("통화 녹음", "")
+                      .trim()
+                      .split('_');
+
+                  String onlyPath = list[0];
+                  String bValue = list[1];
+
+                  String date =
+                      '${bValue.substring(0, 2)}.${bValue.substring(2, 4)}.${bValue.substring(4, 6)}';
+                  int l = list[2].length;
+                  String cValue = list[2].substring(0, l - 4);
+
+                  int hours = int.parse(cValue.substring(0, 2));
+                  int minutes = int.parse(cValue.substring(2, 4));
+                  int seconds = int.parse(cValue.substring(4, 6));
+
+                  String period = (hours >= 12) ? '오후' : '오전';
+                  hours = (hours > 12) ? hours - 12 : hours;
+
+                  String time =
+                      '$period ${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
                   return ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white, // 버튼의 뒷 배경 색을 흰색으로 설정
@@ -140,17 +166,40 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                         ),
                         const SizedBox(width: 8),
                         Expanded(
-                          child: Text(
-                            path
-                                .basename(file.path)
-                                .replaceAll("통화 녹음", "")
-                                .trim(),
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            overflow: TextOverflow.ellipsis,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                onlyPath,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    date,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  const Text("  "),
+                                  Text(
+                                    time,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                       ],
