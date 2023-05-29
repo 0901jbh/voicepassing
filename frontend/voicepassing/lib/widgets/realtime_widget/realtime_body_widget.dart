@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:voicepassing/models/receive_message_model.dart';
+import 'package:voicepassing/providers/is_analyzing.dart';
 import 'package:voicepassing/providers/realtime_provider.dart';
 import 'package:voicepassing/style/color_style.dart';
 import 'package:voicepassing/widgets/realtime_widget/list_item_widget.dart';
@@ -34,12 +35,13 @@ class _RealtimeBodyWidgetState extends State<RealtimeBodyWidget> {
   @override
   Widget build(BuildContext context) {
     RealtimeProvider realtimeProvider = Provider.of<RealtimeProvider>(context);
-    var data = context.watch<RealtimeProvider>().realtimeDataList;
+    List<ReceiveMessageModel> data = context.watch<RealtimeProvider>().realtimeDataList;
     realtimeProvider.addListener(() {
       if (_scrollController.hasClients) {
         scrollToBottom();
       }
     });
+    bool isAnalyzing = context.watch<IsAnalyzing>().isAnalyzing;
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
@@ -69,21 +71,53 @@ class _RealtimeBodyWidgetState extends State<RealtimeBodyWidget> {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 12),
-                    for (ReceiveMessageModel item in data)
-                      if (item.result!.totalCategory >= 1) ...[
-                        ListItemWidget(jsonData: item),
-                        const SizedBox(height: 12),
-                      ],
-                    const LoadingListWidget(),
-                    const SizedBox(height: 16),
-                  ],
-                ),
+              child: LayoutBuilder(
+                builder: (context, constraint) {
+                  return SingleChildScrollView(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(minHeight: constraint.maxHeight),
+                      child: IntrinsicHeight(
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 12),
+                            for (ReceiveMessageModel item in data)
+                              if (item.result!.totalCategory >= 1) ...[
+                                ListItemWidget(jsonData: item),
+                                const SizedBox(height: 12),
+                              ],
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.ease,
+                              height: !isAnalyzing && data.isEmpty ? MediaQuery.of(context).size.height - 450 : 0,
+                              child: !isAnalyzing && data.isEmpty ? const Center(
+                                child: Text(
+                                    '정상적인 통화입니다.', 
+                                    style: TextStyle(
+                                      color: ColorStyles.themeLightBlue, 
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                              ) : null,
+                            ),
+                            AnimatedAlign(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.ease,
+                              alignment: !isAnalyzing && data.isEmpty ? Alignment.bottomCenter : Alignment.topCenter,
+                              child: const Column(
+                                children: [
+                                  LoadingListWidget(),
+                                  SizedBox(height: 16),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ],
