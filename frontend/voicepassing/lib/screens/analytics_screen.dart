@@ -110,6 +110,13 @@ class _ResultScreenState extends State<AnalyticsScreen> {
                     int sizeB = int.parse(bParts[1]);
                     return sizeB.compareTo(sizeA);
                   });
+                  files.sort((a, b) {
+                    List<String> aParts = path.basename(a.path).split('_');
+                    List<String> bParts = path.basename(b.path).split('_');
+                    int sizeA = int.parse(aParts[2]);
+                    int sizeB = int.parse(bParts[2]);
+                    return sizeB.compareTo(sizeA);
+                  });
                   FileSystemEntity file = files[index];
                   return ElevatedButton(
                     style: ElevatedButton.styleFrom(
