@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:unique_device_id/unique_device_id.dart';
 import 'package:voicepassing/models/receive_message_model.dart';
+import 'package:voicepassing/models/result_model.dart';
 import 'package:voicepassing/providers/is_analyzing.dart';
 import 'package:voicepassing/providers/realtime_provider.dart';
+import 'package:voicepassing/screens/result_screen_detail.dart';
+import 'package:voicepassing/services/api_service.dart';
 import 'package:voicepassing/services/notification_controller.dart';
 import 'package:voicepassing/style/color_style.dart';
 
@@ -15,6 +20,21 @@ class LoadingListWidget extends StatefulWidget {
 }
 
 class _LoadingListWidgetState extends State<LoadingListWidget> {
+  late String androidId;
+  late ResultModel caseInfo;
+  void func() async {
+    androidId = await UniqueDeviceId.instance.getUniqueId() ?? 'unknown';
+    await UniqueDeviceId.instance.getUniqueId().then((value) async {
+      androidId = value!;
+      caseInfo = (await ApiService.getRecentResult(androidId))[0];
+      Get.to(
+          () => ResultScreenDetail(
+                resultInfo: caseInfo,
+              ),
+          transition: Transition.fade);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isAnalyzing = context.watch<IsAnalyzing>().isAnalyzing;
@@ -46,12 +66,13 @@ class _LoadingListWidgetState extends State<LoadingListWidget> {
               ],
             )
           : InkWell(
-              onTap: () {
+              onTap: () async {
                 if (data.isEmpty) {
                   Navigator.pushNamedAndRemoveUntil(
                       context, '/main', (route) => false);
                 } else {
-                  Navigator.pushNamed(context, '/result');
+                  func();
+                  // Navigator.pushNamed(context, '/result');
                 }
                 NotificationController.cancelNotifications();
               },
